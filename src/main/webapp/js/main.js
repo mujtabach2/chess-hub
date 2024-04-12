@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
         board.appendChild(square);
       }
     }
-  
+
     const piecesOnBoard = document.querySelectorAll(".piece");
     piecesOnBoard.forEach(piece => {
       piece.addEventListener("mousedown", startDrag);
@@ -72,20 +72,19 @@ document.addEventListener("DOMContentLoaded", () => {
   
     const themeSelect = document.getElementById("theme-select");
     themeSelect.addEventListener("change", handleThemeChange);
-  
+    
     board.addEventListener("mouseup", dropPiece);
   
   });
   
   function startDrag(event) {
-    selectedPiece = event.target;
     isDragging = true;
+    selectedPiece = event.target;
   
     const offsetX = event.clientX - selectedPiece.getBoundingClientRect().left;
     const offsetY = event.clientY - selectedPiece.getBoundingClientRect().top;
   
     window.addEventListener("mousemove", dragPiece);
-  
     function dragPiece(event) {
       if (isDragging) {
         selectedPiece.style.position = "absolute";
@@ -97,11 +96,13 @@ document.addEventListener("DOMContentLoaded", () => {
   
   function stopDrag(event) {
     isDragging = false;
-    dropPiece(event);  
+    dropPiece(event);
+    
+
   }
   
   function dropPiece(event) {
-    if (selectedPiece) {
+    if (selectedPiece !== null) {
       const targetSquare = event.target.closest(".square");
       if (targetSquare) {
         const targetRect = targetSquare.getBoundingClientRect();
@@ -110,6 +111,8 @@ document.addEventListener("DOMContentLoaded", () => {
         selectedPiece.style.top = `${targetRect.top + targetRect.height / 2 - selectedPiece.offsetHeight / 2}px`;
   
         targetSquare.appendChild(selectedPiece);
+
+        console.log("Dropped piece at row: " + targetSquare.dataset.row + " col: " + targetSquare.dataset.col);
       }
     }
   }

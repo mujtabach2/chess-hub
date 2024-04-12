@@ -218,3 +218,7 @@ body {
     .piece.white {
       color: #d6d6d6; 
     }  
+
+    .piece:hover {
+      cursor: pointer;
+    }
