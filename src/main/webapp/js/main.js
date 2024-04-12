@@ -80,25 +80,13 @@ document.addEventListener("DOMContentLoaded", () => {
   function startDrag(event) {
     isDragging = true;
     selectedPiece = event.target;
-  
-    const offsetX = event.clientX - selectedPiece.getBoundingClientRect().left;
-    const offsetY = event.clientY - selectedPiece.getBoundingClientRect().top;
-  
-    window.addEventListener("mousemove", dragPiece);
-    function dragPiece(event) {
-      if (isDragging) {
-        selectedPiece.style.position = "absolute";
-        selectedPiece.style.left = `${event.clientX - offsetX}px`;
-        selectedPiece.style.top = `${event.clientY - offsetY}px`;
-      }
-    }
+    selectedPiece.addAttribute("draggable", "true");
   }
   
   function stopDrag(event) {
     isDragging = false;
     dropPiece(event);
     
-
   }
   
   function dropPiece(event) {
