@@ -1,0 +1,220 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #1e1e1e;
+    -webkit-user-select: none; 
+    -ms-user-select: none; 
+    user-select: none;
+  }
+  
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-start;
+    width: 650px;
+    height: 650px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .upper {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    width: 650px;
+    height: 600px;
+  }
+  
+  .lower {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 600px;
+    height: 50px;
+  
+  }
+  
+  .chessboard {
+    display: grid;
+    grid-template-columns: repeat(8, 75px);
+    grid-template-rows: repeat(8, 75px);
+  }
+  
+  .square {
+    width: 75px;
+    height: 75px;
+    border: 1px solid #333;
+  }
+  
+  .dark {
+    background-color: #769656;
+  }
+  
+  .light {
+    background-color: #eeeed2;
+  }
+  
+  .numbers-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100%;
+    width: 100%;
+  }
+  
+  .numbers {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      width: 100%;
+    }
+  
+  .number {
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    font-size: 16px;
+    line-height: 50px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: whitesmoke;
+  }
+  
+  .letters-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .letters{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .letter {
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    font-size: 16px;
+    line-height: 50px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: whitesmoke;
+  }
+  
+  /* Classic Theme */
+  .chessboard.classic .dark {
+      background-color: #769656;
+    }
+    
+    .chessboard.classic .light {
+      background-color: #eeeed2;
+    }
+    
+    /* Modern Theme */
+    .chessboard.modern .dark {
+      background-color: #666;
+    }
+    
+    .chessboard.modern .light {
+      background-color: #f0f0f0;
+    }
+    
+    /* Dark Theme */
+    .chessboard.dark .dark {
+      background-color: #222;
+    }
+    
+    .chessboard.dark .light {
+      background-color: #6e6c6c;
+    }
+    
+    /* Ocean Theme */
+    .chessboard.ocean .dark {
+      background-color: #008080;
+    }
+    
+    .chessboard.ocean .light {
+      background-color: #d4f4ff;
+    }
+    
+    /* Pastel Theme */
+    .chessboard.pastel .dark {
+      background-color: #ff69b4;
+    }
+    
+    .chessboard.pastel .light {
+      background-color: #fce4ec;
+    }
+    
+    /* Wooden Theme */
+    .chessboard.wooden .dark {
+      background-color: #78552b;
+    }
+    
+    .chessboard.wooden .light {
+      background-color: #e6b78a;
+    }
+    
+  
+  
+
+  #theme-select {
+      position: relative;
+      top: 20px; 
+      right: 20px; 
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #f0f0f0;
+      color: #333;
+      outline: none;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    
+    #theme-select option {
+      font-size: 16px;
+      background-color: #f0f0f0;
+      color: #333;
+    }
+    
+    #theme-select option:hover {
+      background-color: #ccc;
+    }
+    
+  
+    .piece {
+      font-size: 70px;
+      line-height: 75px; 
+      text-align: center;
+    }
+  
+    .piece:focus {
+      outline: none;
+      background: none;
+    }
+  
+    
+    /* Black pieces */
+    .piece.black {
+      color: #000; 
+    }
+    
+    /* White pieces */
+    .piece.white {
+      color: #d6d6d6; 
+    }  
