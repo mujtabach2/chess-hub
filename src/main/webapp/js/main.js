@@ -164,17 +164,27 @@ document.addEventListener("DOMContentLoaded", () => {
             const opponentColor = opponentPiece.classList.contains(currentPlayer === "white" ? "black" : "white");
             console.log("Opponent piece color:", opponentColor);
             if (opponentColor) {
-              // Take the piece of the opponent
               const opponentPieceName = unicodeToPieceName[opponentPiece.innerHTML.trim().normalize()];
               console.log("Captured opponent's", opponentPieceName);
-              // Remove the opponent's piece from the board
-              clickedSquare.removeChild(opponentPiece);
       
-              // Move the player's piece to the target square
-              clickedSquare.appendChild(selectedPiece);
+              const capturedPiece = clickedSquare.querySelector(".piece");
+              if (capturedPiece && opponentColor) {  // Check if captured piece exists and is opponent's
+           
+                clickedSquare.removeChild(capturedPiece);
+              }
+
+                clickedSquare.appendChild(selectedPiece);
+              // Update the chessboard array
+              updateChessboardArray(
+                parseInt(previousSquare.dataset.row),
+                parseInt(previousSquare.dataset.col),
+                parseInt(clickedSquare.dataset.row),
+                parseInt(clickedSquare.dataset.col)
+              );
       
-              
               console.log("Moved piece to row:", clickedSquare.dataset.row, "col:", clickedSquare.dataset.col);
+
+    
               switchTurn(true); // Switch turn after successful move
             } else {
               // Target square has your own piece - cannot move there
@@ -221,6 +231,7 @@ document.addEventListener("DOMContentLoaded", () => {
       
       
       
+      
     function startDrag(event) {
         selectedPiece = event.target.closest(".piece");
         if (!selectedPiece) return;
@@ -246,6 +257,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
     function stopDrag(event) {
+        console.log("stopping");
         if (isDragging && selectedPiece) {
             isDragging = false;
     
@@ -291,6 +303,18 @@ document.addEventListener("DOMContentLoaded", () => {
                             const opponentPiece = targetSquare.querySelector(".piece");
                             const opponentPieceColor = opponentPiece.classList.contains("white") ? "white" : "black";
                             const opponentPieceName = unicodeToPieceName[opponentPiece.innerHTML.trim().normalize()];
+
+                            const isValid = isValidMove(
+                                unicodeToPieceName[selectedPiece.innerHTML.trim().normalize()],
+                                parseInt(previousSquare.dataset.row),
+                                parseInt(previousSquare.dataset.col),
+                                parseInt(targetSquare.dataset.row),
+                                parseInt(targetSquare.dataset.col),
+                                opponentPieceName,
+                                chessBoard,
+                                currentPlayer
+                            );
+                            if (isValid) {
                             
                             // Remove the opponent's piece from the board
                             targetSquare.removeChild(opponentPiece);
@@ -308,6 +332,14 @@ document.addEventListener("DOMContentLoaded", () => {
                             console.log("Captured opponent's", opponentPieceName, "of color", opponentPieceColor);
                             
                             switchTurn(true); // Switch turn after successful move
+                            }
+                            else {
+                                // Change the color of the square to indicate an invalid move
+                                targetSquare.style.backgroundColor = "red";
+                                setTimeout(() => {
+                                    targetSquare.style.backgroundColor = "";
+                                }, 1000);
+                            }
                         }
                     } else {
                         console.log("You can only move your own pieces.");
