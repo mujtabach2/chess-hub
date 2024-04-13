@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
   };
 
+  let currentPlayer = "white"; // Start with white player
   let selectedPiece = null;
   let isDragging = false;
   let offsetX, offsetY;
@@ -80,68 +81,86 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // for click and move the piece
   board.addEventListener("click", clickMovePiece);
-  });
 
-  
+  function switchTurn() {
+      currentPlayer = currentPlayer === "white" ? "black" : "white";
+      console.log("Current turn: " + currentPlayer);
+  }
+
   function clickMovePiece(event) {
     if (isDragging || !selectedPiece) return;
 
     const clickedSquare = event.target.closest(".square");
-  
+
     if (clickedSquare) {
-      if (!clickedSquare.querySelector(".piece")) {
-        clickedSquare.appendChild(selectedPiece);
-        console.log("Moved piece to row: " + clickedSquare.dataset.row + " col: " + clickedSquare.dataset.col);
-      } else {
-        console.log("Cannot move to an occupied square.");
-      }
+        // Check if the clicked piece belongs to the current player
+        const pieceColor = selectedPiece.classList.contains("white") ? "white" : "black";
+        if (pieceColor === currentPlayer) {
+            if (!clickedSquare.querySelector(".piece")) {
+                clickedSquare.appendChild(selectedPiece);
+                console.log("Moved piece to row: " + clickedSquare.dataset.row + " col: " + clickedSquare.dataset.col);
+                switchTurn();
+            } else {
+                console.log("Cannot move to an occupied square.");
+            }
+        } else {
+            console.log("You can only move your own pieces.");
+        }
     }
-  }
-  
-
-function startDrag(event) {
-  isDragging = true;
-  selectedPiece = event.target;
-  selectedPiece.style.zIndex = "1000";
-
-  const rect = selectedPiece.getBoundingClientRect();
-  offsetX = event.clientX - rect.left;
-  offsetY = event.clientY - rect.top;
-
-
-  document.addEventListener("mousemove", dragPiece);
 }
 
-function dragPiece(event) {
-  if (isDragging && selectedPiece) {
-      selectedPiece.style.position = "fixed";
-      selectedPiece.style.left = `${event.clientX - offsetX}px`;
-      selectedPiece.style.top = `${event.clientY - offsetY}px`;
-  }
-}
-
-function stopDrag(event) {
-  if (isDragging && selectedPiece) {
-    isDragging = false;
 
 
-    document.removeEventListener("mousemove", dragPiece);
+  function startDrag(event) {
+    selectedPiece = event.target.closest(".piece");
+    if (!selectedPiece) return;
 
-    selectedPiece.style.position = "static";
+    const pieceColor = selectedPiece.classList.contains("white") ? "white" : "black";
+    if (pieceColor === currentPlayer) {
+        isDragging = true;
+        selectedPiece.style.zIndex = "1000";
 
-    if (event.button === 0) {
-      const targetSquare = document.elementFromPoint(event.clientX, event.clientY).closest(".square");
-      if (targetSquare) {
-        targetSquare.appendChild(selectedPiece);
-        console.log("Dropped piece at row: " + targetSquare.dataset.row + " col: " + targetSquare.dataset.col);
-      }
+        const rect = selectedPiece.getBoundingClientRect();
+        offsetX = event.clientX - rect.left;
+        offsetY = event.clientY - rect.top;
+
+        document.addEventListener("mousemove", dragPiece);
     }
+}
+
+
+  function dragPiece(event) {
+      if (isDragging && selectedPiece) {
+          selectedPiece.style.position = "fixed";
+          selectedPiece.style.left = `${event.clientX - offsetX}px`;
+          selectedPiece.style.top = `${event.clientY - offsetY}px`;
+      }
   }
-}
+
+  function stopDrag(event) {
+      if (isDragging && selectedPiece) {
+          isDragging = false;
 
 
-function handleThemeChange(event) {
-  const theme = event.target.value;
-  const chessboard = document.querySelector(".chessboard");
-  chessboard.className = `chessboard ${theme}`;
-}
+          document.removeEventListener("mousemove", dragPiece);
+
+          selectedPiece.style.position = "static";
+
+          if (event.button === 0) {
+              const targetSquare = document.elementFromPoint(event.clientX, event.clientY).closest(".square");
+              if (targetSquare) {
+                  targetSquare.appendChild(selectedPiece);
+                  console.log("Dropped piece at row: " + targetSquare.dataset.row + " col: " + targetSquare.dataset.col);
+                  switchTurn();
+              }
+          }
+      }
+  }
+
+
+  function handleThemeChange(event) {
+      const theme = event.target.value;
+      const chessboard = document.querySelector(".chessboard");
+      chessboard.className = `chessboard ${theme}`;
+  }
+});
