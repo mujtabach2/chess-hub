@@ -38,12 +38,12 @@ export default function isValidMove(piece, fromRow, fromCol, toRow, toCol, lastM
         case "pawn":
             // Pawn moves differently based on color and direction
             if (currentPlayer === "white") {
-                return (fromCol === toCol && toRow === fromRow - 1) || // Can move one square forward
+                return (fromCol === toCol && toRow === fromRow - 1) || 
                        (fromCol === toCol && fromRow === 6 && toRow === 4) || // Can move two squares forward on initial move
                        (lastMove && lastMove.piece === "pawn" && lastMove.fromRow === 6 && lastMove.toRow === 4 && // En passant
                         toCol === lastMove.toCol && Math.abs(toRow - fromRow) === 1 && Math.abs(toCol - fromCol) === 1);
             } else {
-                return (fromCol === toCol && toRow === fromRow + 1) || // Can move one square forward
+                return (fromCol === toCol && toRow === fromRow + 1) || 
                        (fromCol === toCol && fromRow === 1 && toRow === 3) || // Can move two squares forward on initial move
                        (lastMove && lastMove.piece === "pawn" && lastMove.fromRow === 1 && lastMove.toRow === 3 && // En passant
                         toCol === lastMove.toCol && Math.abs(toRow - fromRow) === 1 && Math.abs(toCol - fromCol) === 1);
@@ -76,45 +76,38 @@ function isSquareAttacked(row, col, color, board) {
     return false;
 }
 function canCastle(king, fromSquare, toSquare, board) {
-const fromRow = parseInt(fromSquare.dataset.row);
-const fromCol = parseInt(fromSquare.dataset.col);
-const toRow = parseInt(toSquare.dataset.row);
-const toCol = parseInt(toSquare.dataset.col);
+    const fromRow = parseInt(fromSquare.dataset.row);
+    const fromCol = parseInt(fromSquare.dataset.col);
+    const toRow = parseInt(toSquare.dataset.row);
+    const toCol = parseInt(toSquare.dataset.col);
 
-// Check if the king is in its initial position
-if (king.classList.contains("white")) {
-    if (fromRow !== 7 || fromCol !== 4) return false; // King is not in initial position
-} else {
-    if (fromRow !== 0 || fromCol !== 4) return false; // King is not in initial position
-}
-
-// Check if the destination square is two squares away horizontally
-if (Math.abs(toCol - fromCol) !== 2) return false;
-
-// Check if there are any pieces between the king and the rook
-const rookCol = toCol === 6 ? 7 : 0; // Determine the column of the rook
-const rookSquare = board[fromRow][rookCol];
-if (rookSquare.piece === null || rookSquare.piece.type !== "rook") return false;
-
-// Check if any square between the king and the rook is occupied
-if (toCol === 6) {
-    for (let col = fromCol + 1; col < toCol; col++) {
-        if (board[fromRow][col].piece !== null) return false;
+    // Check if the king is in its initial position
+    if (king.classList.contains("white")) {
+        if (fromRow !== 7 || fromCol !== 4) return false; 
+    } else {
+        if (fromRow !== 0 || fromCol !== 4) return false; 
     }
-} else {
-    for (let col = fromCol - 1; col > toCol; col--) {
-        if (board[fromRow][col].piece !== null) return false;
+
+    // Check if the destination square is two squares away horizontally
+    if (Math.abs(toCol - fromCol) !== 2) return false;
+
+    // Check if there are any pieces between the king and the rook
+    const rookCol = toCol === 6 ? 7 : 0;
+    const rookSquare = board[fromRow][rookCol];
+    if (rookSquare.piece === null || rookSquare.piece.type !== "rook") return false;
+
+    // Check if any square between the king and the rook is occupied
+    if (toCol === 6) {
+        for (let col = fromCol + 1; col < toCol; col++) {
+            if (board[fromRow][col].piece !== null) return false;
+        }
+    } else {
+        for (let col = fromCol - 1; col > toCol; col--) {
+            if (board[fromRow][col].piece !== null) return false;
+        }
     }
-}
 
-// Check if the king is not in check
-// (This requires checking if the king would move through or end up in a square attacked by an opponent's piece)
-
-// Check if the rook is not in check
-// (This requires checking if the rook would move through or end up in a square attacked by an opponent's piece)
-
-// Return true if all conditions are met for castling
-return true;
+    return true;
 }
 
 

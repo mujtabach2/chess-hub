@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "♞": "knight",
             "♟": "pawn"
         };
-    let currentPlayer = "white"; // Start with white player
+    let currentPlayer = "white"; // change to player 1 or player 2 later
     let selectedPiece = null;
     let isDragging = false;
     let offsetX, offsetY;
@@ -117,7 +117,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // for click and move the piece
     board.addEventListener("click", selectPiece);
   
-    function switchTurn() {
+    function switchTurn(isValidMoveMade) {
+        if (!isValidMoveMade) { 
+            console.log("No valid move made. Turn continues.");
+            return; 
+        }
         currentPlayer = currentPlayer === "white" ? "black" : "white";
         console.log("Current turn: " + currentPlayer);
     }
@@ -129,6 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
         if (selectedPiece) {
             // Second click: Move the piece if valid
+            console.log("Dropped piece on square:", clickedSquare);
             clickMovePiece(clickedSquare);
         } else {
             // First click: Select the piece if it belongs to the current player
@@ -141,7 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   
     function clickMovePiece(clickedSquare) {
-        if (clickedSquare !== previousSquare) { // Check if it's not the same square
+        if (clickedSquare !== previousSquare) { 
             const pieceColor = selectedPiece.classList.contains("white") ? "white" : "black";
             const pieceUni = selectedPiece.innerHTML.trim();
             console.log("Piece Unicode:", pieceUni);
@@ -151,19 +156,19 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log("Piece:", piece);
             if (pieceColor === currentPlayer) {
                 if (!clickedSquare.querySelector(".piece")) {
-                    // Validate the move
+                   
                     const isValid = isValidMove(
                         piece,
                         parseInt(previousSquare.dataset.row),
                         parseInt(previousSquare.dataset.col),
                         parseInt(clickedSquare.dataset.row),
                         parseInt(clickedSquare.dataset.col),
-                        null, // Provide appropriate value for lastMove if needed
+                        null, 
                         chessBoard,
                         currentPlayer
                     );
-                    if (isValid) {
-                        // Perform the move if it's valid
+                    if (isValid && !isDragging) {
+                        
                         clickedSquare.appendChild(selectedPiece);
                         updateChessboardArray(
                             parseInt(previousSquare.dataset.row),
@@ -172,9 +177,19 @@ document.addEventListener("DOMContentLoaded", () => {
                             parseInt(clickedSquare.dataset.col)
                         );
                         console.log("Moved piece to row: " + clickedSquare.dataset.row + " col: " + clickedSquare.dataset.col);
-                        switchTurn();
-                    } else {
-                        console.log("Invalid move.");
+                        switchTurn(isValid);
+                    } else if(isValid && isDragging) {
+                        // Perform the move if it's valid
+                        clickedSquare.appendChild(selectedPiece);
+                        updateChessboardArray(
+                            parseInt(previousSquare.dataset.row),
+                            parseInt(previousSquare.dataset.col),
+                            parseInt(clickedSquare.dataset.row),
+                            parseInt(clickedSquare.dataset.col)
+                        );
+                        console.log("Dragged piece to row: " + clickedSquare.dataset.row + " col: " + clickedSquare.dataset.col);
+                        switchTurn(isValid);
+                        
                     }
                 } else {
                     console.log("Cannot move to an occupied square.");
@@ -198,11 +213,11 @@ document.addEventListener("DOMContentLoaded", () => {
         if (pieceColor === currentPlayer) {
             isDragging = true;
             selectedPiece.style.zIndex = "1000";
-  
             const rect = selectedPiece.getBoundingClientRect();
             offsetX = event.clientX - rect.left;
             offsetY = event.clientY - rect.top;
-  
+
+            previousSquare = selectedPiece.parentElement;
             document.addEventListener("mousemove", dragPiece);
         }
     }
@@ -218,19 +233,67 @@ document.addEventListener("DOMContentLoaded", () => {
     function stopDrag(event) {
         if (isDragging && selectedPiece) {
             isDragging = false;
-  
+    
             document.removeEventListener("mousemove", dragPiece);
-  
+    
             selectedPiece.style.position = "static";
-  
-            if (event.button === 0) {
-                const targetSquare = document.elementFromPoint(event.clientX, event.clientY).closest(".square");
-                if (targetSquare) {
-                    clickMovePiece(targetSquare);
+    
+            const targetSquare = document.elementFromPoint(event.clientX, event.clientY).closest(".square");
+            console.log("Target Square:", targetSquare);
+            if (targetSquare) {
+                console.log("Dropped on square:", targetSquare);
+                if (targetSquare !== previousSquare) {
+                    console.log("Dropped piece on square:", targetSquare);
+                    console.log("Previous square:", previousSquare);
+                    const pieceColor = selectedPiece.classList.contains("white") ? "white" : "black";
+                    if (pieceColor === currentPlayer) {
+                        if (!targetSquare.querySelector(".piece")) {
+                            const isValid = isValidMove(
+                                unicodeToPieceName[selectedPiece.innerHTML.trim().normalize()],
+                                parseInt(previousSquare.dataset.row),
+                                parseInt(previousSquare.dataset.col),
+                                parseInt(targetSquare.dataset.row),
+                                parseInt(targetSquare.dataset.col),
+                                null, 
+                                chessBoard,
+                                currentPlayer
+                            );
+                            if (isValid) {
+                                targetSquare.appendChild(selectedPiece);
+                                updateChessboardArray(
+                                    parseInt(previousSquare.dataset.row),
+                                    parseInt(previousSquare.dataset.col),
+                                    parseInt(targetSquare.dataset.row),
+                                    parseInt(targetSquare.dataset.col)
+                                );
+                               
+                                console.log("Moved piece to row:", targetSquare.dataset.row, "col:", targetSquare.dataset.col);
+                                switchTurn(isValid);
+                                
+                            } else {
+                                console.log("Invalid move.");
+                            }
+                        } else {
+                            console.log("Cannot move to an occupied square.");
+                        }
+                    } else {
+                        console.log("You can only move your own pieces.");
+                    }
+                } else {
+                    console.log("Cannot move to the same square.");
                 }
+            } else {
+                console.log("Dropped outside the board.");
             }
+           
+            selectedPiece = null;
+            previousSquare = null;
         }
     }
+    
+    
+    
+    
   
     function handleThemeChange(event) {
         const theme = event.target.value;
