@@ -55,7 +55,7 @@ body{
     color: #ffffff;
 }
 
-.online .now p{
+.online, .now{
     font-weight: bold;
 }
 
@@ -82,11 +82,14 @@ body{
     border: none;
     display: flex;
     flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
 
 .play-online-btn img{
     width: 3rem;
     height: 3rem;
+
 }
 
 
@@ -114,11 +117,15 @@ body{
     display: flex;
     flex-direction: row;
     gap: 1.5rem;
+    justify-content: center;
+    align-items: center;
 }
 
 .play-computer-btn img{
     width: 3rem;
     height: 3rem;
+
+    
 }
 
 .play-computer-btn button:hover{
