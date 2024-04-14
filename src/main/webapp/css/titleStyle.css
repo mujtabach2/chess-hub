@@ -21,14 +21,14 @@ body{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
+    width: 100%;
 }
 
-.text-secton{
+.text-section{
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    width: 100%;
 }
 
 .title{
