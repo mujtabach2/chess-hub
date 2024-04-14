@@ -120,11 +120,6 @@ document.addEventListener("DOMContentLoaded", () => {
     board.addEventListener("click", selectPiece);
   
     function switchTurn(isValidMoveMade) {
-      if (isCheckmate(currentPlayer, chessBoard)) {
-          console.log("Checkmate! Game over.");
-          displayGameOverMessage("Checkmate! Game over.");
-          return;
-      }
       if (!isValidMoveMade) {
           console.log("No valid move made. Turn continues.");
           return;
@@ -141,7 +136,11 @@ document.addEventListener("DOMContentLoaded", () => {
   
 
     function getPossibleMoves(piece, row, col, chessBoard, currentPlayer) {
-
+        if (isCheckmate(currentPlayer, chessBoard)) {
+          console.log("Checkmate! Game over.");
+          displayGameOverMessage("Checkmate! Game over.");
+          return;
+      }
         const validMoves = [];
         for (let r = 0; r < 8; r++) {
           for (let c = 0; c < 8; c++) {

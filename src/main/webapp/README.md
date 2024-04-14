@@ -1,6 +1,4 @@
 # TODO
-- Check mate logic
-- Castling logic
-- Taking pieces logic works only for drag not click
+- Check mate logic (threat part needs tweaks)
 - rook taking logic
 

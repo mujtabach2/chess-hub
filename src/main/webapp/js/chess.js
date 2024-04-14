@@ -26,7 +26,7 @@ export default function isValidMove(piece, fromRow, fromCol, toRow, toCol, board
                     return true;
                 }
             }
-            // Implement special cases like en passant and pawn promotion if necessary.
+    
             break;
         case "rook":
             // Rook can move horizontally or vertically
