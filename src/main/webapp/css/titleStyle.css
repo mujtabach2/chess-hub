@@ -28,8 +28,8 @@ body {
 
 .img-section img {
   border-radius: 2%;
-  width: 80%;
-  height: 72%;
+  width: 33rem;
+  height: 33rem;
   filter: blur(0.5px);
 }
 
