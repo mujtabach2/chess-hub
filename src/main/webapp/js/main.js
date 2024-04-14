@@ -262,26 +262,52 @@ document.addEventListener("DOMContentLoaded", () => {
           console.log("Cannot move to the same square.");
         }
       }
+
+
+      function highlightValidMoves(event) {
+        // Remove previous highlights
+        const highlightedSquares = document.querySelectorAll(".highlighted");
+        highlightedSquares.forEach((square) => square.classList.remove("highlighted"));
+      
+        const hoverSquare = document.elementFromPoint(event.clientX, event.clientY).closest(".square");
+        if (!hoverSquare) return;
+      
+        const pieceUni = selectedPiece.innerHTML.trim();
+        const pieceName = unicodeToPieceName[pieceUni.normalize()];
+      
+        const possibleMoves = getPossibleMoves(
+          pieceName,
+          parseInt(previousSquare.dataset.row),
+          parseInt(previousSquare.dataset.col),
+          chessBoard,
+          currentPlayer
+        );
+      
+        possibleMoves.forEach(({ row, col }) => {
+          const square = document.querySelector(`.square[data-row="${row}"][data-col="${col}"]`);
+          square.classList.add("highlighted");
+        });
+      }
       
       
       
-      
-    function startDrag(event) {
+      function startDrag(event) {
         selectedPiece = event.target.closest(".piece");
         if (!selectedPiece) return;
-  
+      
         const pieceColor = selectedPiece.classList.contains("white") ? "white" : "black";
         if (pieceColor === currentPlayer) {
-            isDragging = true;
-            selectedPiece.style.zIndex = "1000";
-            const rect = selectedPiece.getBoundingClientRect();
-            offsetX = event.clientX - rect.left;
-            offsetY = event.clientY - rect.top;
-
-            previousSquare = selectedPiece.parentElement;
-            document.addEventListener("mousemove", dragPiece);
+          isDragging = true;
+          selectedPiece.style.zIndex = "1000";
+          const rect = selectedPiece.getBoundingClientRect();
+          offsetX = event.clientX - rect.left;
+          offsetY = event.clientY - rect.top;
+      
+          previousSquare = selectedPiece.parentElement;
+          document.addEventListener("mousemove", dragPiece);
+          document.addEventListener("mousemove", highlightValidMoves); // Add this line
         }
-    }
+      }
   
     function dragPiece(event) {
         if (isDragging && selectedPiece) {
@@ -296,6 +322,12 @@ document.addEventListener("DOMContentLoaded", () => {
             isDragging = false;
     
             document.removeEventListener("mousemove", dragPiece);
+            document.removeEventListener("mousemove", highlightValidMoves);
+
+            
+            const highlightedSquares = document.querySelectorAll(".highlighted");
+            highlightedSquares.forEach((square) => square.classList.remove("highlighted"));
+
     
             selectedPiece.style.position = "static";
     

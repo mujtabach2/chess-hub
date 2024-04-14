@@ -1,4 +1,13 @@
 export default function isValidMove(piece, fromRow, fromCol, toRow, toCol, lastMove, board, currentPlayer) {
+
+    const fromPiece = board[fromRow][fromCol]; // Get the piece being moved
+    const toPiece = board[toRow][toCol]; // Get the piece (if any) on the target square
+
+    // Check if the target square is occupied by a friendly piece
+    if (toPiece && fromPiece.color === toPiece.color) {
+        // Cannot move to a square occupied by a friendly piece
+        return false;
+    }
     // Check if the move puts the opponent's king in check
     const opponentColor = currentPlayer === 'white' ? 'black' : 'white';
     // const opponentKingSquare = findKingSquare(opponentColor, board);
@@ -21,31 +30,80 @@ export default function isValidMove(piece, fromRow, fromCol, toRow, toCol, lastM
         case "king":
             // King can move one square in any direction or perform castling
             return (Math.abs(toRow - fromRow) <= 1 && Math.abs(toCol - fromCol) <= 1) ||
-                   (canCastle(piece, fromRow, fromCol, toRow, toCol, board));
+                (canCastle(piece, fromRow, fromCol, toRow, toCol, board));
         case "queen":
             // Queen can move any number of squares diagonally, horizontally, or vertically
             return (Math.abs(toRow - fromRow) === Math.abs(toCol - fromCol)) || (fromRow === toRow || fromCol === toCol);
         case "rook":
             // Rook can move any number of squares horizontally or vertically
-            return fromRow === toRow || fromCol === toCol;
+            if (fromRow === toRow) {
+                // Moving horizontally
+                const colDirection = fromCol < toCol ? 1 : -1;  // Determine the direction of the movement
+                for (let col = fromCol + colDirection; col !== toCol; col += colDirection) {
+                    if (board[fromRow][col].piece !== null) {
+                        return false; // There's a piece in the path
+                    }
+                }
+            } else if (fromCol === toCol) {
+                // Moving vertically
+                const rowDirection = fromRow < toRow ? 1 : -1;
+                for (let row = fromRow + rowDirection; row !== toRow; row += rowDirection) {
+                    if (board[row][fromCol].piece !== null) {
+                        return false; // There's a piece in the path
+                    }
+                }
+            } else {
+                return false; // Invalid move for a rook
+            }
+
+            return true;
+
+
+
         case "bishop":
             // Bishop can move any number of squares diagonally
-            return Math.abs(toRow - fromRow) === Math.abs(toCol - fromCol);
+            if (Math.abs(toRow - fromRow) !== Math.abs(toCol - fromCol)) {
+                return false;
+            }
+
+            // Determine the direction of the movement
+            const rowDirection = (toRow - fromRow) / Math.abs(toRow - fromRow);
+            const colDirection = (toCol - fromCol) / Math.abs(toCol - fromCol);
+
+            // Start from the original position and move towards the destination
+            let checkRow = fromRow + rowDirection;
+            let checkCol = fromCol + colDirection;
+
+            while (checkRow !== toRow || checkCol !== toCol) {
+                // If there's a piece in the path, the move is not valid
+                if (board[checkRow][checkCol].piece !== null) {
+
+                    return false;
+                }
+
+
+                checkRow += rowDirection;
+                checkCol += colDirection;
+                break;
+            }
+
+            return true;
+
         case "knight":
             // Knight can move in an L-shape: two squares in one direction and one square in a perpendicular direction
-            return (Math.abs(toRow - fromRow) === 2 && Math.abs(toCol - fromCol) === 1) || 
-                   (Math.abs(toRow - fromRow) === 1 && Math.abs(toCol - fromCol) === 2);
+            return (Math.abs(toRow - fromRow) === 2 && Math.abs(toCol - fromCol) === 1) ||
+                (Math.abs(toRow - fromRow) === 1 && Math.abs(toCol - fromCol) === 2);
         case "pawn":
             // Pawn moves differently based on color and direction
             if (currentPlayer === "white") {
-                return (fromCol === toCol && toRow === fromRow - 1) || 
-                       (fromCol === toCol && fromRow === 6 && toRow === 4) || // Can move two squares forward on initial move
-                       (lastMove && lastMove.piece === "pawn" && lastMove.fromRow === 6 && lastMove.toRow === 4 && // En passant
+                return (fromCol === toCol && toRow === fromRow - 1) ||
+                    (fromCol === toCol && fromRow === 6 && toRow === 4) || // Can move two squares forward on initial move
+                    (lastMove && lastMove.piece === "pawn" && lastMove.fromRow === 6 && lastMove.toRow === 4 && // En passant
                         toCol === lastMove.toCol && Math.abs(toRow - fromRow) === 1 && Math.abs(toCol - fromCol) === 1);
             } else {
-                return (fromCol === toCol && toRow === fromRow + 1) || 
-                       (fromCol === toCol && fromRow === 1 && toRow === 3) || // Can move two squares forward on initial move
-                       (lastMove && lastMove.piece === "pawn" && lastMove.fromRow === 1 && lastMove.toRow === 3 && // En passant
+                return (fromCol === toCol && toRow === fromRow + 1) ||
+                    (fromCol === toCol && fromRow === 1 && toRow === 3) || // Can move two squares forward on initial move
+                    (lastMove && lastMove.piece === "pawn" && lastMove.fromRow === 1 && lastMove.toRow === 3 && // En passant
                         toCol === lastMove.toCol && Math.abs(toRow - fromRow) === 1 && Math.abs(toCol - fromCol) === 1);
             }
         default:
@@ -83,9 +141,9 @@ function canCastle(king, fromSquare, toSquare, board) {
 
     // Check if the king is in its initial position
     if (king.classList.contains("white")) {
-        if (fromRow !== 7 || fromCol !== 4) return false; 
+        if (fromRow !== 7 || fromCol !== 4) return false;
     } else {
-        if (fromRow !== 0 || fromCol !== 4) return false; 
+        if (fromRow !== 0 || fromCol !== 4) return false;
     }
 
     // Check if the destination square is two squares away horizontally

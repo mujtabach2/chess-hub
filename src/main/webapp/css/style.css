@@ -216,7 +216,7 @@ body {
     
     /* White pieces */
     .piece.white {
-      color: #d6d6d6; 
+      color: #949494; 
     }  
 
     .piece:hover {
