@@ -116,11 +116,11 @@ body {
   
   /* Classic Theme */
   .chessboard.classic .dark {
-      background-color: #769656;
+      background-color: #739453;
     }
     
     .chessboard.classic .light {
-      background-color: #eeeed2;
+      background-color: #EBECD0;
     }
     
     /* Modern Theme */
