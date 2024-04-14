@@ -20,13 +20,13 @@ export default function isValidMove(piece, fromRow, fromCol, toRow, toCol, board
                         !board[fromRow + forwardDirection][toCol] && !board[toRow][toCol])) {
                     return true;
                 }
-                // Check if the pawn is capturing diagonally
-                if (Math.abs(toCol - fromCol) === 1 && fromRow + forwardDirection === toRow &&
-                    board[toRow][toCol] && board[toRow][toCol][0] !== currentPlayer[0]) {
+            }
+            else if (Math.abs(fromCol - toCol) === 1) {
+                // Check if the pawn is capturing an opponent's piece
+                if (fromRow + forwardDirection === toRow && toPiece && toPiece[0] !== currentPlayer[0]) {
                     return true;
                 }
             }
-    
             break;
         case "rook":
             // Rook can move horizontally or vertically
