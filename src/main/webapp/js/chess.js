@@ -7,6 +7,7 @@ export default function isValidMove(piece, fromRow, fromCol, toRow, toCol, board
         return false;
     }
 
+    
   
     switch (piece) {
         case "pawn":
@@ -115,18 +116,54 @@ export default function isValidMove(piece, fromRow, fromCol, toRow, toCol, board
                     return true;
                 }
             }
-            // Implement special cases like castling if necessary.
+    
             break;
         default:
-            // Invalid piece type
+          
             return false;
     }
 
-    // If none of the above conditions match, the move is invalid
+  
     return false;
 }
 
-function haveSameCaseFirstLetter(text1, text2) {
-    const firstLetterRegex = /^[a-z]|[A-Z]/; // Matches either lowercase or uppercase letter
-    return firstLetterRegex.test(text1.charAt(0)) === firstLetterRegex.test(text2.charAt(0));
-  }
+function hasKingThreat(currentPlayer, board) {
+    // Find the position of the king
+    let kingPosition = null;
+    const kingPiece = currentPlayer[0].toUpperCase() + 'k';
+    for (let row = 0; row < 8; row++) {
+        for (let col = 0; col < 8; col++) {
+            const piece = board[row][col];
+            if (piece === kingPiece) {
+                kingPosition = { row, col };
+                break;
+            }
+        }
+        if (kingPosition) break;
+    }
+
+    if (!kingPosition) return true; // King not found, so the game is over
+
+    // Iterate through the board to find opponent's pieces and check if they threaten the king
+    const opponent = currentPlayer === 'white' ? 'black' : 'white';
+    for (let row = 0; row < 8; row++) {
+        for (let col = 0; col < 8; col++) {
+            const piece = board[row][col];
+            if (piece && piece[0] === opponent[0]) {
+                if (isValidMove(piece, row, col, kingPosition.row, kingPosition.col, board, opponent)) {
+                    return true; // Found a threatening piece
+                }
+            }
+        }
+    }
+    return false; 
+}
+
+export function isCheckmate(currentPlayer, board) {
+    
+    if (!hasKingThreat(currentPlayer, board)) {
+        return false; 
+    } else {
+        return true; 
+    }
+}

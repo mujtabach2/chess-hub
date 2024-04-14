@@ -1,4 +1,6 @@
 import isValidMove from "./chess.js";
+import { isCheckmate } from "./chess.js";
+
 document.addEventListener("DOMContentLoaded", () => {
     const board = document.querySelector(".chessboard");
   
@@ -118,13 +120,25 @@ document.addEventListener("DOMContentLoaded", () => {
     board.addEventListener("click", selectPiece);
   
     function switchTurn(isValidMoveMade) {
-        if (!isValidMoveMade) { 
-            console.log("No valid move made. Turn continues.");
-            return; 
-        }
-        currentPlayer = currentPlayer === "white" ? "black" : "white";
-        console.log("Current turn: " + currentPlayer);
-    }
+      if (isCheckmate(currentPlayer, chessBoard)) {
+          console.log("Checkmate! Game over.");
+          displayGameOverMessage("Checkmate! Game over.");
+          return;
+      }
+      if (!isValidMoveMade) {
+          console.log("No valid move made. Turn continues.");
+          return;
+      }
+      currentPlayer = currentPlayer === "white" ? "black" : "white";
+      console.log("Current turn: " + currentPlayer);
+  }
+  
+  function displayGameOverMessage(message) {
+      // You can display the game over message in a modal, alert box, or any other UI element
+      alert(message);
+      // Optionally, you can also disable further moves or take other actions here
+  }
+  
 
     function getPossibleMoves(piece, row, col, chessBoard, currentPlayer) {
 
@@ -438,4 +452,18 @@ document.addEventListener("DOMContentLoaded", () => {
         const chessboard = document.querySelector(".chessboard");
         chessboard.className = `chessboard ${theme}`;
     }
+
+    function displayGameOverMessage(message) {
+      // Display the game over message
+      alert(message);
+  
+      // Remove event listeners to disable further moves
+      board.removeEventListener("click", selectPiece);
+      board.removeEventListener("mousedown", startDrag);
+      document.removeEventListener("mousemove", dragPiece);
+      document.removeEventListener("mousemove", highlightValidMoves);
+      board.removeEventListener("mouseup", stopDrag);
+      board.removeEventListener("mouseleave", stopDrag);
+  }
+  
   });
