@@ -5,51 +5,214 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>About Us</title>
     <link rel="stylesheet" href="css/aboutStyle.css" />
+    <link rel="stylesheet" href="css/sidebar.css" />
+    <script src="js/main.js" defer></script>
+    <script src="js/themeswitch.js" defer></script>
   </head>
   <body>
+    <div class="sidebar">
+      <div class="logo">
+        <a class="logo" href="title.html">
+          <img src="images/knight-icon.png" alt="logo" />
+          <h1>ChessHub</h1>
+        </a>
+      </div>
+      <div class="menu">
+        <ul>
+          <li>
+            <a href="title.html">Home</a>
+          </li>
+          <li>
+            <a href="index.html">Online</a>
+          </li>
+          <li>
+            <a href="computer.html">Computer</a>
+          </li>
+          <li>
+            <a onclick="openPopup()" class="themeslink">Themes</a>
+          </li>
+          <li>
+            <a href="about.html">About</a>
+          </li>
+          <li class="profile">
+            <img src="images/profile-icon.png" alt="profile" />
+            <a href="">Profile</a>
+          </li>
+        </ul>
+      </div>
+    </div>
     <div class="container">
       <div class="text-section">
         <div class="title">
           <h1>About Us</h1>
         </div>
         <div class="members">
-            <div class="members-details">
-                <div class="mujtaba">
-                    <img src="images/mujtaba.png" alt="Mujtaba" width="150px" height="150px">
-                    <h2 class="name">Mujtaba Chaudhry</h2>
-                    <div class="icons">
-                        <img src="images/github.png" alt="github" width="25px" height="25px">
-                        <img src="images/linkedin.png" alt="linkedin" width="25px" height="25px">
-                    </div>
-                </div>
-                <div class="simon">
-                    <img src="images/simon.jpeg" alt="Simon" width="150px" height="150px">
-                    <h2 class="name">Simon Berhe</h2>
-                    <div class="icons">
-                        <img src="images/github.png" alt="github" width="25px" height="25px">
-                        <img src="images/linkedin.png" alt="linkedin" width="25px" height="25px">
-                    </div>
-                </div>
-                <div class="haider">
-                    <img src="images/haider.jpeg" alt="Haider" width="150px" height="150px">
-                    <h2 class="name">Haider Saleem</h2>
-                    <div class="icons">
-                        <img src="images/github.png" alt="github" width="25px" height="25px">
-                        <img src="images/linkedin.png" alt="linkedin" width="25px" height="25px">
-                    </div>
-                </div>
-                <div class="kersh">
-                    <img src="images/kersh.jpeg" alt="Kersh" width="150px" height="150px">
-                    <h2 class="name">Kershan Arulnesarwan</h2>
-                    <div class="icons">
-                        <img src="images/github.png" alt="github" width="25px" height="25px">
-                        <img src="images/linkedin.png" alt="linkedin" width="25px" height="25px">
-                    </div>
-                </div>
+          <div class="members-details">
+            <div class="mujtaba">
+              <img
+                src="images/mujtaba.png"
+                alt="Mujtaba"
+                width="150px"
+                height="150px"
+              />
+              <h2 class="name">Mujtaba Chaudhry</h2>
+              <div class="icons">
+                <img
+                  src="images/github.png"
+                  alt="github"
+                  width="25px"
+                  height="25px"
+                />
+                <img
+                  src="images/linkedin.png"
+                  alt="linkedin"
+                  width="25px"
+                  height="25px"
+                />
+              </div>
             </div>
+            <div class="simon">
+              <img
+                src="images/simon.jpeg"
+                alt="Simon"
+                width="150px"
+                height="150px"
+              />
+              <h2 class="name">Simon Berhe</h2>
+              <div class="icons">
+                <img
+                  src="images/github.png"
+                  alt="github"
+                  width="25px"
+                  height="25px"
+                />
+                <img
+                  src="images/linkedin.png"
+                  alt="linkedin"
+                  width="25px"
+                  height="25px"
+                />
+              </div>
+            </div>
+            <div class="haider">
+              <img
+                src="images/haider.jpeg"
+                alt="Haider"
+                width="150px"
+                height="150px"
+              />
+              <h2 class="name">Haider Saleem</h2>
+              <div class="icons">
+                <img
+                  src="images/github.png"
+                  alt="github"
+                  width="25px"
+                  height="25px"
+                />
+                <img
+                  src="images/linkedin.png"
+                  alt="linkedin"
+                  width="25px"
+                  height="25px"
+                />
+              </div>
+            </div>
+            <div class="kersh">
+              <img
+                src="images/kersh.jpeg"
+                alt="Kersh"
+                width="150px"
+                height="150px"
+              />
+              <h2 class="name">Kershan Arulnesarwan</h2>
+              <div class="icons">
+                <img
+                  src="images/github.png"
+                  alt="github"
+                  width="25px"
+                  height="25px"
+                />
+                <img
+                  src="images/linkedin.png"
+                  alt="linkedin"
+                  width="25px"
+                  height="25px"
+                />
+              </div>
+            </div>
+          </div>
         </div>
         <div class="footer">
-            <p>Copyright © 2024 ChessHub. All Rights Reserved.</p>
+          <p>Copyright © 2024 ChessHub. All Rights Reserved.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="popup" id="popup">
+      <div class="themes">
+        <div class="box">
+          <div class="text">
+            <h2>Classic</h2>
+          </div>
+          <div class="theme theme01">
+            <a onclick="closePopup()">
+              <img src="images/classicTheme.png" alt="Classic Theme" />
+            </a>
+          </div>
+        </div>
+        <div class="box">
+          <div class="text">
+            <h2>Dark</h2>
+          </div>
+          <div class="theme theme02">
+            <a onclick="closePopup()">
+              <img src="images/darkTheme.png" alt="Dark Theme" />
+            </a>
+          </div>
+        </div>
+        <div class="box">
+          <div class="text">
+            <h2>Ocean</h2>
+          </div>
+          <div class="theme theme03">
+            <a onclick="closePopup()">
+              <img src="images/oceanTheme.png" alt="Ocean Theme" />
+            </a>
+          </div>
+        </div>
+        <div class="box">
+          <div class="text">
+            <h2>Wooden</h2>
+          </div>
+          <div class="theme theme04">
+            <a onclick="closePopup()">
+              <img src="images/woodenTheme.png" alt="Wooden Theme" />
+            </a>
+          </div>
+        </div>
+        <div class="box">
+          <div class="text">
+            <h2>Modern</h2>
+          </div>
+          <div class="theme theme05">
+            <a onclick="closePopup()">
+              <img src="images/modernTheme.png" alt="Modern Theme" />
+            </a>
+          </div>
+        </div>
+        <div class="box">
+          <div class="text">
+            <h2>Pastel</h2>
+          </div>
+          <div class="theme theme06">
+            <a onclick="closePopup()">
+              <img src="images/pastelTheme.png" alt="Pastel Theme" />
+            </a>
+          </div>
+        </div>
+
+        <div class="button">
+          <a href="#" class="close" onclick="closePopup()"></a>
         </div>
       </div>
     </div>
