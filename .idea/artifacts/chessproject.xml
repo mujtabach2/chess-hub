@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" build-on-make="true" name="chessproject">
+    <output-path>$PROJECT_DIR$/out/artifacts/chessproject</output-path>
+    <root id="archive" name="chessproject.war">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="chessproject" />
+        </element>
+        <element id="dir-copy" path="$PROJECT_DIR$/src/main/webapp" />
+      </element>
+    </root>
+  </artifact>
+</component>
