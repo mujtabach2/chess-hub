@@ -109,8 +109,6 @@ document.addEventListener("DOMContentLoaded", () => {
         piece.addEventListener("mousedown", startDrag);
     });
   
-    const themeSelect = document.getElementById("theme-select");
-    themeSelect.addEventListener("change", handleThemeChange);
   
     //for drag and drop
     board.addEventListener("mouseup", stopDrag);
@@ -446,11 +444,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     
   
-    function handleThemeChange(event) {
-        const theme = event.target.value;
-        const chessboard = document.querySelector(".chessboard");
-        chessboard.className = `chessboard ${theme}`;
-    }
+    
 
     function displayGameOverMessage(message) {
       // Display the game over message
