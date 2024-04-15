@@ -424,32 +424,4 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-
-
-
-  // Define an object to map themes to image URLs
-  const themeImages = {
-    classic: 'images/classicTheme.png',
-    modern: 'images/modernTheme.png',
-    dark: 'images/darkTheme.png',
-    ocean: 'images/oceanTheme.png',
-    pastel: 'images/pastelTheme.png',
-    wooden: 'images/woodenTheme.png'
-  };
-
-  function handleThemeChange(event) {
-    const theme = event.target.value;
-    const chessboard = document.querySelector(".chessboard");
-    const imgSection = document.querySelector('.img-section img');
-
-    // Update chessboard theme
-    chessboard.className = `chessboard ${theme}`;
-
-    // Update image source
-    imgSection.src = themeImages[theme];
-
-    // Store the selected theme in local storage
-    localStorage.setItem('selectedTheme', theme);
-  }
-
 });
