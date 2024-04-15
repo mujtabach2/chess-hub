@@ -1,172 +1,169 @@
-export default function isValidMove(piece, fromRow, fromCol, toRow, toCol, lastMove, board, currentPlayer) {
+export default function isValidMove(piece, fromRow, fromCol, toRow, toCol, board, currentPlayer) {
+  
+    const fromPiece = board[fromRow][fromCol];
+    const toPiece = board[toRow][toCol];
 
-    const fromPiece = board[fromRow][fromCol]; // Get the piece being moved
-    const toPiece = board[toRow][toCol]; // Get the piece (if any) on the target square
-
-    // Check if the target square is occupied by a friendly piece
-    if (toPiece && fromPiece.color === toPiece.color) {
-        // Cannot move to a square occupied by a friendly piece
+    if (fromPiece[0] === toPiece[0]) {
         return false;
     }
-    // Check if the move puts the opponent's king in check
-    const opponentColor = currentPlayer === 'white' ? 'black' : 'white';
-    // const opponentKingSquare = findKingSquare(opponentColor, board);
-    // const isInCheck = isSquareAttacked(opponentKingSquare.row, opponentKingSquare.col, opponentColor, board);
 
-    // // Check if the move is valid
-    // // If it puts the opponent's king in check, it's an invalid move
-    // if (isInCheck) {
-    //     // Simulate the move and check if the opponent's king is still in check
-    //     const tempBoard = simulateMove(piece, fromRow, fromCol, toRow, toCol, board);
-    //     const isStillInCheck = isSquareAttacked(opponentKingSquare.row, opponentKingSquare.col, opponentColor, tempBoard);
-
-    //     if (isStillInCheck) {
-    //         // Move results in the opponent's king still being in check
-    //         return false;
-    //     }
-    // }
-
+    
+  
     switch (piece) {
-        case "king":
-            // King can move one square in any direction or perform castling
-            return (Math.abs(toRow - fromRow) <= 1 && Math.abs(toCol - fromCol) <= 1) ||
-                (canCastle(piece, fromRow, fromCol, toRow, toCol, board));
-        case "queen":
-            // Queen can move any number of squares diagonally, horizontally, or vertically
-            return (Math.abs(toRow - fromRow) === Math.abs(toCol - fromCol)) || (fromRow === toRow || fromCol === toCol);
-        case "rook":
-            // Rook can move any number of squares horizontally or vertically
-            if (fromRow === toRow) {
-                // Moving horizontally
-                const colDirection = fromCol < toCol ? 1 : -1;  // Determine the direction of the movement
-                for (let col = fromCol + colDirection; col !== toCol; col += colDirection) {
-                    if (board[fromRow][col].piece !== null) {
-                        return false; // There's a piece in the path
-                    }
-                }
-            } else if (fromCol === toCol) {
-                // Moving vertically
-                const rowDirection = fromRow < toRow ? 1 : -1;
-                for (let row = fromRow + rowDirection; row !== toRow; row += rowDirection) {
-                    if (board[row][fromCol].piece !== null) {
-                        return false; // There's a piece in the path
-                    }
-                }
-            } else {
-                return false; // Invalid move for a rook
-            }
-
-            return true;
-
-
-
-        case "bishop":
-            // Bishop can move any number of squares diagonally
-            if (Math.abs(toRow - fromRow) !== Math.abs(toCol - fromCol)) {
-                return false;
-            }
-
-            // Determine the direction of the movement
-            const rowDirection = (toRow - fromRow) / Math.abs(toRow - fromRow);
-            const colDirection = (toCol - fromCol) / Math.abs(toCol - fromCol);
-
-            // Start from the original position and move towards the destination
-            let checkRow = fromRow + rowDirection;
-            let checkCol = fromCol + colDirection;
-
-            while (checkRow !== toRow || checkCol !== toCol) {
-                // If there's a piece in the path, the move is not valid
-                if (board[checkRow][checkCol].piece !== null) {
-
-                    return false;
-                }
-
-
-                checkRow += rowDirection;
-                checkCol += colDirection;
-                break;
-            }
-
-            return true;
-
-        case "knight":
-            // Knight can move in an L-shape: two squares in one direction and one square in a perpendicular direction
-            return (Math.abs(toRow - fromRow) === 2 && Math.abs(toCol - fromCol) === 1) ||
-                (Math.abs(toRow - fromRow) === 1 && Math.abs(toCol - fromCol) === 2);
         case "pawn":
-            // Pawn moves differently based on color and direction
-            if (currentPlayer === "white") {
-                return (fromCol === toCol && toRow === fromRow - 1) ||
-                    (fromCol === toCol && fromRow === 6 && toRow === 4) || // Can move two squares forward on initial move
-                    (lastMove && lastMove.piece === "pawn" && lastMove.fromRow === 6 && lastMove.toRow === 4 && // En passant
-                        toCol === lastMove.toCol && Math.abs(toRow - fromRow) === 1 && Math.abs(toCol - fromCol) === 1);
-            } else {
-                return (fromCol === toCol && toRow === fromRow + 1) ||
-                    (fromCol === toCol && fromRow === 1 && toRow === 3) || // Can move two squares forward on initial move
-                    (lastMove && lastMove.piece === "pawn" && lastMove.fromRow === 1 && lastMove.toRow === 3 && // En passant
-                        toCol === lastMove.toCol && Math.abs(toRow - fromRow) === 1 && Math.abs(toCol - fromCol) === 1);
+            // Check if the pawn is moving forward
+            const forwardDirection = currentPlayer === "white" ? -1 : 1;
+            if (fromCol === toCol) {
+                // Moving forward
+                if ((fromRow + forwardDirection === toRow && !board[toRow][toCol]) ||
+                    (fromRow + 2 * forwardDirection === toRow && fromRow === (currentPlayer === "white" ? 6 : 1) &&
+                        !board[fromRow + forwardDirection][toCol] && !board[toRow][toCol])) {
+                    return true;
+                }
             }
+            else if (Math.abs(fromCol - toCol) === 1) {
+                // Check if the pawn is capturing an opponent's piece
+                if (fromRow + forwardDirection === toRow && toPiece && toPiece[0] !== currentPlayer[0]) {
+                    return true;
+                }
+            }
+            break;
+        case "rook":
+            // Rook can move horizontally or vertically
+            if (fromRow === toRow || fromCol === toCol) {
+                // Check if there are any pieces blocking its path
+                if (fromRow === toRow) { // Horizontal move
+                    const minCol = Math.min(fromCol, toCol);
+                    const maxCol = Math.max(fromCol, toCol);
+                    for (let c = minCol + 1; c < maxCol; c++) {
+                        if (board[fromRow][c]) return false; // Piece blocking the path
+                    }
+                } else { // Vertical move
+                    const minRow = Math.min(fromRow, toRow);
+                    const maxRow = Math.max(fromRow, toRow);
+                    for (let r = minRow + 1; r < maxRow; r++) {
+                        if (board[r][fromCol]) return false; // Piece blocking the path
+                    }
+                }
+                // Check if the destination square is empty or has an opponent's piece
+                if (!board[toRow][toCol] || board[toRow][toCol][0] !== currentPlayer[0]) {
+                    return true;
+                }
+            }
+            break;
+        case "knight":
+            // Knight moves in an L shape (2 squares in one direction and 1 square in a perpendicular direction)
+            const rowDiff = Math.abs(toRow - fromRow);
+            const colDiff = Math.abs(toCol - fromCol);
+            if ((rowDiff === 2 && colDiff === 1) || (rowDiff === 1 && colDiff === 2)) {
+                // Check if the destination square is empty or has an opponent's piece
+                if (!board[toRow][toCol] || board[toRow][toCol][0] !== currentPlayer[0]) {
+                    return true;
+                }
+            }
+            break;
+        case "bishop":
+            // Bishop can move diagonally
+            if (Math.abs(toRow - fromRow) === Math.abs(toCol - fromCol)) {
+                // Check if there are any pieces blocking its path
+                const rowIncrement = toRow > fromRow ? 1 : -1;
+                const colIncrement = toCol > fromCol ? 1 : -1;
+                for (let i = 1; i < Math.abs(toRow - fromRow); i++) {
+                    if (board[fromRow + i * rowIncrement][fromCol + i * colIncrement]) return false; // Piece blocking the path
+                }
+                // Check if the destination square is empty or has an opponent's piece
+                if (!board[toRow][toCol] || board[toRow][toCol][0] !== currentPlayer[0]) {
+                    return true;
+                }
+            }
+            break;
+        case "queen":
+            // Queen can move horizontally, vertically, or diagonally
+            if ((fromRow === toRow || fromCol === toCol) || Math.abs(toRow - fromRow) === Math.abs(toCol - fromCol)) {
+                // Check if there are any pieces blocking its path
+                if (fromRow === toRow || fromCol === toCol) { // Horizontal or vertical move
+                    if (fromRow === toRow) { // Horizontal move
+                        const minCol = Math.min(fromCol, toCol);
+                        const maxCol = Math.max(fromCol, toCol);
+                        for (let c = minCol + 1; c < maxCol; c++) {
+                            if (board[fromRow][c]) return false; // Piece blocking the path
+                        }
+                    } else { // Vertical move
+                        const minRow = Math.min(fromRow, toRow);
+                        const maxRow = Math.max(fromRow, toRow);
+                        for (let r = minRow + 1; r < maxRow; r++) {
+                            if (board[r][fromCol]) return false; // Piece blocking the path
+                        }
+                    }
+                } else { // Diagonal move
+                    const rowIncrement = toRow > fromRow ? 1 : -1;
+                    const colIncrement = toCol > fromCol ? 1 : -1;
+                    for (let i = 1; i < Math.abs(toRow - fromRow); i++) {
+                        if (board[fromRow + i * rowIncrement][fromCol + i * colIncrement]) return false; // Piece blocking the path
+                    }
+                }
+                // Check if the destination square is empty or has an opponent's piece
+                if (!board[toRow][toCol] || board[toRow][toCol][0] !== currentPlayer[0]) {
+                    return true;
+                }
+            }
+            break;
+        case "king":
+            // King can move one square in any direction
+            if (Math.abs(toRow - fromRow) <= 1 && Math.abs(toCol - fromCol) <= 1) {
+                // Check if the destination square is empty or has an opponent's piece
+                if (!board[toRow][toCol] || board[toRow][toCol][0] !== currentPlayer[0]) {
+                    return true;
+                }
+            }
+    
+            break;
         default:
+          
             return false;
     }
-}
 
-function findKingSquare(color, board) {
-    for (let row = 0; row < 8; row++) {
-        for (let col = 0; col < 8; col++) {
-            const square = board[row][col];
-            if (square.piece && square.piece.type === 'king' && square.piece.color === color) {
-                return { row, col };
-            }
-        }
-    }
-}
-
-function isSquareAttacked(row, col, color, board) {
-    for (let r = 0; r < 8; r++) {
-        for (let c = 0; c < 8; c++) {
-            const piece = board[r][c].piece;
-            if (piece && piece.color !== color && isValidMove(piece.type, { dataset: { row: r, col: c } }, { dataset: { row, col } }, null, board, color)) {
-                return true;
-            }
-        }
-    }
+  
     return false;
 }
-function canCastle(king, fromSquare, toSquare, board) {
-    const fromRow = parseInt(fromSquare.dataset.row);
-    const fromCol = parseInt(fromSquare.dataset.col);
-    const toRow = parseInt(toSquare.dataset.row);
-    const toCol = parseInt(toSquare.dataset.col);
 
-    // Check if the king is in its initial position
-    if (king.classList.contains("white")) {
-        if (fromRow !== 7 || fromCol !== 4) return false;
-    } else {
-        if (fromRow !== 0 || fromCol !== 4) return false;
+function hasKingThreat(currentPlayer, board) {
+    // Find the position of the king
+    let kingPosition = null;
+    const kingPiece = currentPlayer[0].toUpperCase() + 'k';
+    for (let row = 0; row < 8; row++) {
+        for (let col = 0; col < 8; col++) {
+            const piece = board[row][col];
+            if (piece === kingPiece) {
+                kingPosition = { row, col };
+                break;
+            }
+        }
+        if (kingPosition) break;
     }
 
-    // Check if the destination square is two squares away horizontally
-    if (Math.abs(toCol - fromCol) !== 2) return false;
+    if (!kingPosition) return true; // King not found, so the game is over
 
-    // Check if there are any pieces between the king and the rook
-    const rookCol = toCol === 6 ? 7 : 0;
-    const rookSquare = board[fromRow][rookCol];
-    if (rookSquare.piece === null || rookSquare.piece.type !== "rook") return false;
-
-    // Check if any square between the king and the rook is occupied
-    if (toCol === 6) {
-        for (let col = fromCol + 1; col < toCol; col++) {
-            if (board[fromRow][col].piece !== null) return false;
-        }
-    } else {
-        for (let col = fromCol - 1; col > toCol; col--) {
-            if (board[fromRow][col].piece !== null) return false;
+    // Iterate through the board to find opponent's pieces and check if they threaten the king
+    const opponent = currentPlayer === 'white' ? 'black' : 'white';
+    for (let row = 0; row < 8; row++) {
+        for (let col = 0; col < 8; col++) {
+            const piece = board[row][col];
+            if (piece && piece[0] === opponent[0]) {
+                if (isValidMove(piece, row, col, kingPosition.row, kingPosition.col, board, opponent)) {
+                    return true; // Found a threatening piece
+                }
+            }
         }
     }
-
-    return true;
+    return false; 
 }
 
-
-
+export function isCheckmate(currentPlayer, board) {
+    
+    if (!hasKingThreat(currentPlayer, board)) {
+        return false; 
+    } else {
+        return true; 
+    }
+}
