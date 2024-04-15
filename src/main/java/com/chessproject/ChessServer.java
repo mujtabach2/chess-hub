@@ -8,17 +8,19 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@ServerEndpoint("/ws")
+@ServerEndpoint("/ws/{roomID}")
 public class ChessServer {
     private static Map<String, String> roomList = new HashMap<>();
     private static Map<String, String> turnList = new HashMap<>();
 
     @OnOpen
-    public void open(Session session) throws IOException {
-        roomList.put(session.getId(), "1");
-        if (!turnList.containsKey("1")) {
-            turnList.put("1", session.getId());
+    public void onOpen(Session session, @PathParam("roomID") String roomID) throws IOException {
+        roomList.put(session.getId(), roomID);
+        if (!turnList.containsKey(roomID)) {
+            turnList.put(roomID, session.getId());
         }
+        // Send initial message after confirming the connection is open
+        session.getBasicRemote().sendText("Hello!");
     }
 
     @OnMessage
@@ -35,6 +37,7 @@ public class ChessServer {
     @OnError
     public void onError(Session session, Throwable throwable) {
         throwable.printStackTrace();
+        // Additional error handling logic can be added here, such as logging or sending an error message to the client
     }
 
     @OnClose

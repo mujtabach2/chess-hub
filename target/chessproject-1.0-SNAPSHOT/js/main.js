@@ -37,14 +37,15 @@ document.addEventListener("DOMContentLoaded", () => {
             "♞": "knight",
             "♟": "pawn"
         };
-    const ws = new WebSocket('ws://localhost:8080/chessproject-1.0/ws');
+  let code = "1";
+  const ws = new WebSocket("ws://localhost:8080/chessproject-1.0/ws/"+code);
 
-  //ws.onopen = function (event) {
-  //    console.log('WebSocket connection opened');
-  //};
-  //
+  ws.onopen = function () {
+      console.log('WebSocket connection opened');
+  };
+  
   //ws.onerror = function (event) {
-  //    console.error('WebSocket error:', event);
+  //    console.error('WebSocket error:', event.data);
   //};
   //
   //ws.onmessage = function (event) {
@@ -77,21 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
           ["Wp", "Wp", "Wp", "Wp", "Wp", "Wp", "Wp", "Wp"], 
           ["Wr", "Wn", "Wb", "Wq", "Wk", "Wb", "Wn", "Wr"]
       ];
-
-      // Initialize WebSocket connection
-      //ws.onmessage = function (event) {
-      //  console.log('Message from server:', event.data)
-      //  const data = JSON.parse(event.data);
-  //
-      //    if (data.type === 'move') {
-      //        // Update the game state and UI with the move
-      //        updateChessboardArray(data.fromRow, data.fromCol, data.toRow, data.toCol);
-      //        switchTurn(true);
-      //    } else if (data.type === 'turn') {
-      //        // Update the current player
-      //        currentPlayer = data.player;
-      //    }
-      //}
 
     // Function to update the chessboard array when a piece is moved
     function updateChessboardArray(fromRow, fromCol, toRow, toCol) {
