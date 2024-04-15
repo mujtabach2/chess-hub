@@ -1,20 +1,4 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap");
-<<<<<<< HEAD
-
-body {
-  margin: 0;
-  padding: 0;
-  font-family: Poppins, sans-serif;
-  box-sizing: border-box;
-  background-color: #312f2b;
-  height: 100vh;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-
-=======
 
 body {
   margin: 0;
@@ -25,21 +9,13 @@ body {
   height: 100vh;
   width: 100%;
   overflow: hidden;
->>>>>>> a56b9720530749253524af8bce30deec00ba33e5
 }
 
 .container {
   display: flex;
   flex-direction: row;
-<<<<<<< HEAD
-  width: 80%;
-  height: 100vh;
-  position: relative;
-  left: 3rem;
-=======
   width: 100%;
   height: 100vh;
->>>>>>> a56b9720530749253524af8bce30deec00ba33e5
 }
 
 .img-section {
@@ -52,13 +28,8 @@ body {
 
 .img-section img {
   border-radius: 2%;
-<<<<<<< HEAD
-  width: 30rem;
-  height: 30rem;
-=======
   width: 33rem;
   height: 33rem;
->>>>>>> a56b9720530749253524af8bce30deec00ba33e5
   filter: blur(0.5px);
 }
 
@@ -66,16 +37,9 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-<<<<<<< HEAD
-  width: 80%;
-  position: relative;
-  top: 3rem;
-  height: 100%;
-=======
   width: 100%;
   position: relative;
   top: 3rem;
->>>>>>> a56b9720530749253524af8bce30deec00ba33e5
 }
 
 .title {
@@ -137,44 +101,6 @@ body {
   transition: transform 0.3s ease-in-out;
  text-align: center;
 }
-<<<<<<< HEAD
-
-.play-online-btn button:hover {
-  transform: translateY(-2px);
-  background-color: #a3d160;
-  box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
-    rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #5d9948 0 -5px 0 inset,
-    #5d9948 0 0 4px .5px;
-}
-
-.play-online-btn button:active {
-  background-color: #83B64D;
-  box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
-    rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #47743C 0 -5px 0 inset;
-}
-
-.buttons .text{
-    position: relative;
-    right: 1rem;
-}
-
-.buttons .text2{
-    position: relative;
-    left: .55rem;
-}
-
-.play-online-btn img {
-  width: 4rem;
-  height: 4rem;
-  position: relative;
-  right: 3rem;
-  filter: drop-shadow(0 .2rem .3rem rgba(0, 0, 0, .4));
-}
-
-.buttons a{
-    text-decoration: none;
-=======
->>>>>>> a56b9720530749253524af8bce30deec00ba33e5
 
 .play-online-btn button:hover {
   transform: translateY(-2px);
