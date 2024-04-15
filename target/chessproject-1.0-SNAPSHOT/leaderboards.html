@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/sidebar.css">
+  <link rel="stylesheet" href="css/popUp.css">
+  <script src="js/themeswitch.js" defer></script>
+  <title>Leaderboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #302e2b;
+      margin: 0;
+      padding: 0;
+    }
+
+    h2 {
+      text-align: center;
+      margin-top: 20px;
+      color: white;
+      font-size: 1.9em;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 33.7%;
+      margin: 20px auto;
+      background-color: #262421;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      height: 400px; /* adjust this value to your desired height */
+      overflow-y: auto; /* make the table scrollable */
+      display: block; /* display the table as a block element for scrolling */
+    }
+
+    th, td {
+      border: none;
+      padding: 12px;
+      text-align: left;
+      color: white;
+      font-size: 1.2em;
+      
+    }
+
+    th {
+      background-color: #80b64b;
+      color: white;
+      font-size: 1.5em;
+        width: 100%;
+    }
+
+    .username {
+      display: flex;
+      align-items: center;
+    }
+
+    .username img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    a {
+      text-decoration: none;
+      color: white;
+    }
+
+    a:hover {
+      color: #80b64b;
+    }
+
+    tr {
+      border-bottom: 1px solid gray;
+    }
+
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background-color: #4b4b4b;
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background-color: #262421;
+    }
+
+  </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+          <a class="logo" href="title.html">
+            <img src="images/knight-icon.png" alt="logo" />
+            <h1>ChessHub</h1>
+          </a>
+        </div>
+        <div class="menu">
+          <ul>
+            <li>
+              <a href="title.html">Home</a>
+            </li>
+            <li>
+              <a href="index.html">Online</a>
+            </li>
+            <li>
+              <a href="computer.html">Computer</a>
+            </li>
+            <li>
+              <a onclick="openPopup()" class="themeslink">Themes</a>
+            </li>
+            <li>
+              <a href="leaderboards.html">Leaderboard</a>
+            </li>
+            <li>
+              <a href="about.html">About</a>
+            </li>
+            <li class="profile">
+              <img src="images/profile-icon.png" alt="profile" />
+              <a href="">Profile</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+  <h2>Daily Leaderboard</h2>
+  <table id="dailyLeaderboard">
+    <thead>
+      <tr>
+        <th>Rank</th>
+        <th>Username</th>
+        <th>Score</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  <div class="popup" id="popup">
+    <div class="themes">
+      <div class="box">
+        <div class="text">
+          <h2>Classic</h2>
+        </div>
+        <div class="theme theme01">
+          <a onclick="closePopup()">
+            <img src="images/classicTheme.png" alt="Classic Theme" />
+          </a>
+        </div>
+      </div>
+      <div class="box">
+        <div class="text">
+          <h2>Dark</h2>
+        </div>
+        <div class="theme theme02">
+          <a onclick="closePopup()">
+            <img src="images/darkTheme.png" alt="Dark Theme" />
+          </a>
+        </div>
+      </div>
+      <div class="box">
+        <div class="text">
+          <h2>Ocean</h2>
+        </div>
+        <div class="theme theme03">
+          <a onclick="closePopup()">
+            <img src="images/oceanTheme.png" alt="Ocean Theme" />
+          </a>
+        </div>
+      </div>
+      <div class="box">
+        <div class="text">
+          <h2>Wooden</h2>
+        </div>
+        <div class="theme theme04">
+          <a onclick="closePopup()">
+            <img src="images/woodenTheme.png" alt="Wooden Theme" />
+          </a>
+        </div>
+      </div>
+      <div class="box">
+        <div class="text">
+          <h2>Modern</h2>
+        </div>
+        <div class="theme theme05">
+          <a onclick="closePopup()">
+            <img src="images/modernTheme.png" alt="Modern Theme" />
+          </a>
+        </div>
+      </div>
+      <div class="box">
+        <div class="text">
+          <h2>Pastel</h2>
+        </div>
+        <div class="theme theme06">
+          <a onclick="closePopup()">
+            <img src="images/pastelTheme.png" alt="Pastel Theme" />
+          </a>
+        </div>
+      </div>
+
+      <div class="button">
+        <a href="#" class="close" onclick="closePopup()"></a>
+      </div>
+    </div>
+  </div>
+  <script>
+    fetch('https://api.chess.com/pub/leaderboards')
+      .then(response => response.json())
+      .then(data => {
+        const dailyLeaderboard = data.daily;
+        const dailyTableBody = document.querySelector('#dailyLeaderboard tbody');
+        dailyLeaderboard.forEach(entry => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${entry.rank}</td>
+            <td class="username"><img src="${entry.avatar}" alt="${entry.username}"><a href="${entry.url}">${entry.username}</a></td>
+            <td>${entry.score}</td>
+          `;
+          dailyTableBody.appendChild(row);
+        });
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  </script>
+</body>
+</html>

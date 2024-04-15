@@ -4,16 +4,58 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/titleStyle.css" />
+    <link rel="stylesheet" href="css/sidebar.css" />
+    <link rel="stylesheet" href="css/popUp.css" />
+    <script src="js/main.js" defer></script>
+    <script src="js/themeswitch.js" defer></script>
     <title>ChessHub</title>
   </head>
 
   <body>
+    <div class="sidebar">
+      <div class="logo">
+        <a class="logo" href="title.html">
+          <img src="images/knight-icon.png" alt="logo" />
+          <h1>ChessHub</h1>
+        </a>
+      </div>
+      <div class="menu">
+        <ul>
+          <li>
+            <a href="title.html">Home</a>
+          </li>
+          <li>
+            <a href="index.html">Online</a>
+          </li>
+          <li>
+            <a href="computer.html">Computer</a>
+          </li>
+          <li>
+            <a onclick="openPopup()" class="themeslink">Themes</a>
+          </li>
+          <li>
+            <a href="leaderboards.html">Leaderboard</a>
+          </li>
+          <li>
+            <a href="about.html">About</a>
+          </li>
+          <li class="profile">
+            <img src="images/profile-icon.png" alt="profile" />
+            <a href="">Profile</a>
+          </li>
+        </ul>
+      </div>
+    </div>
     <div class="container">
       <div class="img-section">
+<<<<<<< HEAD
+        <img src="images/ChessIMG.gif" alt="chessBoard" />
+=======
         <img
           src="images/ChessIMG.png"
           alt="chessBoard"
         />
+>>>>>>> a56b9720530749253524af8bce30deec00ba33e5
       </div>
       <div class="text-section">
         <div class="title">
@@ -28,6 +70,39 @@
           <p><span class="now">58</span> players now</p>
         </div>
         <div class="buttons">
+<<<<<<< HEAD
+          <!-- Wrapped the button in the anchor tag -->
+          <a href="index.html" class="link1">
+            <div class="play-online-btn">
+              <button type="button">
+                <img src="images/PlayIMG.svg" alt="playChess" />
+                <p class="text">Play Online</p>
+              </button>
+            </div>
+          </a>
+          <!-- Wrapped the button in the anchor tag -->
+          <a href="computer.html" class="link2">
+            <div class="play-computer-btn">
+              <button type="button">
+                <img src="images/computerIMG.svg" alt="computerChess" />
+                <p class="text2">Play Computer</p>
+              </button>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="popup" id="popup">
+      <div class="themes">
+        <div class="box">
+          <div class="text">
+            <h2>Classic</h2>
+          </div>
+          <div class="theme theme01">
+            <a onclick="closePopup()">
+              <img src="images/classicTheme.png" alt="Classic Theme" />
+            </a>
+=======
           <div class="play-online-btn">
             <button type="button">
               <img src="images/PlayIMG.svg" alt="playChess" />
@@ -39,7 +114,62 @@
               <img src="images/computerIMG.svg" alt="computerChess" />
               <p class="text2">Play Computer</p>
             </button>
+>>>>>>> a56b9720530749253524af8bce30deec00ba33e5
           </div>
+        </div>
+        <div class="box">
+          <div class="text">
+            <h2>Dark</h2>
+          </div>
+          <div class="theme theme02">
+            <a onclick="closePopup()">
+              <img src="images/darkTheme.png" alt="Dark Theme" />
+            </a>
+          </div>
+        </div>
+        <div class="box">
+          <div class="text">
+            <h2>Ocean</h2>
+          </div>
+          <div class="theme theme03">
+            <a onclick="closePopup()">
+              <img src="images/oceanTheme.png" alt="Ocean Theme" />
+            </a>
+          </div>
+        </div>
+        <div class="box">
+          <div class="text">
+            <h2>Wooden</h2>
+          </div>
+          <div class="theme theme04">
+            <a onclick="closePopup()">
+              <img src="images/woodenTheme.png" alt="Wooden Theme" />
+            </a>
+          </div>
+        </div>
+        <div class="box">
+          <div class="text">
+            <h2>Modern</h2>
+          </div>
+          <div class="theme theme05">
+            <a onclick="closePopup()">
+              <img src="images/modernTheme.png" alt="Modern Theme" />
+            </a>
+          </div>
+        </div>
+        <div class="box">
+          <div class="text">
+            <h2>Pastel</h2>
+          </div>
+          <div class="theme theme06">
+            <a onclick="closePopup()">
+              <img src="images/pastelTheme.png" alt="Pastel Theme" />
+            </a>
+          </div>
+        </div>
+
+        <div class="button">
+          <a href="#" class="close" onclick="closePopup()"></a>
         </div>
       </div>
     </div>
