@@ -51,7 +51,7 @@
             color: white;
         }
         a:hover {
-            color: gray;
+            color: #80b64b;
         }
         tr {
             border-bottom: 1px solid gray;
@@ -83,7 +83,7 @@
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${entry.rank}</td>
-                <td class="username"><img src="${entry.avatar}" alt="${entry.username}">${entry.username}</td>
+                <td class="username"><img src="${entry.avatar}" alt="${entry.username}"><a href="${entry.url}">${entry.username}</a></td>
                 <td>${entry.score}</td>
             `;
             dailyTableBody.appendChild(row);
