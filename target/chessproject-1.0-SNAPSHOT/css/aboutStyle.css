@@ -19,6 +19,8 @@ body {
   height: 100vh;
   position: relative;
   left: 8rem;
+  height: 100vh;
+  margin-top: 5.5rem;
 }
 
 .title {
