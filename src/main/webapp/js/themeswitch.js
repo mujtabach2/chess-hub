@@ -1,11 +1,25 @@
 let popup = document.getElementById("popup");
+let rulesPopup = document.getElementById("openRulesPopup");
+
+
   
 function openPopup() {
   popup.classList.add("open-popup");
+  closeRulesPopup();
 }
 
 function closePopup() {
   popup.classList.remove("open-popup");
+
+}
+
+function openRulesPopup() {
+  rulesPopup.classList.add("open-rules-popup");
+  closePopup();
+}
+
+function closeRulesPopup() {
+  rulesPopup.classList.remove("open-rules-popup");
 }
 
 function selectTheme(theme) {

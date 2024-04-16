@@ -159,7 +159,13 @@ document.addEventListener("DOMContentLoaded", () => {
   function getPossibleMoves(piece, row, col, chessBoard, currentPlayer) {
     if (isCheckmate(currentPlayer, chessBoard)) {
       console.log("Checkmate! Game over.");
-      displayGameOverMessage("Checkmate! Game over.");
+
+      if (currentPlayer === "white") {
+        displayGameOverMessage("Black Wins!");
+      } else {
+
+      displayGameOverMessage("White Wins!");
+      }
       return;
     }
     const validMoves = [];
@@ -288,9 +294,9 @@ document.addEventListener("DOMContentLoaded", () => {
           );
           console.log(
             "Moved piece to row: " +
-              clickedSquare.dataset.row +
-              " col: " +
-              clickedSquare.dataset.col
+            clickedSquare.dataset.row +
+            " col: " +
+            clickedSquare.dataset.col
           );
           switchTurn(isValid);
         } else {
@@ -503,23 +509,46 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  HEAD;
+
   function handleThemeChange(event) {
     const theme = event.target.value;
     const chessboard = document.querySelector(".chessboard");
     chessboard.className = `chessboard ${theme}`;
   }
 
-  +function displayGameOverMessage(message) {
-    // Display the game over message
-    alert(message);
+  let popup = document.getElementById('game-popup');
+  let winText = document.getElementById('win');
+  let closeBtn = document.getElementById('close-popup');
+  let closeBtn2 = document.getElementById('closepopup');
 
-    // Remove event listeners to disable further moves
-    board.removeEventListener("click", selectPiece);
-    board.removeEventListener("mousedown", startDrag);
-    document.removeEventListener("mousemove", dragPiece);
-    document.removeEventListener("mousemove", highlightValidMoves);
-    board.removeEventListener("mouseup", stopDrag);
-    board.removeEventListener("mouseleave", stopDrag);
-  };
-});
+function openPopup() {
+  popup.classList.add('game-over-popup');
+}
+
+if (closeBtn) {
+  closeBtn.addEventListener('click', function() {
+    location.reload();
+  });
+}
+
+if (closeBtn2) { 
+  closeBtn2.addEventListener('click', closePopup);
+}
+
+function closePopup() {
+  popup.classList.remove('game-over-popup');
+}
+
+function displayGameOverMessage(message) {
+  // Display the game over message
+  winText.textContent = message;
+  openPopup();
+
+  // Remove event listeners to disable further moves
+  board.removeEventListener("click", selectPiece);
+  board.removeEventListener("mousedown", startDrag);
+  document.removeEventListener("mousemove", dragPiece);
+  document.removeEventListener("mousemove", highlightValidMoves);
+  board.removeEventListener("mouseup", stopDrag);
+  board.removeEventListener("mouseleave", stopDrag);
+}});
