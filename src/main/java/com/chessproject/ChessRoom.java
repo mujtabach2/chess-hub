@@ -51,6 +51,10 @@ public class ChessRoom {
         }
     }
 
+    public String getUserName(String userID){
+        return players.get(userID);
+    }
+
     /**
      * This method will remove a user from this room
      * **/

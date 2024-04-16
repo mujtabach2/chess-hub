@@ -10,26 +10,39 @@ import java.util.Map;
 
 @ServerEndpoint("/ws/{roomID}")
 public class ChessServer {
-    private static Map<String, String> roomList = new HashMap<>();
-    private static Map<String, String> turnList = new HashMap<>();
+    private static Map<String, ChessRoom> activeRooms = new HashMap<>();
+    private Map<String, Map<Character, String>> turnList = new HashMap<>();
 
     @OnOpen
     public void onOpen(Session session, @PathParam("roomID") String roomID) throws IOException {
-        roomList.put(session.getId(), roomID);
-        if (!turnList.containsKey(roomID)) {
-            turnList.put(roomID, session.getId());
-        }
-        // Send initial message after confirming the connection is open
-        session.getBasicRemote().sendText("Hello!");
+        ChessRoom room = activeRooms.getOrDefault(roomID, new ChessRoom(roomID, session.getId()));
+        activeRooms.put(roomID, room);
+
+        room.setUserName(session.getId(), "Player"); // Set user name
+
+        session.getBasicRemote().sendText("{\"type\": \"welcome\", \"message\":\"Welcome to King's Conquest!\"}");
     }
 
     @OnMessage
-    public void handleMessage(String message, Session session) throws IOException {
-        String roomID = roomList.get(session.getId());
+    public void handleMessage(String message, Session session) {
+        ChessRoom room = activeRooms.get(session.getPathParameters().get("roomID"));
 
-        for (Session s : session.getOpenSessions()) {
-            if (roomList.get(s.getId()).equals(roomID) && !s.getId().equals(session.getId())) {
-                s.getBasicRemote().sendText(message);
+        if (room != null) {
+            // Put the player, colour and turn to the turnList if not already in it
+            if (!turnList.containsKey(room.getCode())) {
+                Map<Character, String> player = new HashMap<>();
+                player.put('W', room.getUsers().get(session.getId()));
+                player.put('B', room.getUsers().get(session.getId()));
+                turnList.put(room.getUserName(session.getId()), player);
+            }
+        }
+
+        //Send the message to all users in room
+        for(String user : room.getUsers().keySet()){
+            try {
+                session.getBasicRemote().sendText(message);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -37,16 +50,17 @@ public class ChessServer {
     @OnError
     public void onError(Session session, Throwable throwable) {
         throwable.printStackTrace();
-        // Additional error handling logic can be added here, such as logging or sending an error message to the client
     }
 
     @OnClose
     public void onClose(Session session) {
-        String roomID = roomList.get(session.getId());
-        roomList.remove(session.getId());
-        if (roomID != null && turnList.get(roomID) != null && turnList.get(roomID).equals(session.getId())) {
-            // If the closing session was the current turn holder, remove the turn holder
-            turnList.remove(roomID);
+        ChessRoom room = activeRooms.get(session.getPathParameters().get("roomID"));
+
+        if (room != null) {
+            room.removeUser(session.getId());
+            if (room.getUsers().isEmpty()) {
+                activeRooms.remove(room.getCode());
+            }
         }
     }
 }

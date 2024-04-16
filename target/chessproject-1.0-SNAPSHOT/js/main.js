@@ -1,5 +1,6 @@
 import isValidMove from "./chess.js";
 import { isCheckmate } from "./chess.js";
+let ws;
 
 document.addEventListener("DOMContentLoaded", () => {
     const board = document.querySelector(".chessboard");
@@ -37,37 +38,37 @@ document.addEventListener("DOMContentLoaded", () => {
             "♞": "knight",
             "♟": "pawn"
         };
-  let code = "1";
-  const ws = new WebSocket("ws://localhost:8080/chessproject-1.0/ws/"+code);
 
-  ws.onopen = function () {
-      console.log('WebSocket connection opened');
-  };
+  let code = "1";
+  // Create a new WebSocket connection
+  ws = new WebSocket("ws://localhost:8080/chessproject-1.0-SNAPSHOT/ws/"+code);
+
+// Event handler for successful connection
+ws.onopen = function(event) {
+  console.log("WebSocket connection established.");
+};
   
-  //ws.onerror = function (event) {
-  //    console.error('WebSocket error:', event.data);
-  //};
-  //
-  //ws.onmessage = function (event) {
-  //    console.log('Message from server:', event.data)
-  //    const data = JSON.parse(event.data);
-  //
-  //    if (data.type === 'move') {
-  //        // Update the game state and UI with the move
-  //        updateChessboardArray(data.fromRow, data.fromCol, data.toRow, data.toCol);
-  //        switchTurn(true);
-  //    } else if (data.type === 'turn') {
-  //        // Update the current player
-  //        currentPlayer = data.player;
-  //    }
-  //};
+ws.onmessage = function (event) {
+    console.log("Message from server:", event.data)
+    const data = JSON.parse(event.data);
+
+    if (data.type === "move") {
+        // Update the game state and UI with the move
+        updateChessboardArray(data.fromRow, data.fromCol, data.toRow, data.toCol);
+        switchTurn(true);
+    } else if (data.type === "turn") {
+        // Update the current player
+        currentPlayer = data.player;
+    }
+};
 
 
     let currentPlayer = "white"; // change to player 1 or player 2 later
-    let selectedPiece = null;
-    let isDragging = false;
+    let selectedPiece = null; // The piece that is currently selected for moving
+    let isDragging = false; // Flag to indicate if a piece is being dragged
     let offsetX, offsetY;
-    let previousSquare = null;
+    let previousSquare = null; // The square where the selected piece was before dragging
+    let isCaptured = false; // Flag to indicate if a piece is captured
       const chessBoard = [
           ["Br", "Bn", "Bb", "Bq", "Bk", "Bb", "Bn", "Br"],
           ["Bp", "Bp", "Bp", "Bp", "Bp", "Bp", "Bp", "Bp"],
@@ -284,6 +285,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 parseInt(clickedSquare.dataset.row),
                 parseInt(clickedSquare.dataset.col)
               );
+              sendMove(currentPlayer, selectedPiece, parseInt(previousSquare.dataset.row), parseInt(previousSquare.dataset.col), parseInt(clickedSquare.dataset.row), parseInt(clickedSquare.dataset.col));
               console.log("Moved piece to row: " + clickedSquare.dataset.row + " col: " + clickedSquare.dataset.col);
               switchTurn(isValid);
             } else {
@@ -382,7 +384,6 @@ document.addEventListener("DOMContentLoaded", () => {
                                 currentPlayer
                             );
                             if (isValid) {
-                           
                                 targetSquare.appendChild(selectedPiece);
                                 updateChessboardArray(
                                     parseInt(previousSquare.dataset.row),
@@ -390,8 +391,10 @@ document.addEventListener("DOMContentLoaded", () => {
                                     parseInt(targetSquare.dataset.row),
                                     parseInt(targetSquare.dataset.col),
                                 );
-
-
+                                //printout unicode piece in console exact format #9812...
+                                console.log(selectedPiece.innerHTML.trim().normalize());
+                                
+                                sendMove(currentPlayer, selectedPiece, parseInt(previousSquare.dataset.row), parseInt(previousSquare.dataset.col), parseInt(targetSquare.dataset.row), parseInt(targetSquare.dataset.col));
                                 console.log("Moved piece to row:", targetSquare.dataset.row, "col:", targetSquare.dataset.col);
                                 switchTurn(isValid);
 
@@ -425,6 +428,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             
                             // Remove the opponent's piece from the board
                             targetSquare.removeChild(opponentPiece);
+                            isCaptured = true;
                             
                             // Move the player's piece to the target square
                             targetSquare.appendChild(selectedPiece);
@@ -434,11 +438,12 @@ document.addEventListener("DOMContentLoaded", () => {
                                 parseInt(targetSquare.dataset.row),
                                 parseInt(targetSquare.dataset.col)
                             );
-                            
+                            sendMove(currentPlayer, selectedPiece, parseInt(previousSquare.dataset.row), parseInt(previousSquare.dataset.col), parseInt(targetSquare.dataset.row), parseInt(targetSquare.dataset.col));
                             console.log("Moved piece to row:", targetSquare.dataset.row, "col:", targetSquare.dataset.col);
                             console.log("Captured opponent's", opponentPieceName, "of color", opponentPieceColor);
                             
                             switchTurn(true); // Switch turn after successful move
+                            isCaptured = false;
                             }
                             else {
                                console.log("Invalid move. Cannot capture opponent's piesdfsdfsace.");
@@ -481,5 +486,72 @@ document.addEventListener("DOMContentLoaded", () => {
       document.removeEventListener("mousemove", highlightValidMoves);
       board.removeEventListener("mouseup", stopDrag);
       board.removeEventListener("mouseleave", stopDrag);
+    }
+
+    //Sends the player and the move in standard chess notation to the server
+    function sendMove(player, selectedPiece, fromRow, fromCol, toRow, toCol) {
+      
+      const data = {
+          type: "move",
+          player: player,
+          move: convertToStandardNotation(selectedPiece, fromCol, toRow, toCol), // Convert the move to standard chess notation
+          selectedPiece: selectedPiece,
+          fromRow: fromRow,
+          fromCol: fromCol,
+          toRow: toRow,
+          toCol: toCol
+      };
+
+      ws.send(JSON.stringify(data)); 
+    }
+
+    //Converts the column number to a letter
+    function convertColumn(col) {
+      return String.fromCharCode(97 + col);
+    }
+
+    //Converts the move to standard chess notation i.e Ke2, Nf3, etc. https://www.chess.com/terms/chess-notation
+    function convertToStandardNotation(selectedPiece, fromCol, toRow, toCol) {
+      let pieceName = "";
+      let move = "";
+
+      // Get the piece name from the unicode character
+      if (selectedPiece) {
+        // Check if selectedPiece contains HTML content
+        if (selectedPiece.innerHTML) {
+            // Use trim() after ensuring that innerHTML is not null or undefined
+            const pieceUni = selectedPiece.innerHTML.trim();
+            pieceName = unicodeToPieceName[pieceUni.normalize()];
+        } else {
+          // Handle the case where selectedPiece does not contain HTML content
+            console.error("Selected piece does not contain HTML content.");
+        }
+      } else {
+          console.error("No piece selected.");
+      } 
+
+      //conditional for pieces
+      if (pieceName === "king") {
+        move = "K";
+      } else if (pieceName === "queen") {
+        move = "Q";
+      } else if (pieceName === "rook") {
+        move = "R";
+      } else if (pieceName === "bishop") {
+        move = "B";
+      } else if (pieceName === "knight") {
+        move = "N";
+      }
+
+      //Now check if the move is a capture
+      if (isCaptured === true && pieceName === "pawn") {
+        move += convertColumn(fromCol)+"x";
+      } else if (isCaptured === true){
+        move += "x";
+      }
+
+      //Finally add destination square to the move
+      move += convertColumn(toCol) + (8 - toRow);
+      return move;
     }
   });
