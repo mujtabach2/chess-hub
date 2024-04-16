@@ -37,32 +37,6 @@ document.addEventListener("DOMContentLoaded", () => {
             "♞": "knight",
             "♟": "pawn"
         };
-  let code = "1";
-  const ws = new WebSocket("ws://localhost:8080/chessproject-1.0/ws/"+code);
-
-  ws.onopen = function () {
-      console.log('WebSocket connection opened');
-  };
-  
-  //ws.onerror = function (event) {
-  //    console.error('WebSocket error:', event.data);
-  //};
-  //
-  //ws.onmessage = function (event) {
-  //    console.log('Message from server:', event.data)
-  //    const data = JSON.parse(event.data);
-  //
-  //    if (data.type === 'move') {
-  //        // Update the game state and UI with the move
-  //        updateChessboardArray(data.fromRow, data.fromCol, data.toRow, data.toCol);
-  //        switchTurn(true);
-  //    } else if (data.type === 'turn') {
-  //        // Update the current player
-  //        currentPlayer = data.player;
-  //    }
-  //};
-
-
     let currentPlayer = "white"; // change to player 1 or player 2 later
     let selectedPiece = null;
     let isDragging = false;
@@ -135,8 +109,6 @@ document.addEventListener("DOMContentLoaded", () => {
         piece.addEventListener("mousedown", startDrag);
     });
   
-    const themeSelect = document.getElementById("theme-select");
-    themeSelect.addEventListener("change", handleThemeChange);
   
     //for drag and drop
     board.addEventListener("mouseup", stopDrag);
@@ -302,7 +274,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
 
-<<<<<<< HEAD
 
   function highlightValidMoves(event) {
     // Remove previous highlights
@@ -367,69 +338,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const highlightedSquares = document.querySelectorAll(".highlighted");
       highlightedSquares.forEach((square) => square.classList.remove("highlighted"));
-=======
-      function highlightValidMoves(event) {
-        // Remove previous highlights
-        const highlightedSquares = document.querySelectorAll(".highlighted");
-        highlightedSquares.forEach((square) => square.classList.remove("highlighted"));
-      
-        const hoverSquare = document.elementFromPoint(event.clientX, event.clientY).closest(".square");
-        if (!hoverSquare) return;
-      
-        const pieceUni = selectedPiece.innerHTML.trim();
-        const pieceName = unicodeToPieceName[pieceUni.normalize()];
-      
-        const possibleMoves = getPossibleMoves(
-          pieceName,
-          parseInt(previousSquare.dataset.row),
-          parseInt(previousSquare.dataset.col),
-          chessBoard,
-          currentPlayer
-        );
-      
-        possibleMoves.forEach(({ row, col }) => {
-          const square = document.querySelector(`.square[data-row="${row}"][data-col="${col}"]`);
-          square.classList.add("highlighted");
-        });
-      }
-      
-      function startDrag(event) {
-        selectedPiece = event.target.closest(".piece");
-        if (!selectedPiece) return;
-      
-        const pieceColor = selectedPiece.classList.contains("white") ? "white" : "black";
-        if (pieceColor === currentPlayer) {
-          isDragging = true;
-          selectedPiece.style.zIndex = "1000";
-          const rect = selectedPiece.getBoundingClientRect();
-          offsetX = event.clientX - rect.left;
-          offsetY = event.clientY - rect.top;
-      
-          previousSquare = selectedPiece.parentElement;
-          document.addEventListener("mousemove", dragPiece);
-          document.addEventListener("mousemove", highlightValidMoves); // Add this line
-        }
-      }
-  
-    function dragPiece(event) {
-        if (isDragging && selectedPiece) {
-            selectedPiece.style.position = "fixed";
-            selectedPiece.style.left = `${event.clientX - offsetX}px`;
-            selectedPiece.style.top = `${event.clientY - offsetY}px`;
-        }
-    }
-    function stopDrag(event) {
-        console.log("stopping");
-        if (isDragging && selectedPiece) {
-            isDragging = false;
-    
-            document.removeEventListener("mousemove", dragPiece);
-            document.removeEventListener("mousemove", highlightValidMoves);
-            
-            const highlightedSquares = document.querySelectorAll(".highlighted");
-            highlightedSquares.forEach((square) => square.classList.remove("highlighted"));
->>>>>>> a56b9720530749253524af8bce30deec00ba33e5
 
+    
             selectedPiece.style.position = "static";
     
             const targetSquare = document.elementFromPoint(event.clientX, event.clientY).closest(".square");
@@ -531,11 +441,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
     
-    function handleThemeChange(event) {
-        const theme = event.target.value;
-        const chessboard = document.querySelector(".chessboard");
-        chessboard.className = `chessboard ${theme}`;
-    }
+    
+    
+  
+    
 
     function displayGameOverMessage(message) {
       // Display the game over message
@@ -548,5 +457,6 @@ document.addEventListener("DOMContentLoaded", () => {
       document.removeEventListener("mousemove", highlightValidMoves);
       board.removeEventListener("mouseup", stopDrag);
       board.removeEventListener("mouseleave", stopDrag);
-    }
+  }
+  
   });

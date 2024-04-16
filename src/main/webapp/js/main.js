@@ -37,36 +37,23 @@ document.addEventListener("DOMContentLoaded", () => {
     "♞": "knight",
     "♟": "pawn",
   };
-  let code = "1";
-  const ws = new WebSocket("ws://localhost:8080/chessproject-1.0/ws/" + code);
+
+  const ws = new WebSocket("ws://localhost:8080/chessproject-1.0/ws/1");
 
   ws.onopen = function () {
     console.log("WebSocket connection opened");
   };
 
-  //ws.onerror = function (event) {
-  //    console.error('WebSocket error:', event.data);
-  //};
-  //
-  //ws.onmessage = function (event) {
-  //    console.log('Message from server:', event.data)
-  //    const data = JSON.parse(event.data);
-  //
-  //    if (data.type === 'move') {
-  //        // Update the game state and UI with the move
-  //        updateChessboardArray(data.fromRow, data.fromCol, data.toRow, data.toCol);
-  //        switchTurn(true);
-  //    } else if (data.type === 'turn') {
-  //        // Update the current player
-  //        currentPlayer = data.player;
-  //    }
-  //};
-
-  let currentPlayer = "white"; // change to player 1 or player 2 later
+  let currentPlayer = "white";
   let selectedPiece = null;
   let isDragging = false;
   let offsetX, offsetY;
   let previousSquare = null;
+  let player1Time = 60 * 10;
+  let player2Time = 60 * 10;
+  let timerInterval1 = setInterval(updateTimer1, 1000);
+  let timerInterval2;
+
   const chessBoard = [
     ["Br", "Bn", "Bb", "Bq", "Bk", "Bb", "Bn", "Br"],
     ["Bp", "Bp", "Bp", "Bp", "Bp", "Bp", "Bp", "Bp"],
@@ -77,6 +64,13 @@ document.addEventListener("DOMContentLoaded", () => {
     ["Wp", "Wp", "Wp", "Wp", "Wp", "Wp", "Wp", "Wp"],
     ["Wr", "Wn", "Wb", "Wq", "Wk", "Wb", "Wn", "Wr"],
   ];
+
+  const startEffect = new Audio("sound/start-effect.mp3");
+  const moveEffect = new Audio("sound/move-effect.mp3");
+  const captureEffect = new Audio("sound/capture-effect.mp3");
+  const checkMateEffect = new Audio("sound/checkmate-effect.mp3");
+
+  startEffect.play();
 
   // Function to update the chessboard array when a piece is moved
   function updateChessboardArray(fromRow, fromCol, toRow, toCol) {
@@ -148,6 +142,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     currentPlayer = currentPlayer === "white" ? "black" : "white";
     console.log("Current turn: " + currentPlayer);
+
+    // Pause or resume timers based on current player
+    if (currentPlayer === "white") {
+      clearInterval(timerInterval2); // Pause black timer
+      timerInterval1 = setInterval(updateTimer1, 1000); // Resume white timer
+    } else {
+      clearInterval(timerInterval1); // Pause white timer
+      timerInterval2 = setInterval(updateTimer2, 1000); // Start black timer
+    }
   }
 
   function displayGameOverMessage(message) {
@@ -158,6 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function getPossibleMoves(piece, row, col, chessBoard, currentPlayer) {
     if (isCheckmate(currentPlayer, chessBoard)) {
+      checkMateEffect.play();
       console.log("Checkmate! Game over.");
 
       if (currentPlayer === "white") {
@@ -285,6 +289,7 @@ document.addEventListener("DOMContentLoaded", () => {
           currentPlayer
         );
         if (isValid) {
+          moveEffect.play();
           clickedSquare.appendChild(selectedPiece);
           updateChessboardArray(
             parseInt(previousSquare.dataset.row),
@@ -409,6 +414,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 currentPlayer
               );
               if (isValid) {
+                moveEffect.play();
                 targetSquare.appendChild(selectedPiece);
                 updateChessboardArray(
                   parseInt(previousSquare.dataset.row),
@@ -458,6 +464,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
               if (isValid) {
                 // Remove the opponent's piece from the board
+                captureEffect.play();
                 targetSquare.removeChild(opponentPiece);
 
                 // Move the player's piece to the target square
@@ -509,6 +516,34 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Timer related functions
+  function updateTimer1() {
+    player1Time--;
+    const timer1Display = document.getElementById("white-timer");
+    timer1Display.textContent = formatTime(player1Time);
+    if (player1Time <= 0) {
+      clearInterval(timerInterval1);
+      alert("Player 1's time is up!");
+    }
+  }
+  
+  function updateTimer2() {
+    player2Time--;
+    const timer2Display = document.getElementById("black-timer");
+    timer2Display.textContent = formatTime(player2Time);
+    if (player2Time <= 0) {
+      clearInterval(timerInterval2);
+      alert("Player 2's time is up!");
+    }
+  }
+  
+
+  function formatTime(time) {
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+    return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+  }
+  
 
   function handleThemeChange(event) {
     const theme = event.target.value;
