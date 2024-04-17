@@ -22,6 +22,7 @@ public class ChessServer {
 
         //sets player colour based on number of users in the room
         String playerColor;
+        // Used modulo here, 50% white, 50% black.
         if (room.getUsers().size() % 2 == 1) {
             playerColor = "white";
         } else {
