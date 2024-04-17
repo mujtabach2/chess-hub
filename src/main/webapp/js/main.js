@@ -136,6 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
   board.addEventListener("click", selectPiece);
 
   function switchTurn(isValidMoveMade) {
+    
     if (!isValidMoveMade) {
       console.log("No valid move made. Turn continues.");
       return;
@@ -151,15 +152,10 @@ document.addEventListener("DOMContentLoaded", () => {
       clearInterval(timerInterval1); // Pause white timer
       timerInterval2 = setInterval(updateTimer2, 1000); // Start black timer
     }
+    callCheckMate(currentPlayer, chessBoard);
   }
 
-  function displayGameOverMessage(message) {
-    // You can display the game over message in a modal, alert box, or any other UI element
-    alert(message);
-    // Optionally, you can also disable further moves or take other actions here
-  }
-
-  function getPossibleMoves(piece, row, col, chessBoard, currentPlayer) {
+  function callCheckMate(currentPlayer, chessBoard) {
     if (isCheckmate(currentPlayer, chessBoard)) {
       checkMateEffect.play();
       console.log("Checkmate! Game over.");
@@ -172,6 +168,11 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       return;
     }
+  }
+
+
+  function getPossibleMoves(piece, row, col, chessBoard, currentPlayer) {
+
     const validMoves = [];
     for (let r = 0; r < 8; r++) {
       for (let c = 0; c < 8; c++) {
@@ -303,6 +304,7 @@ document.addEventListener("DOMContentLoaded", () => {
             " col: " +
             clickedSquare.dataset.col
           );
+         
           switchTurn(isValid);
         } else {
           // Change the color of the square to indicate an invalid move
@@ -429,6 +431,22 @@ document.addEventListener("DOMContentLoaded", () => {
                   "col:",
                   targetSquare.dataset.col
                 );
+                const fromCol = parseInt(previousSquare.dataset.col);
+                const fromRow = 8 - parseInt(previousSquare.dataset.row);
+                const toCol = parseInt(targetSquare.dataset.col);
+                const toRow = 8 - parseInt(targetSquare.dataset.row);
+
+                // Convert coordinates to algebraic notation (e.g., a1, b2, etc.)
+                const from = String.fromCharCode(97 + fromCol) + fromRow;
+                const to = String.fromCharCode(97 + toCol) + toRow;
+
+            
+                const piece = selectedPiece.innerHTML.trim();
+                const move = `${piece}${from} to ${to}`;
+
+                // Update and display the move in the sidebar
+                updateMoveList(move);
+               
                 switchTurn(isValid);
               } else {
                 // Change the color of the square to indicate an invalid move
@@ -488,6 +506,23 @@ document.addEventListener("DOMContentLoaded", () => {
                   "of color",
                   opponentPieceColor
                 );
+
+                const fromCol = parseInt(previousSquare.dataset.col);
+                const fromRow = 8 - parseInt(previousSquare.dataset.row);
+                const toCol = parseInt(targetSquare.dataset.col);
+                const toRow = 8 - parseInt(targetSquare.dataset.row);
+
+                // Convert coordinates to algebraic notation (e.g., a1, b2, etc.)
+                const from = String.fromCharCode(97 + fromCol) + fromRow;
+                const to = String.fromCharCode(97 + toCol) + toRow;
+
+                const piece = selectedPiece.innerHTML.trim();
+                const opponentPieceUni = opponentPiece.innerHTML.trim();
+                const move = `${piece}${from} captures ${opponentPieceUni}${to}`;
+
+                // Update and display the move in the sidebar
+                updateMoveList(move);
+               
 
                 switchTurn(true); // Switch turn after successful move
               } else {
@@ -591,4 +626,13 @@ function displayGameOverMessage(message) {
   document.removeEventListener("mousemove", highlightValidMoves);
   board.removeEventListener("mouseup", stopDrag);
   board.removeEventListener("mouseleave", stopDrag);
-}});
+}
+function updateMoveList(move) {
+  const moveList = document.getElementById("moveList");
+  const listItem = document.createElement("li");
+  listItem.textContent = move;
+  moveList.appendChild(listItem);
+}
+
+
+});
