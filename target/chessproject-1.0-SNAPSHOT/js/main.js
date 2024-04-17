@@ -39,6 +39,15 @@ document.addEventListener("DOMContentLoaded", () => {
             "♟": "pawn"
         };
 
+      const names = {
+        "r" : "rook",
+        "n" : "knight",
+        "b" : "bishop",
+        "q" : "queen",
+        "k" : "king",
+        "p" : "pawn"
+      }
+
   let code = "1";
   // Create a new WebSocket connection
   ws = new WebSocket("ws://localhost:8080/chessproject-1.0-SNAPSHOT/ws/"+code);
@@ -49,19 +58,16 @@ ws.onopen = function(event) {
 };
   
 ws.onmessage = function (event) {
-    console.log("Message from server:", event.data)
-    const data = JSON.parse(event.data);
-
-    if (data.type === "move") {
-        // Update the game state and UI with the move
-        updateChessboardArray(data.fromRow, data.fromCol, data.toRow, data.toCol);
-        switchTurn(true);
-    } else if (data.type === "turn") {
-        // Update the current player
-        currentPlayer = data.player;
-    }
+  const data = JSON.parse(event.data);
+  if (data.type === "move") {
+      console.log(data.player + " played the following move: " + data.move);
+      chessBoard = data.state;
+      updateChessboardArray(data.fromRow, data.fromCol, data.toRow, data.toCol);
+      switchTurn(true); // Switch turn after successful move
+  } else if (data.type === "turn") {
+      currentPlayer = data.player;
+  }
 };
-
 
     let currentPlayer = "white"; // change to player 1 or player 2 later
     let selectedPiece = null; // The piece that is currently selected for moving
@@ -69,7 +75,7 @@ ws.onmessage = function (event) {
     let offsetX, offsetY;
     let previousSquare = null; // The square where the selected piece was before dragging
     let isCaptured = false; // Flag to indicate if a piece is captured
-      const chessBoard = [
+      let chessBoard = [
           ["Br", "Bn", "Bb", "Bq", "Bk", "Bb", "Bn", "Br"],
           ["Bp", "Bp", "Bp", "Bp", "Bp", "Bp", "Bp", "Bp"],
           ["", "", "", "", "", "", "", ""],
@@ -82,12 +88,17 @@ ws.onmessage = function (event) {
 
     // Function to update the chessboard array when a piece is moved
     function updateChessboardArray(fromRow, fromCol, toRow, toCol) {
-        const piece = chessBoard[fromRow][fromCol];
-        chessBoard[fromRow][fromCol] = ""; // Clear the previous position
-        chessBoard[toRow][toCol] = piece; // Place the piece in the new position
-
-        console.log(chessBoard);
-    }
+      const piece = chessBoard[fromRow][fromCol];
+      chessBoard[fromRow][fromCol] = ""; // Clear the previous position
+      chessBoard[toRow][toCol] = piece; // Place the piece in the new position
+  
+      // Update the UI
+      const fromSquare = document.querySelector(`.square[data-row="${fromRow}"][data-col="${fromCol}"]`);
+      const toSquare = document.querySelector(`.square[data-row="${toRow}"][data-col="${toCol}"]`);
+      const pieceElement = fromSquare.querySelector(".piece");
+      fromSquare.removeChild(pieceElement);
+      toSquare.appendChild(pieceElement);
+  }
   
     for (let row = 0; row < 8; row++) {
         for (let col = 0; col < 8; col++) {
@@ -279,15 +290,9 @@ ws.onmessage = function (event) {
             );
             if (isValid) {
               clickedSquare.appendChild(selectedPiece);
-              updateChessboardArray(
-                parseInt(previousSquare.dataset.row),
-                parseInt(previousSquare.dataset.col),
-                parseInt(clickedSquare.dataset.row),
-                parseInt(clickedSquare.dataset.col)
-              );
-              sendMove(currentPlayer, selectedPiece, parseInt(previousSquare.dataset.row), parseInt(previousSquare.dataset.col), parseInt(clickedSquare.dataset.row), parseInt(clickedSquare.dataset.col));
-              console.log("Moved piece to row: " + clickedSquare.dataset.row + " col: " + clickedSquare.dataset.col);
-              switchTurn(isValid);
+              sendMove(currentPlayer, selectedPiece, chessBoard, parseInt(previousSquare.dataset.row), 
+                parseInt(previousSquare.dataset.col), parseInt(clickedSquare.dataset.row), 
+                parseInt(clickedSquare.dataset.col));
             } else {
               // Change the color of the square to indicate an invalid move
               clickedSquare.style.backgroundColor = "red";
@@ -384,21 +389,10 @@ ws.onmessage = function (event) {
                                 currentPlayer
                             );
                             if (isValid) {
-                                targetSquare.appendChild(selectedPiece);
-                                updateChessboardArray(
-                                    parseInt(previousSquare.dataset.row),
-                                    parseInt(previousSquare.dataset.col),
-                                    parseInt(targetSquare.dataset.row),
-                                    parseInt(targetSquare.dataset.col),
-                                );
-                                //printout unicode piece in console exact format #9812...
-                                console.log(selectedPiece.innerHTML.trim().normalize());
-                                
-                                sendMove(currentPlayer, selectedPiece, parseInt(previousSquare.dataset.row), parseInt(previousSquare.dataset.col), parseInt(targetSquare.dataset.row), parseInt(targetSquare.dataset.col));
-                                console.log("Moved piece to row:", targetSquare.dataset.row, "col:", targetSquare.dataset.col);
-                                switchTurn(isValid);
-
-                                
+                                targetSquare.appendChild(selectedPiece);                           
+                                sendMove(currentPlayer, selectedPiece, chessBoard, 
+                                  parseInt(previousSquare.dataset.row), parseInt(previousSquare.dataset.col),
+                                  parseInt(targetSquare.dataset.row), parseInt(targetSquare.dataset.col));
                             } else {
                                 // Change the color of the square to indicate an invalid move
                                 targetSquare.style.backgroundColor = "red";
@@ -432,17 +426,9 @@ ws.onmessage = function (event) {
                             
                             // Move the player's piece to the target square
                             targetSquare.appendChild(selectedPiece);
-                            updateChessboardArray(
-                                parseInt(previousSquare.dataset.row),
-                                parseInt(previousSquare.dataset.col),
-                                parseInt(targetSquare.dataset.row),
-                                parseInt(targetSquare.dataset.col)
-                            );
-                            sendMove(currentPlayer, selectedPiece, parseInt(previousSquare.dataset.row), parseInt(previousSquare.dataset.col), parseInt(targetSquare.dataset.row), parseInt(targetSquare.dataset.col));
-                            console.log("Moved piece to row:", targetSquare.dataset.row, "col:", targetSquare.dataset.col);
-                            console.log("Captured opponent's", opponentPieceName, "of color", opponentPieceColor);
-                            
-                            switchTurn(true); // Switch turn after successful move
+                            sendMove(currentPlayer, selectedPiece, chessBoard, 
+                              parseInt(previousSquare.dataset.row), parseInt(previousSquare.dataset.col),
+                              parseInt(targetSquare.dataset.row), parseInt(targetSquare.dataset.col));
                             isCaptured = false;
                             }
                             else {
@@ -489,12 +475,12 @@ ws.onmessage = function (event) {
     }
 
     //Sends the player and the move in standard chess notation to the server
-    function sendMove(player, selectedPiece, fromRow, fromCol, toRow, toCol) {
-      
+    function sendMove(player, selectedPiece, chessBoard, fromRow, fromCol, toRow, toCol) {
       const data = {
           type: "move",
           player: player,
           move: convertToStandardNotation(selectedPiece, fromCol, toRow, toCol), // Convert the move to standard chess notation
+          state : chessBoard,
           selectedPiece: selectedPiece,
           fromRow: fromRow,
           fromCol: fromCol,
@@ -502,7 +488,17 @@ ws.onmessage = function (event) {
           toCol: toCol
       };
 
-      ws.send(JSON.stringify(data)); 
+      ws.send(JSON.stringify(data));
+    }
+
+    //Sends the player who's turn it is to the server
+    function sendTurn(chessBoard, player) {
+      const data = {
+          type: "turn",
+          player: player === "white" ? "black" : "white",
+          state: chessBoard
+      };
+      ws.send(JSON.stringify(data));
     }
 
     //Converts the column number to a letter
