@@ -5,19 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chessboard</title>
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/sidebar.css" />
+    <link rel="stylesheet" href="css/popUp.css" />
     <script src="js/main.js" type="module" defer></script>
-  
-
+    <script src="js/themeswitch.js" defer></script>
   </head>
+
   <body>
-    <select id="theme-select">
-      <option value="classic">Classic</option>
-      <option value="modern">Modern</option>
-      <option value="dark">Dark</option>
-      <option value="ocean">Ocean</option>
-      <option value="pastel">Pastel</option>
-      <option value="wooden">Wooden</option>
-    </select>
+    <div class="sidebar side2">
+      <div class="logo">
+        <a class="logo" href="title.html">
+          <img src="images/knight-icon.png" alt="logo" />
+          <h1>ChessHub</h1>
+        </a>
+      </div>
+      <div class="menu">
+        <ul>
+          <li>
+            <a href="title.html">Home</a>
+          </li>
+          <li>
+            <a href="index.html">Online</a>
+          </li>
+          <li>
+            <a href="register.html">Computer</a>
+          </li>
+          <li>
+            <a onclick="openPopup()" class="themeslink">Themes</a>
+          </li>
+          <li>
+            <a href="leaderboards.html">Leaderboard</a>
+          </li>
+          <li>
+            <a href="about.html">About</a>
+          </li>
+          <li class="profile">
+            <img src="images/profile-icon.png" alt="profile" />
+            <a href="">Profile</a>
+          </li>
+        </ul>
+      </div>
+    </div>
 
     <div class="container">
       <div class="upper">
@@ -33,8 +61,7 @@
             <div class="number">1</div>
           </div>
         </div>
-        <div class="chessboard">
-        </div>
+        <div class="chessboard"></div>
       </div>
       <div class="lower">
         <div class="letters">
@@ -48,6 +75,75 @@
             <div class="letter">g</div>
             <div class="letter">h</div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="popup" id="popup">
+      <div class="themes">
+        <div class="box">
+          <div class="text">
+            <h2>Classic</h2>
+          </div>
+          <div class="theme theme01">
+            <a onclick="selectTheme('classic')">
+              <img src="images/classicTheme.png" alt="Classic Theme" />
+            </a>
+          </div>
+        </div>
+        <div class="box">
+          <div class="text">
+            <h2>Dark</h2>
+          </div>
+          <div class="theme theme02">
+            <a onclick="selectTheme('dark')">
+              <img src="images/darkTheme.png" alt="Dark Theme" />
+            </a>
+          </div>
+        </div>
+        <div class="box">
+          <div class="text">
+            <h2>Ocean</h2>
+          </div>
+          <div class="theme theme03">
+            <a onclick="selectTheme('ocean')">
+              <img src="images/oceanTheme.png" alt="Ocean Theme" />
+            </a>
+          </div>
+        </div>
+        <div class="box">
+          <div class="text">
+            <h2>Wooden</h2>
+          </div>
+          <div class="theme theme04">
+            <a onclick="selectTheme('wooden')">
+              <img src="images/woodenTheme.png" alt="Wooden Theme" />
+            </a>
+          </div>
+        </div>
+        <div class="box">
+          <div class="text">
+            <h2>Modern</h2>
+          </div>
+          <div class="theme theme05">
+            <a onclick="selectTheme('modern')">
+              <img src="images/modernTheme.png" alt="Modern Theme" />
+            </a>
+          </div>
+        </div>
+        <div class="box">
+          <div class="text">
+            <h2>Pastel</h2>
+          </div>
+          <div class="theme theme06">
+            <a onclick="selectTheme('pastel')">
+              <img src="images/pastelTheme.png" alt="Pastel Theme" />
+            </a>
+          </div>
+        </div>
+
+        <div class="button">
+          <a href="#" class="close" onclick="closePopup()"></a>
         </div>
       </div>
     </div>
