@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chessboard</title>
+    <link rel="icon" href="images/knight-icon.png">
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/sidebar.css" />
     <link rel="stylesheet" href="css/popUp.css" />
@@ -23,7 +24,7 @@
         <ul>
           <li>
             <a href="title.html">Home</a>
-          </li>
+          </li> 
           <li>
             <a href="index.html">Online</a>
           </li>
@@ -36,12 +37,12 @@
           <li>
             <a href="leaderboards.html">Leaderboard</a>
           </li>
-          <li>
-            <a href="about.html">About</a>
+          <li class="rule">
+            <a onclick="openRulesPopup()" class="rulestheme">Rules</a>
           </li>
-          <li class="profile">
-            <img src="images/profile-icon.png" alt="profile" />
-            <a href="">Profile</a>
+          <li class="about">
+            <img src="images/aboutIcon.png" alt="aboutIcon" />
+            <a href="about.html">About</a>
           </li>
         </ul>
       </div>
@@ -75,6 +76,14 @@
             <div class="letter">g</div>
             <div class="letter">h</div>
           </div>
+        </div>
+      </div>
+      <div class="timers">
+        <div>
+          <div id="black-timer">10:00</div>
+        </div>
+        <div>
+          <div id="white-timer">10:00</div>
         </div>
       </div>
     </div>
@@ -144,6 +153,61 @@
 
         <div class="button">
           <a href="#" class="close" onclick="closePopup()"></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="rules-popup" id="openRulesPopup">
+      <div class="rules">
+        <h2>Rules</h2>
+        <ul>
+          <li>
+            <strong>Initiating a Game:</strong> Choose to play against other
+            players or challenge the computer.
+          </li>
+          <li>
+            <strong>Online Play:</strong> Generate a unique code that allows
+            both users to join the same game when entered.
+          </li>
+          <li>
+            <strong>Objective:</strong> The primary objective of this game is
+            to capture your opponent's king.
+          </li>
+          <li>
+            <strong>Winning by Timer:</strong> You can win by depleting your
+            opponent's time; when they run out of time, you win.
+          </li>
+          <li>
+            <strong>Piece Capture:</strong> Capturing an opponent's piece is
+            achieved by dragging your piece onto theirs.
+          </li>
+          <li>
+            <strong>Special Moves:</strong> Castling, en passant, and pawn
+            promotion are special moves in chess.
+          </li>
+          <li>
+            <strong>Stalemate:</strong> Stalemate occurs when a player has no
+            legal moves.
+          </li>
+        </ul>
+      </div>
+      <div class="rules-btn">
+        <a href="#" class="close" onclick="closeRulesPopup()"></a>
+      </div>
+    </div>
+
+    <div class="game-popup" id="game-popup">
+      <div class="gameover">
+        <h1>Game Over</h1>
+        <p id="win"></p>
+        <div class="buttons">
+          <div class="playagain">
+            <a href="#" class="btn againbtn" id="close-popup" onclick="closePopup()">Play Again</a>
+          </div>
+    
+          <div class="close">
+            <a href="#" class="btn closebtn" id="closepopup" onclick="closePopup()">Close</a>
+          </div>
         </div>
       </div>
     </div>

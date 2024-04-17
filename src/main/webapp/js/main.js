@@ -3,167 +3,174 @@ import { isCheckmate } from "./chess.js";
 let ws;
 
 document.addEventListener("DOMContentLoaded", () => {
-    const board = document.querySelector(".chessboard");
-  
-    const pieces = {
-        white: {
-            king: "&#9812;",
-            queen: "&#9813;",
-            rook: "&#9814;",
-            bishop: "&#9815;",
-            knight: "&#9816;",
-            pawn: "&#9817;"
-        },
-        black: {
-            king: "&#9818;",
-            queen: "&#9819;",
-            rook: "&#9820;",
-            bishop: "&#9821;",
-            knight: "&#9822;",
-            pawn: "&#9823;"
-        }
-    };
-  
-    const unicodeToPieceName = {
-            "♔": "king",
-            "♕": "queen",
-            "♖": "rook",
-            "♗": "bishop",
-            "♘": "knight",
-            "♙": "pawn",
-            "♚": "king",
-            "♛": "queen",
-            "♜": "rook",
-            "♝": "bishop",
-            "♞": "knight",
-            "♟": "pawn"
-        };
+  const board = document.querySelector(".chessboard");
 
-      const names = {
-        "r" : "rook",
-        "n" : "knight",
-        "b" : "bishop",
-        "q" : "queen",
-        "k" : "king",
-        "p" : "pawn"
-      }
+  const pieces = {
+    white: {
+      king: "&#9812;",
+      queen: "&#9813;",
+      rook: "&#9814;",
+      bishop: "&#9815;",
+      knight: "&#9816;",
+      pawn: "&#9817;",
+    },
+    black: {
+      king: "&#9818;",
+      queen: "&#9819;",
+      rook: "&#9820;",
+      bishop: "&#9821;",
+      knight: "&#9822;",
+      pawn: "&#9823;",
+    },
+  };
+
+  const unicodeToPieceName = {
+    "♔": "king",
+    "♕": "queen",
+    "♖": "rook",
+    "♗": "bishop",
+    "♘": "knight",
+    "♙": "pawn",
+    "♚": "king",
+    "♛": "queen",
+    "♜": "rook",
+    "♝": "bishop",
+    "♞": "knight",
+    "♟": "pawn",
+  };
 
   let code = "1";
-  // Create a new WebSocket connection
   ws = new WebSocket("ws://localhost:8080/chessproject-1.0-SNAPSHOT/ws/"+code);
 
-// Event handler for successful connection
-ws.onopen = function(event) {
-  console.log("WebSocket connection established.");
-};
-  
-ws.onmessage = function (event) {
-  const data = JSON.parse(event.data);
-  if (data.type === "move") {
-      console.log(data.player + " played the following move: " + data.move);
-      chessBoard = data.state;
-      updateChessboardArray(data.fromRow, data.fromCol, data.toRow, data.toCol);
-      switchTurn(true); // Switch turn after successful move
-  } else if (data.type === "turn") {
-      currentPlayer = data.player;
-  }
-};
+  ws.onopen = function () {
+    console.log("WebSocket connection opened");
+  };
 
-    let currentPlayer = "white"; // change to player 1 or player 2 later
-    let selectedPiece = null; // The piece that is currently selected for moving
-    let isDragging = false; // Flag to indicate if a piece is being dragged
-    let offsetX, offsetY;
-    let previousSquare = null; // The square where the selected piece was before dragging
-    let isCaptured = false; // Flag to indicate if a piece is captured
-      let chessBoard = [
-          ["Br", "Bn", "Bb", "Bq", "Bk", "Bb", "Bn", "Br"],
-          ["Bp", "Bp", "Bp", "Bp", "Bp", "Bp", "Bp", "Bp"],
-          ["", "", "", "", "", "", "", ""],
-          ["", "", "", "", "", "", "", ""],
-          ["", "", "", "", "", "", "", ""],
-          ["", "", "", "", "", "", "", ""],
-          ["Wp", "Wp", "Wp", "Wp", "Wp", "Wp", "Wp", "Wp"], 
-          ["Wr", "Wn", "Wb", "Wq", "Wk", "Wb", "Wn", "Wr"]
-      ];
-
-    // Function to update the chessboard array when a piece is moved
-    function updateChessboardArray(fromRow, fromCol, toRow, toCol) {
-      const piece = chessBoard[fromRow][fromCol];
-      chessBoard[fromRow][fromCol] = ""; // Clear the previous position
-      chessBoard[toRow][toCol] = piece; // Place the piece in the new position
-  
-      // Update the UI
-      const fromSquare = document.querySelector(`.square[data-row="${fromRow}"][data-col="${fromCol}"]`);
-      const toSquare = document.querySelector(`.square[data-row="${toRow}"][data-col="${toCol}"]`);
-      const pieceElement = fromSquare.querySelector(".piece");
-      fromSquare.removeChild(pieceElement);
-      toSquare.appendChild(pieceElement);
-  }
-  
-    for (let row = 0; row < 8; row++) {
-        for (let col = 0; col < 8; col++) {
-            const square = document.createElement("div");
-            square.classList.add("square");
-            square.classList.add((row + col) % 2 === 0 ? "light" : "dark");
-            square.dataset.row = row;
-            square.dataset.col = col;
-  
-            if (row === 1) {
-                square.innerHTML = `<div class="piece black">${pieces.black.pawn}</div>`;
-            } else if (row === 6) {
-                square.innerHTML = `<div class="piece white">${pieces.white.pawn}</div>`;
-            } else if (row === 0 || row === 7) {
-                let pieceColor = row === 0 ? "black" : "white";
-                let piece;
-                switch (col) {
-                    case 0:
-                    case 7:
-                        piece = "rook";
-                        break;
-                    case 1:
-                    case 6:
-                        piece = "knight";
-                        break;
-                    case 2:
-                    case 5:
-                        piece = "bishop";
-                        break;
-                    case 3:
-                        piece = "queen";
-                        break;
-                    case 4:
-                        piece = "king";
-                        break;
-                }
-                square.innerHTML = `<div class="piece ${pieceColor}">${pieces[pieceColor][piece]}</div>`;
-            }
-  
-            board.appendChild(square);
-        }
+  ws.onmessage = function (event) {
+    const data = JSON.parse(event.data);
+    if (data.type === "move") {
+        console.log(data.player + " played the following move: " + data.move);
+        chessBoard = data.state;
+        updateChessboardArray(data.fromRow, data.fromCol, data.toRow, data.toCol);
+        switchTurn(true); // Switch turn after successful move
+    } else if (data.type === "turn") {
+        currentPlayer = data.player;
     }
-  
-    const piecesOnBoard = document.querySelectorAll(".piece");
-    piecesOnBoard.forEach(piece => {
-        piece.addEventListener("mousedown", startDrag);
-    });
-  
-    const themeSelect = document.getElementById("theme-select");
-    themeSelect.addEventListener("change", handleThemeChange);
-  
-    //for drag and drop
-    board.addEventListener("mouseup", stopDrag);
-    board.addEventListener("mouseleave", stopDrag);
-  
-    // for click and move the piece
-    board.addEventListener("click", selectPiece);
-  
-    function switchTurn(isValidMoveMade) {
-      if (!isValidMoveMade) {
-          console.log("No valid move made. Turn continues.");
-          return;
+  };
+
+  let currentPlayer = "white";
+  let selectedPiece = null;
+  let isDragging = false;
+  let offsetX, offsetY;
+  let previousSquare = null;
+  let isCaptured = false;
+  let player1Time = 60 * 10;
+  let player2Time = 60 * 10;
+  let timerInterval1 = setInterval(updateTimer1, 1000);
+  let timerInterval2;
+
+  let chessBoard = [
+    ["Br", "Bn", "Bb", "Bq", "Bk", "Bb", "Bn", "Br"],
+    ["Bp", "Bp", "Bp", "Bp", "Bp", "Bp", "Bp", "Bp"],
+    ["", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", ""],
+    ["Wp", "Wp", "Wp", "Wp", "Wp", "Wp", "Wp", "Wp"],
+    ["Wr", "Wn", "Wb", "Wq", "Wk", "Wb", "Wn", "Wr"],
+  ];
+
+  const startEffect = new Audio("sound/start-effect.mp3");
+  const moveEffect = new Audio("sound/move-effect.mp3");
+  const captureEffect = new Audio("sound/capture-effect.mp3");
+  const checkMateEffect = new Audio("sound/checkmate-effect.mp3");
+
+  startEffect.play();
+
+  // Function to update the chessboard array when a piece is moved
+  function updateChessboardArray(fromRow, fromCol, toRow, toCol) {
+    const piece = chessBoard[fromRow][fromCol];
+    chessBoard[fromRow][fromCol] = ""; // Clear the previous position
+    chessBoard[toRow][toCol] = piece; // Place the piece in the new position
+
+    // Update the UI
+    const fromSquare = document.querySelector(`.square[data-row="${fromRow}"][data-col="${fromCol}"]`);
+    const toSquare = document.querySelector(`.square[data-row="${toRow}"][data-col="${toCol}"]`);
+    const pieceElement = fromSquare.querySelector(".piece");
+    fromSquare.removeChild(pieceElement);
+    toSquare.appendChild(pieceElement);
+}
+
+  for (let row = 0; row < 8; row++) {
+    for (let col = 0; col < 8; col++) {
+      const square = document.createElement("div");
+      square.classList.add("square");
+      square.classList.add((row + col) % 2 === 0 ? "light" : "dark");
+      square.dataset.row = row;
+      square.dataset.col = col;
+
+      if (row === 1) {
+        square.innerHTML = `<div class="piece black">${pieces.black.pawn}</div>`;
+      } else if (row === 6) {
+        square.innerHTML = `<div class="piece white">${pieces.white.pawn}</div>`;
+      } else if (row === 0 || row === 7) {
+        let pieceColor = row === 0 ? "black" : "white";
+        let piece;
+        switch (col) {
+          case 0:
+          case 7:
+            piece = "rook";
+            break;
+          case 1:
+          case 6:
+            piece = "knight";
+            break;
+          case 2:
+          case 5:
+            piece = "bishop";
+            break;
+          case 3:
+            piece = "queen";
+            break;
+          case 4:
+            piece = "king";
+            break;
+        }
+        square.innerHTML = `<div class="piece ${pieceColor}">${pieces[pieceColor][piece]}</div>`;
       }
-      currentPlayer = currentPlayer === "white" ? "black" : "white";
-      console.log("Current turn: " + currentPlayer);
+
+      board.appendChild(square);
+    }
+  }
+
+  const piecesOnBoard = document.querySelectorAll(".piece");
+  piecesOnBoard.forEach((piece) => {
+    piece.addEventListener("mousedown", startDrag);
+  });
+
+  //for drag and drop
+  board.addEventListener("mouseup", stopDrag);
+  board.addEventListener("mouseleave", stopDrag);
+
+  // for click and move the piece
+  board.addEventListener("click", selectPiece);
+
+  function switchTurn(isValidMoveMade) {
+    if (!isValidMoveMade) {
+      console.log("No valid move made. Turn continues.");
+      return;
+    }
+    currentPlayer = currentPlayer === "white" ? "black" : "white";
+    console.log("Current turn: " + currentPlayer);
+
+    // Pause or resume timers based on current player
+    if (currentPlayer === "white") {
+      clearInterval(timerInterval2); // Pause black timer
+      timerInterval1 = setInterval(updateTimer1, 1000); // Resume white timer
+    } else {
+      clearInterval(timerInterval1); // Pause white timer
+      timerInterval2 = setInterval(updateTimer2, 1000); // Start black timer
+    }
   }
 
   function displayGameOverMessage(message) {
@@ -272,56 +279,56 @@ ws.onmessage = function (event) {
           //   clickedSquare.removeChild(capturedPiece);
           // }
 
-              //   clickedSquare.appendChild(selectedPiece);
-              // // Update the chessboard array
-              // updateChessboardArray(
-              //   parseInt(previousSquare.dataset.row),
-              //   parseInt(previousSquare.dataset.col),
-              //   parseInt(clickedSquare.dataset.row),
-              //   parseInt(clickedSquare.dataset.col)
-              // );
-      
-              // console.log("Moved piece to row:", clickedSquare.dataset.row, "col:", clickedSquare.dataset.col);
+          //   clickedSquare.appendChild(selectedPiece);
+          // // Update the chessboard array
+          // updateChessboardArray(
+          //   parseInt(previousSquare.dataset.row),
+          //   parseInt(previousSquare.dataset.col),
+          //   parseInt(clickedSquare.dataset.row),
+          //   parseInt(clickedSquare.dataset.col)
+          // );
 
-    
-              // switchTurn(true); // Switch turn after successful move
-              console.log('Drag to capture opponent piece');
-            } else {
-              // Target square has your own piece - cannot move there
-              console.log("Cannot move to a square occupied by your own piece.");
-              return;
-            }
-          } else {
-            // The clicked square is empty, check for valid move
-            const isValid = isValidMove(
-              piece,
-              parseInt(previousSquare.dataset.row),
-              parseInt(previousSquare.dataset.col),
-              parseInt(clickedSquare.dataset.row),
-              parseInt(clickedSquare.dataset.col),
-              chessBoard,
-              currentPlayer
-            );
-            if (isValid) {
-              clickedSquare.appendChild(selectedPiece);
+          // console.log("Moved piece to row:", clickedSquare.dataset.row, "col:", clickedSquare.dataset.col);
+
+          // switchTurn(true); // Switch turn after successful move
+          console.log("Drag to capture opponent piece");
+        } else {
+          // Target square has your own piece - cannot move there
+          console.log("Cannot move to a square occupied by your own piece.");
+          return;
+        }
+      } else {
+        // The clicked square is empty, check for valid move
+        const isValid = isValidMove(
+          piece,
+          parseInt(previousSquare.dataset.row),
+          parseInt(previousSquare.dataset.col),
+          parseInt(clickedSquare.dataset.row),
+          parseInt(clickedSquare.dataset.col),
+          chessBoard,
+          currentPlayer
+        );
+        if (isValid) {
+          moveEffect.play();
+          clickedSquare.appendChild(selectedPiece);
               sendMove(currentPlayer, selectedPiece, chessBoard, parseInt(previousSquare.dataset.row), 
                 parseInt(previousSquare.dataset.col), parseInt(clickedSquare.dataset.row), 
                 parseInt(clickedSquare.dataset.col));
             } else {
-              // Change the color of the square to indicate an invalid move
-              clickedSquare.style.backgroundColor = "red";
-              setTimeout(() => {
-                clickedSquare.style.backgroundColor = "";
-              }, 1000);
-            }
-          }
-      
-          selectedPiece = null;
-          previousSquare = null;
-        } else {
-          console.log("Cannot move to the same square.");
+          // Change the color of the square to indicate an invalid move
+          clickedSquare.style.backgroundColor = "red";
+          setTimeout(() => {
+            clickedSquare.style.backgroundColor = "";
+          }, 1000);
         }
       }
+
+      selectedPiece = null;
+      previousSquare = null;
+    } else {
+      console.log("Cannot move to the same square.");
+    }
+  }
 
   function highlightValidMoves(event) {
     // Remove previous highlights
@@ -413,95 +420,160 @@ ws.onmessage = function (event) {
                 parseInt(targetSquare.dataset.row),
                 parseInt(targetSquare.dataset.col),
 
-                                chessBoard,
-                                currentPlayer
-                            );
-                            if (isValid) {
-                                targetSquare.appendChild(selectedPiece);                           
-                                sendMove(currentPlayer, selectedPiece, chessBoard, 
-                                  parseInt(previousSquare.dataset.row), parseInt(previousSquare.dataset.col),
-                                  parseInt(targetSquare.dataset.row), parseInt(targetSquare.dataset.col));
-                            } else {
-                                // Change the color of the square to indicate an invalid move
-                                targetSquare.style.backgroundColor = "red";
-                                setTimeout(() => {
-                                    targetSquare.style.backgroundColor = "";
-                                }, 1000);
-                            }
-                        } else {
-                            // Take the piece of the opponent
-                            console.log("Opponent's piece found:", targetSquare.querySelector(".piece"));
-                            const opponentPiece = targetSquare.querySelector(".piece");
-                            const opponentPieceColor = opponentPiece.classList.contains("white") ? "white" : "black";
-                            const opponentPieceName = unicodeToPieceName[opponentPiece.innerHTML.trim().normalize()];
-
-                            const isValid = isValidMove(
-                                unicodeToPieceName[selectedPiece.innerHTML.trim().normalize()],
-                                parseInt(previousSquare.dataset.row),
-                                parseInt(previousSquare.dataset.col),
-                                parseInt(targetSquare.dataset.row),
-                                parseInt(targetSquare.dataset.col),
-                                chessBoard,
-                                currentPlayer
-                            );
-                           
-                           
-                            if (isValid) {
-                            
-                            // Remove the opponent's piece from the board
-                            targetSquare.removeChild(opponentPiece);
-                            isCaptured = true;
-                            
-                            // Move the player's piece to the target square
-                            targetSquare.appendChild(selectedPiece);
-                            sendMove(currentPlayer, selectedPiece, chessBoard, 
-                              parseInt(previousSquare.dataset.row), parseInt(previousSquare.dataset.col),
-                              parseInt(targetSquare.dataset.row), parseInt(targetSquare.dataset.col));
-                            isCaptured = false;
-                            }
-                            else {
-                               console.log("Invalid move. Cannot capture opponent's piesdfsdfsace.");
-                                // Change the color of the square to indicate an invalid move
-                                targetSquare.style.backgroundColor = "red";
-                                setTimeout(() => {
-                                    targetSquare.style.backgroundColor = "";
-                                }, 1000);
-                            }
-                        }
-                    } else {
-                        console.log("You can only move your own pieces.");
-                    }
-                } else {
-                    console.log("Cannot move to the same square.");
-                }
+                chessBoard,
+                currentPlayer
+              );
+              if (isValid) {
+                moveEffect.play();
+                targetSquare.appendChild(selectedPiece);
+                sendMove(currentPlayer, selectedPiece, chessBoard, 
+                  parseInt(previousSquare.dataset.row), parseInt(previousSquare.dataset.col),
+                  parseInt(targetSquare.dataset.row), parseInt(targetSquare.dataset.col));
             } else {
-                console.log("Dropped outside the board.");
+                // Change the color of the square to indicate an invalid move
+                targetSquare.style.backgroundColor = "red";
+                setTimeout(() => {
+                  targetSquare.style.backgroundColor = "";
+                }, 1000);
+              }
+            } else {
+              // Take the piece of the opponent
+              console.log(
+                "Opponent's piece found:",
+                targetSquare.querySelector(".piece")
+              );
+              const opponentPiece = targetSquare.querySelector(".piece");
+              const opponentPieceColor = opponentPiece.classList.contains(
+                "white"
+              )
+                ? "white"
+                : "black";
+              const opponentPieceName =
+                unicodeToPieceName[opponentPiece.innerHTML.trim().normalize()];
+
+              const isValid = isValidMove(
+                unicodeToPieceName[selectedPiece.innerHTML.trim().normalize()],
+                parseInt(previousSquare.dataset.row),
+                parseInt(previousSquare.dataset.col),
+                parseInt(targetSquare.dataset.row),
+                parseInt(targetSquare.dataset.col),
+                chessBoard,
+                currentPlayer
+              );
+
+              if (isValid) {
+                // Remove the opponent's piece from the board
+                captureEffect.play();
+                targetSquare.removeChild(opponentPiece);
+                isCaptured = true;
+                
+                // Move the player's piece to the target square
+                targetSquare.appendChild(selectedPiece);
+                sendMove(currentPlayer, selectedPiece, chessBoard, 
+                  parseInt(previousSquare.dataset.row), parseInt(previousSquare.dataset.col),
+                  parseInt(targetSquare.dataset.row), parseInt(targetSquare.dataset.col));
+                isCaptured = false;
+                console.log(
+                  "Invalid move. Cannot capture opponent's piesdfsdfsace."
+                );
+                // Change the color of the square to indicate an invalid move
+                targetSquare.style.backgroundColor = "red";
+                setTimeout(() => {
+                  targetSquare.style.backgroundColor = "";
+                }, 1000);
+              }
             }
-           
-            selectedPiece = null;
-            previousSquare = null;
+          } else {
+            console.log("You can only move your own pieces.");
+          }
+        } else {
+          console.log("Cannot move to the same square.");
         }
-    }
-    
-    function handleThemeChange(event) {
-        const theme = event.target.value;
-        const chessboard = document.querySelector(".chessboard");
-        chessboard.className = `chessboard ${theme}`;
-    }
+      } else {
+        console.log("Dropped outside the board.");
+      }
 
-    function displayGameOverMessage(message) {
-      // Display the game over message
-      alert(message);
+      selectedPiece = null;
+      previousSquare = null;
+    }
+  }
+
+  // Timer related functions
+  function updateTimer1() {
+    player1Time--;
+    const timer1Display = document.getElementById("white-timer");
+    timer1Display.textContent = formatTime(player1Time);
+    if (player1Time <= 0) {
+      clearInterval(timerInterval1);
+      displayGameOverMessage("Black Wins!");
+      
+    }
+  }
   
-      // Remove event listeners to disable further moves
-      board.removeEventListener("click", selectPiece);
-      board.removeEventListener("mousedown", startDrag);
-      document.removeEventListener("mousemove", dragPiece);
-      document.removeEventListener("mousemove", highlightValidMoves);
-      board.removeEventListener("mouseup", stopDrag);
-      board.removeEventListener("mouseleave", stopDrag);
+  function updateTimer2() {
+    player2Time--;
+    const timer2Display = document.getElementById("black-timer");
+    timer2Display.textContent = formatTime(player2Time);
+    if (player2Time <= 0) {
+      clearInterval(timerInterval2);
+      displayGameOverMessage("White Wins!");
     }
+  }
+  
 
+  function formatTime(time) {
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+    return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+  }
+  
+
+  function handleThemeChange(event) {
+    const theme = event.target.value;
+    const chessboard = document.querySelector(".chessboard");
+    chessboard.className = `chessboard ${theme}`;
+  }
+
+  let popup = document.getElementById('game-popup');
+  let winText = document.getElementById('win');
+  let closeBtn = document.getElementById('close-popup');
+  let closeBtn2 = document.getElementById('closepopup');
+
+function openPopup() {
+  popup.classList.add('game-over-popup');
+}
+
+if (closeBtn) {
+  closeBtn.addEventListener('click', function() {
+    location.reload();
+  });
+}
+
+if (closeBtn2) { 
+  closeBtn2.addEventListener('click', closePopup);
+}
+
+function closePopup() {
+  popup.classList.remove('game-over-popup');
+}
+
+function displayGameOverMessage(message) {
+  // Display the game over message
+  winText.textContent = message;
+  openPopup();
+
+  //stop the timers
+  clearInterval(timerInterval1);
+  clearInterval(timerInterval2);
+
+  // Remove event listeners to disable further moves
+  board.removeEventListener("click", selectPiece);
+  board.removeEventListener("mousedown", startDrag);
+  document.removeEventListener("mousemove", dragPiece);
+  document.removeEventListener("mousemove", highlightValidMoves);
+  board.removeEventListener("mouseup", stopDrag);
+  board.removeEventListener("mouseleave", stopDrag);
+}
     //Sends the player and the move in standard chess notation to the server
     function sendMove(player, selectedPiece, chessBoard, fromRow, fromCol, toRow, toCol) {
       const data = {

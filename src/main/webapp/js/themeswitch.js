@@ -1,8 +1,6 @@
 let popup = document.getElementById("popup");
 let rulesPopup = document.getElementById("openRulesPopup");
 
-
-  
 function openPopup() {
   popup.classList.add("open-popup");
   closeRulesPopup();

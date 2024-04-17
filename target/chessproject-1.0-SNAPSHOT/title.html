@@ -6,13 +6,14 @@
     <link rel="stylesheet" href="css/titleStyle.css" />
     <link rel="stylesheet" href="css/sidebar.css" />
     <link rel="stylesheet" href="css/popUp.css" />
+    <link rel="icon" href="images/knight-icon.png">
     <script src="js/main.js" defer></script>
     <script src="js/themeswitch.js" defer></script>
     <title>ChessHub</title>
   </head>
 
   <body>
-    <div class="sidebar">
+    <div class="sidebar side2">
       <div class="logo">
         <a class="logo" href="title.html">
           <img src="images/knight-icon.png" alt="logo" />
@@ -28,7 +29,7 @@
             <a href="index.html">Online</a>
           </li>
           <li>
-            <a href="computer.html">Computer</a>
+            <a href="register.html">Computer</a>
           </li>
           <li>
             <a onclick="openPopup()" class="themeslink">Themes</a>
@@ -36,12 +37,12 @@
           <li>
             <a href="leaderboards.html">Leaderboard</a>
           </li>
-          <li>
-            <a href="about.html">About</a>
+          <li class="rule">
+            <a onclick="openRulesPopup()" class="rulestheme">Rules</a>
           </li>
-          <li class="profile">
-            <img src="images/profile-icon.png" alt="profile" />
-            <a href="">Profile</a>
+          <li class="about">
+            <img src="images/aboutIcon.png" alt="aboutIcon" />
+            <a href="about.html">About</a>
           </li>
         </ul>
       </div>
@@ -94,17 +95,6 @@
             <a onclick="closePopup()">
               <img src="images/classicTheme.png" alt="Classic Theme" />
             </a>
-          <div class="play-online-btn">
-            <button type="button">
-              <img src="images/PlayIMG.svg" alt="playChess" />
-              <p class="text">Play Online</p>
-            </button>
-          </div>
-          <div class="play-computer-btn">
-            <button type="button">
-              <img src="images/computerIMG.svg" alt="computerChess" />
-              <p class="text2">Play Computer</p>
-            </button>
           </div>
         </div>
         <div class="box">
@@ -161,6 +151,45 @@
         <div class="button">
           <a href="#" class="close" onclick="closePopup()"></a>
         </div>
+      </div>
+    </div>
+
+    <div class="rules-popup" id="openRulesPopup">
+      <div class="rules">
+        <h2>Rules</h2>
+        <ul>
+          <li>
+            <strong>Initiating a Game:</strong> Choose to play against other
+            players or challenge the computer.
+          </li>
+          <li>
+            <strong>Online Play:</strong> Generate a unique code that allows
+            both users to join the same game when entered.
+          </li>
+          <li>
+            <strong>Objective:</strong> The primary objective of this game is
+            to capture your opponent's king.
+          </li>
+          <li>
+            <strong>Winning by Timer:</strong> You can win by depleting your
+            opponent's time; when they run out of time, you win.
+          </li>
+          <li>
+            <strong>Piece Capture:</strong> Capturing an opponent's piece is
+            achieved by dragging your piece onto theirs.
+          </li>
+          <li>
+            <strong>Special Moves:</strong> Castling, en passant, and pawn
+            promotion are special moves in chess.
+          </li>
+          <li>
+            <strong>Stalemate:</strong> Stalemate occurs when a player has no
+            legal moves.
+          </li>
+        </ul>
+      </div>
+      <div class="rules-btn">
+        <a href="#" class="close" onclick="closeRulesPopup()"></a>
       </div>
     </div>
   </body>
