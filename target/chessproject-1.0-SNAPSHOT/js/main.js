@@ -40,25 +40,8 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   let code = "1";
-  ws = new WebSocket("ws://localhost:8080/chessproject-1.0-SNAPSHOT/" + code);
-
-  ws.onopen = function () {
-    console.log("WebSocket connection opened");
-  };
-
-  ws.onmessage = function (event) {
-    const data = JSON.parse(event.data);
-    if (data.type === "move") {
-        console.log(data.player + " played the following move: " + data.move);
-        chessBoard = data.state;
-        updateChessboardArray(data.fromRow, data.fromCol, data.toRow, data.toCol);
-        switchTurn(true); // Switch turn after successful move
-    } else if (data.type === "turn") {
-        currentPlayer = data.player;
-    }
-  };
-
   let currentPlayer = "white";
+  let clientPlayer = null;
   let selectedPiece = null;
   let isDragging = false;
   let offsetX, offsetY;
@@ -69,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let timerInterval1 = setInterval(updateTimer1, 1000);
   let timerInterval2;
 
-  const chessBoard = [
+  let chessBoard = [
     ["Br", "Bn", "Bb", "Bq", "Bk", "Bb", "Bn", "Br"],
     ["Bp", "Bp", "Bp", "Bp", "Bp", "Bp", "Bp", "Bp"],
     ["", "", "", "", "", "", "", ""],
@@ -87,19 +70,54 @@ document.addEventListener("DOMContentLoaded", () => {
 
   startEffect.play();
 
+  ws = new WebSocket("ws://localhost:8080/chessproject-1.0-SNAPSHOT/ws/"+code);
+
+  ws.onopen = function () {
+    console.log("WebSocket connection opened");
+    if(clientPlayer === null) {
+      clientPlayer = "white";
+      console.log("You're white");
+    }else{
+      clientPlayer = "black";
+      console.log("You're black");
+    }
+  };
+
+  ws.onmessage = function (event) {
+    const data = JSON.parse(event.data);
+    if (data.type === "move") {
+        console.log(data.player + " played the following move: " + data.move);
+        chessBoard = data.state;
+        console.log(chessBoard);
+        updateChessboardArray(data.fromRow, data.fromCol, data.toRow, data.toCol);
+        switchTurn(true); // Switch turn after successful move
+    } else if (data.type === "colourAssignment") {
+      clientPlayer = data.color;
+      console.log("You're " + clientPlayer+"!");
+    }
+  };
+
   // Function to update the chessboard array when a piece is moved
   function updateChessboardArray(fromRow, fromCol, toRow, toCol) {
     const piece = chessBoard[fromRow][fromCol];
+    
+    // Update the chessBoard array to move the piece
     chessBoard[fromRow][fromCol] = ""; // Clear the previous position
     chessBoard[toRow][toCol] = piece; // Place the piece in the new position
-
+  
+    // Check if a piece is being captured
+    const toSquare = document.querySelector(`.square[data-row="${toRow}"][data-col="${toCol}"]`);
+    if (toSquare.hasChildNodes()) { //sometimes, 2 pieces can occupy the same square, remove captured piece
+      const capturedPieceElement = toSquare.querySelector(".piece");
+      toSquare.removeChild(capturedPieceElement);
+    }
+  
     // Update the UI
     const fromSquare = document.querySelector(`.square[data-row="${fromRow}"][data-col="${fromCol}"]`);
-    const toSquare = document.querySelector(`.square[data-row="${toRow}"][data-col="${toCol}"]`);
     const pieceElement = fromSquare.querySelector(".piece");
     fromSquare.removeChild(pieceElement);
     toSquare.appendChild(pieceElement);
-}
+  }
 
   for (let row = 0; row < 8; row++) {
     for (let col = 0; col < 8; col++) {
@@ -295,6 +313,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           // Target square has your own piece - cannot move there
           console.log("Cannot move to a square occupied by your own piece.");
+          switchTurn(true);
           return;
         }
       } else {
@@ -314,12 +333,14 @@ document.addEventListener("DOMContentLoaded", () => {
               sendMove(currentPlayer, selectedPiece, chessBoard, parseInt(previousSquare.dataset.row), 
                 parseInt(previousSquare.dataset.col), parseInt(clickedSquare.dataset.row), 
                 parseInt(clickedSquare.dataset.col));
+              switchTurn(true);
             } else {
           // Change the color of the square to indicate an invalid move
           clickedSquare.style.backgroundColor = "red";
           setTimeout(() => {
             clickedSquare.style.backgroundColor = "";
           }, 1000);
+          switchTurn(true);
         }
       }
 
@@ -327,6 +348,7 @@ document.addEventListener("DOMContentLoaded", () => {
       previousSquare = null;
     } else {
       console.log("Cannot move to the same square.");
+      switchTurn(true);
     }
   }
 
@@ -429,6 +451,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 sendMove(currentPlayer, selectedPiece, chessBoard, 
                   parseInt(previousSquare.dataset.row), parseInt(previousSquare.dataset.col),
                   parseInt(targetSquare.dataset.row), parseInt(targetSquare.dataset.col));
+                  switchTurn(true);
             } else {
                 // Change the color of the square to indicate an invalid move
                 targetSquare.style.backgroundColor = "red";
@@ -462,17 +485,27 @@ document.addEventListener("DOMContentLoaded", () => {
               );
 
               if (isValid) {
+                // Update the chessBoard array to remove the captured piece
+                console.log(chessBoard);
+                const toRow = parseInt(targetSquare.dataset.row);
+                const toCol = parseInt(targetSquare.dataset.col);
+                chessBoard[toRow][toCol] = "";
+
                 // Remove the opponent's piece from the board
                 captureEffect.play();
+                const opponentPiece = targetSquare.firstChild;
                 targetSquare.removeChild(opponentPiece);
                 isCaptured = true;
                 
                 // Move the player's piece to the target square
-                targetSquare.appendChild(selectedPiece);
+                targetSquare.appendChild(selectedPiece);        
+                
                 sendMove(currentPlayer, selectedPiece, chessBoard, 
                   parseInt(previousSquare.dataset.row), parseInt(previousSquare.dataset.col),
-                  parseInt(targetSquare.dataset.row), parseInt(targetSquare.dataset.col));
+                  toRow, toCol);
+                switchTurn(true);
                 isCaptured = false;
+              } else {
                 console.log(
                   "Invalid move. Cannot capture opponent's piesdfsdfsace."
                 );

@@ -20,6 +20,16 @@ public class ChessServer {
 
         room.setUserName(session.getId(), "Player"); // Set user name
 
+        //sets player colour based on number of users in the room
+        String playerColor;
+        if (room.getUsers().size() == 1) {
+            playerColor = "white";
+        } else {
+            playerColor = "black";
+        }
+
+        session.getBasicRemote().sendText("{\"type\": \"colourAssignment\", \"color\":\"" + playerColor + "\"}");
+
         session.getBasicRemote().sendText("{\"type\": \"welcome\", \"message\":\"Welcome to King's Conquest!\"}");
     }
 
