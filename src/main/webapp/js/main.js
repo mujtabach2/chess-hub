@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (data.type === "move") {
         chessBoard = data.state;
         updateChessboardArray(data.fromRow, data.fromCol, data.toRow, data.toCol);
-        updateMoveList(data.player, data.move);
+        updateMoveList(data.selectedPiece, data.move);
         switchTurn(true); // Switch turn after successful move
     } else if (data.type === "colourAssignment") {
       clientPlayer = data.color;
@@ -618,14 +618,14 @@ function displayGameOverMessage(message) {
           player: player,
           move: convertToStandardNotation(selectedPiece, fromCol, toRow, toCol), // Convert the move to standard chess notation
           state : chessBoard,
-          selectedPiece: selectedPiece,
+          selectedPiece: selectedPiece.innerHTML.trim(),
           fromRow: fromRow,
           fromCol: fromCol,
           toRow: toRow,
           toCol: toCol
       };
 
-      updateMoveList(player, data.move);
+      updateMoveList(selectedPiece.innerHTML.trim(), data.move);
 
       ws.send(JSON.stringify(data));
     }
@@ -690,10 +690,10 @@ function displayGameOverMessage(message) {
       return move;
     }
 
-    function updateMoveList(player, move) {
+    function updateMoveList(piece, move) {
       const moveList = document.getElementById("moveList");
       const listItem = document.createElement("li");
-      listItem.textContent = player + ": " + move;
+      listItem.textContent = piece + ": " + move;
       moveList.appendChild(listItem);
     }
   });
