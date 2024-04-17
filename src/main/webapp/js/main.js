@@ -523,7 +523,8 @@ document.addEventListener("DOMContentLoaded", () => {
     timer1Display.textContent = formatTime(player1Time);
     if (player1Time <= 0) {
       clearInterval(timerInterval1);
-      alert("Player 1's time is up!");
+      displayGameOverMessage("Black Wins!");
+      
     }
   }
   
@@ -533,7 +534,7 @@ document.addEventListener("DOMContentLoaded", () => {
     timer2Display.textContent = formatTime(player2Time);
     if (player2Time <= 0) {
       clearInterval(timerInterval2);
-      alert("Player 2's time is up!");
+      displayGameOverMessage("White Wins!");
     }
   }
   
