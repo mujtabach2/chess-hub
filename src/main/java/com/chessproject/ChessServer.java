@@ -24,10 +24,12 @@ public class ChessServer {
     }
 
     @OnMessage
-    public void handleMessage(String message, Session session) {
+    public void handleMessage(String message, Session session) throws IOException {
         ChessRoom room = activeRooms.get(session.getPathParameters().get("roomID"));
+        String roomID = session.getPathParameters().get("roomID");
 
-        if (room != null) {
+        //check if room exists and JSON message is of type 'move'
+        if (room != null && message.contains("\"type\":\"move\"")) {
             // Put the player, colour and turn to the turnList if not already in it
             if (!turnList.containsKey(room.getCode())) {
                 Map<Character, String> player = new HashMap<>();
@@ -37,14 +39,17 @@ public class ChessServer {
             }
         }
 
-        //Send the message to all users in room
-        for(String user : room.getUsers().keySet()){
-            try {
-                session.getBasicRemote().sendText(message);
-            } catch (IOException e) {
-                e.printStackTrace();
+        for (Session s : session.getOpenSessions()) {
+            String sRoomID = s.getPathParameters().get("roomID");
+            if (sRoomID != null && sRoomID.equals(roomID) && !s.getId().equals(session.getId())) {
+                try {
+                    s.getBasicRemote().sendText(message); // Broadcast the move to all clients in the same room
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
+
     }
 
     @OnError
