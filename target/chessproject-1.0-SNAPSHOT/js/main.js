@@ -73,14 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ws = new WebSocket("ws://localhost:8080/chessproject-1.0-SNAPSHOT/ws/"+code);
 
   ws.onopen = function () {
-    console.log("WebSocket connection opened");
-    if(clientPlayer === null) {
-      clientPlayer = "white";
-      console.log("You're white");
-    }else{
-      clientPlayer = "black";
-      console.log("You're black");
-    }
+    console.log("The WebSocket connection has been opened");
   };
 
   ws.onmessage = function (event) {
@@ -222,6 +215,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function selectPiece(event) {
+    if(clientPlayer !== currentPlayer) {
+      console.log("It's not your turn!");
+      return;
+    }
+
     const clickedSquare = event.target.closest(".square");
 
     if (!clickedSquare) return;
@@ -384,6 +382,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function startDrag(event) {
+    
+    if(clientPlayer !== currentPlayer) {
+      console.log("It's not your turn!");
+      return;
+    }
+
     selectedPiece = event.target.closest(".piece");
     if (!selectedPiece) return;
 
