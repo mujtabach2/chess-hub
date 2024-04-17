@@ -580,6 +580,10 @@ function displayGameOverMessage(message) {
   winText.textContent = message;
   openPopup();
 
+  //stop the timers
+  clearInterval(timerInterval1);
+  clearInterval(timerInterval2);
+
   // Remove event listeners to disable further moves
   board.removeEventListener("click", selectPiece);
   board.removeEventListener("mousedown", startDrag);
