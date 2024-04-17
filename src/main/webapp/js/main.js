@@ -215,11 +215,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function selectPiece(event) {
-    if(clientPlayer !== currentPlayer) {
-      console.log("It's not your turn!");
-      return;
-    }
-
     const clickedSquare = event.target.closest(".square");
 
     if (!clickedSquare) return;
@@ -229,6 +224,11 @@ document.addEventListener("DOMContentLoaded", () => {
     highlightedSquares.forEach((square) =>
       square.classList.remove("highlighted")
     );
+
+    if(clientPlayer !== currentPlayer) {
+      console.log("It's not your turn!");
+      return;
+    }
 
     if (selectedPiece) {
       // Second click: Move the piece if valid
@@ -382,14 +382,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function startDrag(event) {
-    
+    selectedPiece = event.target.closest(".piece");
+    if (!selectedPiece) return;
+
     if(clientPlayer !== currentPlayer) {
       console.log("It's not your turn!");
       return;
     }
-
-    selectedPiece = event.target.closest(".piece");
-    if (!selectedPiece) return;
 
     const pieceColor = selectedPiece.classList.contains("white")
       ? "white"

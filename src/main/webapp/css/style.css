@@ -249,9 +249,6 @@ body {
         background-color: #121212;
     }
 
-
-
-
     .highlighted {
       background-image: url("/src/main/webapp/images/green-circle.png");
       background-size: 30%;
