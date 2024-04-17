@@ -47,21 +47,12 @@
       top: 50%;
       transform: translate(-50%, -50%) scale(1);
       z-index: 1000;
-<<<<<<< HEAD
       box-shadow: 0 0 5px 5px rgba(161, 161, 161, 0.2);
-=======
-      box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);
->>>>>>> edb3a37dbbe7aee396f80dac2c6f02989e846a4d
       border-radius: 10px;
       
       
     }
     
-<<<<<<< HEAD
-=======
-    
-    
->>>>>>> edb3a37dbbe7aee396f80dac2c6f02989e846a4d
     .popup .themes{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -129,7 +120,6 @@
     transform: scale(1);
     }
     
-<<<<<<< HEAD
     
 
     .rules-btn .close {
@@ -234,6 +224,4 @@
       color: #fff;
       font-weight: bold;
     }
-=======
->>>>>>> edb3a37dbbe7aee396f80dac2c6f02989e846a4d
     

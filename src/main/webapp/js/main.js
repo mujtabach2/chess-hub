@@ -79,10 +79,9 @@ document.addEventListener("DOMContentLoaded", () => {
   ws.onmessage = function (event) {
     const data = JSON.parse(event.data);
     if (data.type === "move") {
-        console.log(data.player + " played the following move: " + data.move);
         chessBoard = data.state;
-        console.log(chessBoard);
         updateChessboardArray(data.fromRow, data.fromCol, data.toRow, data.toCol);
+        updateMoveList(data.player, data.move);
         switchTurn(true); // Switch turn after successful move
     } else if (data.type === "colourAssignment") {
       clientPlayer = data.color;
@@ -167,6 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
   board.addEventListener("click", selectPiece);
 
   function switchTurn(isValidMoveMade) {
+    
     if (!isValidMoveMade) {
       console.log("No valid move made. Turn continues.");
       return;
@@ -182,15 +182,10 @@ document.addEventListener("DOMContentLoaded", () => {
       clearInterval(timerInterval1); // Pause white timer
       timerInterval2 = setInterval(updateTimer2, 1000); // Start black timer
     }
+    callCheckMate(currentPlayer, chessBoard);
   }
 
-  function displayGameOverMessage(message) {
-    // You can display the game over message in a modal, alert box, or any other UI element
-    alert(message);
-    // Optionally, you can also disable further moves or take other actions here
-  }
-
-  function getPossibleMoves(piece, row, col, chessBoard, currentPlayer) {
+  function callCheckMate(currentPlayer, chessBoard) {
     if (isCheckmate(currentPlayer, chessBoard)) {
       checkMateEffect.play();
       console.log("Checkmate! Game over.");
@@ -203,6 +198,11 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       return;
     }
+  }
+
+
+  function getPossibleMoves(piece, row, col, chessBoard, currentPlayer) {
+
     const validMoves = [];
     for (let r = 0; r < 8; r++) {
       for (let c = 0; c < 8; c++) {
@@ -625,6 +625,8 @@ function displayGameOverMessage(message) {
           toCol: toCol
       };
 
+      updateMoveList(player, data.move);
+
       ws.send(JSON.stringify(data));
     }
 
@@ -686,5 +688,12 @@ function displayGameOverMessage(message) {
       //Finally add destination square to the move
       move += convertColumn(toCol) + (8 - toRow);
       return move;
+    }
+
+    function updateMoveList(player, move) {
+      const moveList = document.getElementById("moveList");
+      const listItem = document.createElement("li");
+      listItem.textContent = player + ": " + move;
+      moveList.appendChild(listItem);
     }
   });

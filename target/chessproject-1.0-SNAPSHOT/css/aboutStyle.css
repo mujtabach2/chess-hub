@@ -38,27 +38,17 @@ body {
   flex-direction: column;
   align-items: center;
   width: 88%;
-<<<<<<< HEAD
   margin-top: .5rem;
-=======
-  margin-top: 1rem;
->>>>>>> edb3a37dbbe7aee396f80dac2c6f02989e846a4d
 }
 
 .members {
   width: 100%;
   display: flex;
   flex-direction: column;
-<<<<<<< HEAD
   justify-content: center;
   align-items: center;
   position: relative;
   top: 2rem;
-=======
-  margin-top: 5.5rem;
-  justify-content: center;
-  align-items: center;
->>>>>>> edb3a37dbbe7aee396f80dac2c6f02989e846a4d
 }
 
 .members-details {
@@ -86,7 +76,6 @@ body {
   box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
     rgba(13, 13, 13, 0.3) 0 7px 13px -3px, #242320 0 -5px 0 inset;
   transition: transform 0.3s ease-in-out;
-<<<<<<< HEAD
   border-radius: 10px;
 }
 
@@ -99,10 +88,6 @@ body {
 }
 
 
-=======
-}
-
->>>>>>> edb3a37dbbe7aee396f80dac2c6f02989e846a4d
 .icons {
   display: flex;
   flex-direction: row;
@@ -114,10 +99,7 @@ body {
 
 .profile-image {
   border-radius: 50%;
-<<<<<<< HEAD
   object-fit: fill;
-=======
->>>>>>> edb3a37dbbe7aee396f80dac2c6f02989e846a4d
 }
 
 .name {
@@ -126,7 +108,6 @@ body {
 }
 .footer {
   display: flex;
-<<<<<<< HEAD
   width: 100%;
   height: 10vh;
   justify-content: center;
@@ -136,16 +117,6 @@ body {
   left: 3%;
   background-color: #312f2b;
 
-=======
-  flex-direction: row;
-  width: 100%;
-  height: 10vh;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  right: 5rem;
-  margin-top: 5.5rem;
->>>>>>> edb3a37dbbe7aee396f80dac2c6f02989e846a4d
 }
 
 .footer p {

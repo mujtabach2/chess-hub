@@ -114,11 +114,7 @@
   
 }
 
-<<<<<<< HEAD
 .sidebar .about{
-=======
-.sidebar .profile{
->>>>>>> edb3a37dbbe7aee396f80dac2c6f02989e846a4d
     position: fixed;
     bottom: 0;
     width: 10%;
@@ -131,7 +127,6 @@
     align-items: center;
 }
 
-<<<<<<< HEAD
 .sidebar .about img{
     width: 20px;
     height: 20px;
@@ -157,14 +152,6 @@
 }
 
 
-=======
-.sidebar .profile img{
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-}
-
->>>>>>> edb3a37dbbe7aee396f80dac2c6f02989e846a4d
 
 
 
