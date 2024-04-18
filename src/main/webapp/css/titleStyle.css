@@ -1,0 +1,203 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap");
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Poppins, sans-serif;
+  box-sizing: border-box;
+  background-color: #312f2b;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  width: 80%;
+  height: 100vh;
+  position: relative;
+  left: 3rem;
+}
+
+.img-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.img-section img {
+  border-radius: 2%;
+  width: 30rem;
+  height: 30rem;
+  filter: blur(0.5px);
+}
+
+.text-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%;
+  position: relative;
+  top: 3rem;
+  height: 100%;
+}
+
+.title {
+  width: 100%;
+  color: #ffffff;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.title h1 {
+  text-align: center;
+}
+
+.users {
+  display: flex;
+  flex-direction: row;
+  gap: 2.2rem;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.users p {
+  color: #ffffff;
+}
+
+.online,
+.now {
+  font-weight: bold;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.play-online-btn {
+  display: flex;
+  flex-direction: row;
+}
+
+.play-online-btn button {
+  align-items: center;
+  appearance: none;
+  background-color: #83B64D;
+  border-radius: 8px;
+  border: none;
+  box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
+  rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #47743C 0 -5px 0 inset;
+  color: #FEFEFF;
+  cursor: pointer;
+  display: inline-flex;
+  padding: .5rem 5.7rem;
+  font-size: 18px;
+  transition: transform 0.3s ease-in-out;
+  text-align: center;
+}
+
+.play-online-btn button:hover {
+  transform: translateY(-2px);
+  background-color: #a3d160;
+  box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
+  rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #5d9948 0 -5px 0 inset,
+  #5d9948 0 0 4px .5px;
+}
+
+.play-online-btn button:active {
+  background-color: #83B64D;
+  box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
+  rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #47743C 0 -5px 0 inset;
+}
+
+.buttons .text{
+  position: relative;
+  right: 1rem;
+}
+
+.buttons .text2{
+  position: relative;
+  left: .55rem;
+}
+
+.play-online-btn img {
+  width: 4rem;
+  height: 4rem;
+  position: relative;
+  right: 3rem;
+  filter: drop-shadow(0 .2rem .3rem rgba(0, 0, 0, .4));
+}
+
+.buttons a{
+  text-decoration: none;
+
+}
+
+
+.play-online-btn p {
+  font-weight: 700;
+  font-size: 1.8rem;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+.play-computer-btn {
+  display: flex;
+  flex-direction: row;
+}
+
+.play-computer-btn button {
+  align-items: center;
+  appearance: none;
+  background-color: #413F3C;
+  border-radius: 8px;
+  border: none;
+  box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
+  rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #323330 0 -5px 0 inset;
+  color: #FEFEFF;
+  cursor: pointer;
+  display: inline-flex;
+  padding: .6rem 4.35rem;
+  font-size: 18px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.play-computer-btn img {
+  width: 3.8rem;
+  height: 3.8rem;
+  position: relative;
+  right: 1.65rem;
+  filter: drop-shadow(0 .2rem .3rem rgba(0, 0, 0, .4));
+}
+
+.play-computer-btn button:hover {
+  transform: translateY(-2px);
+  background-color: #51504D;
+  box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
+  rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #3C3D3A 0 -5px 0 inset,
+  #3C3D3A 0 0 4px .5px;
+}
+
+.play-computer-btn button:active {
+  background-color: #413F3C;
+  box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
+  rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #323330 0 -5px 0 inset;
+}
+
+.play-computer-btn p {
+  font-weight: 700;
+  font-size: 1.8rem;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+}

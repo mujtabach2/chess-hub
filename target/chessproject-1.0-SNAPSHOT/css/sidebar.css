@@ -1,0 +1,280 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap");
+
+
+.sidebar{
+    height: 100vh;
+    width: 12%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #262523;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1;
+    box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);
+    border-radius: 0 10px 10px 10px;
+    font-family: poppins;
+}
+
+
+
+
+
+.sidebar ul{
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+
+}
+
+.sidebar ul li{
+    padding: 5px 15px;
+    color: #818181;
+    text-align: center;
+    margin-bottom: 5px;
+    width: 100%;
+    transition: 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sidebar ul li:hover{
+    background-color: #201F1C;
+    color: #f1f1f1;
+}
+
+
+.sidebar a{
+    padding: 10px 15px;
+    text-decoration: none;
+    font-size: 1rem;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+    text-decoration: none;
+    width: 100%;
+}
+
+.sidebar a:hover{
+    color: #f1f1f1;
+}
+
+.sidebar .logo {
+    display: block;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 10px 0;
+    width: min-content;
+
+}
+
+.side2 .logo{
+    font-family: poppins;
+}
+
+.sidebar .logo a{
+    border-bottom: 1px solid #818181;
+    cursor: pointer;
+}
+
+.sidebar .logo a:hover{
+    color: #f1f1f1;
+    border-bottom: 1px solid #f1f1f1;
+
+}
+
+.sidebar .menu .themeslink{
+    cursor: pointer;
+}
+
+.sidebar .logo h1{
+    color: #f1f1f1;
+    font-size: 1.2rem;
+    margin: 0;
+    display: inline;
+}
+
+.sidebar .logo img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+
+}
+
+.sidebar .about{
+    position: fixed;
+    bottom: 0;
+    width: 10%;
+    background-color: #262523;
+    padding: 15px 10px;
+    text-align: center;
+    transition: 0.5s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sidebar .about img{
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    position: relative;
+    left: 15px;
+    transition: 0.5s;
+}
+
+.sidebar .rule{
+    cursor: pointer;
+}
+
+.sidebar .about:hover{
+    background-color: #201F1C;
+    color: #f1f1f1;
+}
+
+.sidebar .about img:hover{
+    background-color: #201F1C;
+    color: #f1f1f1;
+    cursor: pointer;
+}
+
+
+
+
+
+.button .close {
+    position: absolute;
+    right: 35px;
+    top: 35px;
+    width: 30px;
+    height: 30px;
+    opacity: 1;
+}
+.button .close:hover {
+    opacity: 1;
+}
+.button .close:before, .button .close:after {
+    position: absolute;
+    left: 15px;
+    content: ' ';
+    height: 33px;
+    width: 2px;
+    background-color: #333;
+}
+.button .close:before {
+    transform: rotate(45deg);
+}
+.button .close:after {
+    transform: rotate(-45deg);
+}
+
+
+.popup{
+    background: #262523;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.1);
+    text-align: center;
+    padding: 40px 40px;
+    color: #818181;
+    visibility: hidden;
+    transition: all 0.4s ease-in-out;
+
+}
+
+.popup.open-popup{
+    visibility: visible;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    z-index: 1000;
+    box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);
+    border-radius: 10px;
+
+
+}
+
+
+
+.popup .themes{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 30px;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+    align-content: center;
+
+    border-radius: 10px;
+}
+
+.popup .theme{
+    width: 15rem;
+    height: 75%;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.popup .themes .box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    border-radius: 10px;
+    height: 14rem;
+    width: 15rem;
+    transition: transform 0.2s;
+}
+
+.popup .themes .box .text{
+    width: 100%;
+    height: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.popup .themes .box .text h2{
+    color: #818181;
+    font-size: 1.3rem;
+}
+
+
+
+
+.popup .themes .box .theme img{
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 10px;
+    transition: transform 0.2s;
+    object-fit: fill;
+
+}
+
+.popup .theme:hover{
+    transform: scale(1.02);
+}
+
+.popup .theme:focus{
+    outline: none;
+    transform: scale(1);
+}

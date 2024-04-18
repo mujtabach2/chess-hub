@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chessboard</title>
+    <link rel="icon" href="images/knight-icon.png">
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/sidebar.css" />
+    <link rel="stylesheet" href="css/popUp.css" />
+
+
+    <script src="js/puzzle.js" type="module" defer></script>
+
+
+    <script src="js/themeswitch.js" defer></script>
+</head>
+
+<body>
+<div class="sidebar side2">
+    <div class="logo">
+        <a class="logo" href="title.html">
+            <img src="images/knight-icon.png" alt="logo" />
+            <h1>ChessHub</h1>
+        </a>
+    </div>
+    <div class="menu">
+        <ul>
+            <li>
+                <a href="title.html">Home</a>
+            </li>
+            <li>
+                <a href="index.html">Online</a>
+            </li>
+            <li>
+                <a href="computer.html">Computer</a>
+            </li>
+            <li>
+                <a href="puzzle.html">Puzzles</a>
+              </li>
+            <li>
+                <a onclick="openPopup()" class="themeslink">Themes</a>
+            </li>
+            <li>
+                <a href="leaderboards.html">Leaderboard</a>
+            </li>
+            <li class="rule">
+                <a onclick="openRulesPopup()" class="rulestheme">Rules</a>
+            </li>
+            <li class="about">
+                <img src="images/aboutIcon.png" alt="aboutIcon" />
+                <a href="about.html">About</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="container">
+    <style>
+
+        .puzzle {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+
+            margin-right: 10rem;
+
+        }
+        .puzzle-header {
+            padding: 10px;
+            width: 15rem;
+            text-align: center;
+        }
+        h1 {
+            margin: 0;
+            color: #d0ff00;
+            font-size: 24px;
+        }
+        .turn-display {
+            color: white;
+            font-size: 18px;
+        }
+    </style>
+    <div class="puzzle">
+        <div class="puzzle-header">
+            <h1>Daily Chess Puzzle</h1>
+            <div id="turn-display" class="turn-display"></div>
+
+
+        </div>
+    </div>
+
+    <div class="upper" style="padding-top:10px;">
+        <div class="numbers">
+            <div class="numbers-column">
+                <div class="number">8</div>
+                <div class="number">7</div>
+                <div class="number">6</div>
+                <div class="number">5</div>
+                <div class="number">4</div>
+                <div class="number">3</div>
+                <div class="number">2</div>
+                <div class="number">1</div>
+            </div>
+        </div>
+        <div class="chessboard"></div>
+    </div>
+    <div class="lower">
+        <div class="letters">
+            <div class="letters-row">
+                <div class="letter">a</div>
+                <div class="letter">b</div>
+                <div class="letter">c</div>
+                <div class="letter">d</div>
+                <div class="letter">e</div>
+                <div class="letter">f</div>
+                <div class="letter">g</div>
+                <div class="letter">h</div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<div class="popup" id="popup">
+    <div class="themes">
+        <div class="box">
+            <div class="text">
+                <h2>Classic</h2>
+            </div>
+            <div class="theme theme01">
+                <a onclick="selectTheme('classic')">
+                    <img src="images/classicTheme.png" alt="Classic Theme" />
+                </a>
+            </div>
+        </div>
+        <div class="box">
+            <div class="text">
+                <h2>Dark</h2>
+            </div>
+            <div class="theme theme02">
+                <a onclick="selectTheme('dark')">
+                    <img src="images/darkTheme.png" alt="Dark Theme" />
+                </a>
+            </div>
+        </div>
+        <div class="box">
+            <div class="text">
+                <h2>Ocean</h2>
+            </div>
+            <div class="theme theme03">
+                <a onclick="selectTheme('ocean')">
+                    <img src="images/oceanTheme.png" alt="Ocean Theme" />
+                </a>
+            </div>
+        </div>
+        <div class="box">
+            <div class="text">
+                <h2>Wooden</h2>
+            </div>
+            <div class="theme theme04">
+                <a onclick="selectTheme('wooden')">
+                    <img src="images/woodenTheme.png" alt="Wooden Theme" />
+                </a>
+            </div>
+        </div>
+        <div class="box">
+            <div class="text">
+                <h2>Modern</h2>
+            </div>
+            <div class="theme theme05">
+                <a onclick="selectTheme('modern')">
+                    <img src="images/modernTheme.png" alt="Modern Theme" />
+                </a>
+            </div>
+        </div>
+        <div class="box">
+            <div class="text">
+                <h2>Pastel</h2>
+            </div>
+            <div class="theme theme06">
+                <a onclick="selectTheme('pastel')">
+                    <img src="images/pastelTheme.png" alt="Pastel Theme" />
+                </a>
+            </div>
+        </div>
+
+        <div class="button">
+            <a href="#" class="close" onclick="closePopup()"></a>
+        </div>
+    </div>
+</div>
+
+<div class="rules-popup" id="openRulesPopup">
+    <div class="rules">
+        <h2>Rules</h2>
+        <ul>
+            <li>
+                <strong>Initiating a Game:</strong> Choose to play against other
+                players or challenge the computer.
+            </li>
+            <li>
+                <strong>Online Play:</strong> Generate a unique code that allows
+                both users to join the same game when entered.
+            </li>
+            <li>
+                <strong>Objective:</strong> The primary objective of this game is
+                to capture your opponent's king.
+            </li>
+            <li>
+                <strong>Winning by Timer:</strong> You can win by depleting your
+                opponent's time; when they run out of time, you win.
+            </li>
+            <li>
+                <strong>Piece Capture:</strong> Capturing an opponent's piece is
+                achieved by dragging your piece onto theirs.
+            </li>
+            <li>
+                <strong>Special Moves:</strong> Castling, en passant, and pawn
+                promotion are special moves in chess.
+            </li>
+            <li>
+                <strong>Stalemate:</strong> Stalemate occurs when a player has no
+                legal moves.
+            </li>
+        </ul>
+    </div>
+    <div class="rules-btn">
+        <a href="#" class="close" onclick="closeRulesPopup()"></a>
+    </div>
+</div>
+
+<div class="game-popup" id="game-popup">
+    <div class="gameover">
+        <h1>Game Over</h1>
+        <p id="win"></p>
+        <div class="buttons">
+            <div class="playagain">
+                <a href="#" class="btn againbtn" id="close-popup" onclick="closePopup()">Play Again</a>
+            </div>
+
+            <div class="close">
+                <a href="#" class="btn closebtn" id="closepopup" onclick="closePopup()">Close</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chessboard</title>
-  <link rel="icon" href="images/knight-icon.png">
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/titleStyle.css" />
   <link rel="stylesheet" href="css/sidebar.css" />
   <link rel="stylesheet" href="css/popUp.css" />
-  <script src="js/main.js" type="module" defer></script>
+  <link rel="icon" href="images/knight-icon.png">
+  <script src="js/main.js" defer></script>
   <script src="js/themeswitch.js" defer></script>
+  <title>ChessHub</title>
 </head>
 
 <body>
@@ -50,52 +50,44 @@
     </ul>
   </div>
 </div>
-
 <div class="container">
-  <div class="upper">
-    <div class="numbers">
-      <div class="numbers-column">
-        <div class="number">8</div>
-        <div class="number">7</div>
-        <div class="number">6</div>
-        <div class="number">5</div>
-        <div class="number">4</div>
-        <div class="number">3</div>
-        <div class="number">2</div>
-        <div class="number">1</div>
-      </div>
-    </div>
-    <div class="chessboard"></div>
+  <div class="img-section">
+    <img src="images/ChessIMG.gif" alt="chessBoard" />
   </div>
-  <div class="lower">
-    <div class="letters">
-      <div class="letters-row">
-        <div class="letter">a</div>
-        <div class="letter">b</div>
-        <div class="letter">c</div>
-        <div class="letter">d</div>
-        <div class="letter">e</div>
-        <div class="letter">f</div>
-        <div class="letter">g</div>
-        <div class="letter">h</div>
-      </div>
+  <div class="text-section">
+    <div class="title">
+      <h1>
+        Play Chess <br />
+        Online <br />
+        On the #1 Site!
+      </h1>
     </div>
-  </div>
-  <div class="timers">
-    <div>
-      <div id="black-timer">10:00</div>
+    <div class="users">
+      <p>Join <span class="online">1000s</span> of players online</p>
+      <p><span class="now">58</span> players now</p>
     </div>
-    <div class="moves-section">
-      <h2>Moves</h2>
-      <ul id="moveList"></ul>
-    </div>
-    <div>
-      <div id="white-timer">10:00</div>
+    <div class="buttons">
+      <!-- Wrapped the button in the anchor tag -->
+      <a href="index.html" class="link1">
+        <div class="play-online-btn">
+          <button type="button">
+            <img src="images/PlayIMG.svg" alt="playChess" />
+            <p class="text">Play Online</p>
+          </button>
+        </div>
+      </a>
+      <!-- Wrapped the button in the anchor tag -->
+      <a href="computer.html" class="link2">
+        <div class="play-computer-btn">
+          <button type="button">
+            <img src="images/computerIMG.svg" alt="computerChess" />
+            <p class="text2">Play Computer</p>
+          </button>
+        </div>
+      </a>
     </div>
   </div>
-
 </div>
-
 <div class="popup" id="popup">
   <div class="themes">
     <div class="box">
@@ -103,7 +95,7 @@
         <h2>Classic</h2>
       </div>
       <div class="theme theme01">
-        <a onclick="selectTheme('classic')">
+        <a onclick="closePopup()">
           <img src="images/classicTheme.png" alt="Classic Theme" />
         </a>
       </div>
@@ -113,7 +105,7 @@
         <h2>Dark</h2>
       </div>
       <div class="theme theme02">
-        <a onclick="selectTheme('dark')">
+        <a onclick="closePopup()">
           <img src="images/darkTheme.png" alt="Dark Theme" />
         </a>
       </div>
@@ -123,7 +115,7 @@
         <h2>Ocean</h2>
       </div>
       <div class="theme theme03">
-        <a onclick="selectTheme('ocean')">
+        <a onclick="closePopup()">
           <img src="images/oceanTheme.png" alt="Ocean Theme" />
         </a>
       </div>
@@ -133,7 +125,7 @@
         <h2>Wooden</h2>
       </div>
       <div class="theme theme04">
-        <a onclick="selectTheme('wooden')">
+        <a onclick="closePopup()">
           <img src="images/woodenTheme.png" alt="Wooden Theme" />
         </a>
       </div>
@@ -143,7 +135,7 @@
         <h2>Modern</h2>
       </div>
       <div class="theme theme05">
-        <a onclick="selectTheme('modern')">
+        <a onclick="closePopup()">
           <img src="images/modernTheme.png" alt="Modern Theme" />
         </a>
       </div>
@@ -153,7 +145,7 @@
         <h2>Pastel</h2>
       </div>
       <div class="theme theme06">
-        <a onclick="selectTheme('pastel')">
+        <a onclick="closePopup()">
           <img src="images/pastelTheme.png" alt="Pastel Theme" />
         </a>
       </div>
@@ -201,22 +193,6 @@
   </div>
   <div class="rules-btn">
     <a href="#" class="close" onclick="closeRulesPopup()"></a>
-  </div>
-</div>
-
-<div class="game-popup" id="game-popup">
-  <div class="gameover">
-    <h1>Game Over</h1>
-    <p id="win"></p>
-    <div class="buttons">
-      <div class="playagain">
-        <a href="#" class="btn againbtn" id="close-popup" onclick="closePopup()">Play Again</a>
-      </div>
-
-      <div class="close">
-        <a href="#" class="btn closebtn" id="closepopup" onclick="closePopup()">Close</a>
-      </div>
-    </div>
   </div>
 </div>
 </body>

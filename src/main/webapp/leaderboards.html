@@ -3,15 +3,92 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chessboard</title>
-  <link rel="icon" href="images/knight-icon.png">
-  <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/sidebar.css" />
   <link rel="stylesheet" href="css/popUp.css" />
-  <script src="js/main.js" type="module" defer></script>
+  <link rel="icon" href="images/knight-icon.png">
   <script src="js/themeswitch.js" defer></script>
-</head>
+  <title>Leaderboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #302e2b;
+      margin: 0;
+      padding: 0;
+    }
 
+    h2 {
+      text-align: center;
+      margin-top: 20px;
+      color: white;
+      font-size: 1.9em;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 33.7%;
+      margin: 20px auto;
+      background-color: #262421;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      height: 400px; /* adjust this value to your desired height */
+      overflow-y: auto; /* make the table scrollable */
+      display: block; /* display the table as a block element for scrolling */
+    }
+
+    th,
+    td {
+      border: none;
+      padding: 12px;
+      text-align: left;
+      color: white;
+      font-size: 1.2em;
+    }
+
+    th {
+      background-color: #80b64b;
+      color: white;
+      font-size: 1.5em;
+      width: 100%;
+    }
+
+    .username {
+      display: flex;
+      align-items: center;
+    }
+
+    .username img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    a {
+      text-decoration: none;
+      color: white;
+    }
+
+    a:hover {
+      color: #80b64b;
+    }
+
+    tr {
+      border-bottom: 1px solid gray;
+    }
+
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background-color: #4b4b4b;
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background-color: #262421;
+    }
+  </style>
+</head>
 <body>
 <div class="sidebar side2">
   <div class="logo">
@@ -50,52 +127,17 @@
     </ul>
   </div>
 </div>
-
-<div class="container">
-  <div class="upper">
-    <div class="numbers">
-      <div class="numbers-column">
-        <div class="number">8</div>
-        <div class="number">7</div>
-        <div class="number">6</div>
-        <div class="number">5</div>
-        <div class="number">4</div>
-        <div class="number">3</div>
-        <div class="number">2</div>
-        <div class="number">1</div>
-      </div>
-    </div>
-    <div class="chessboard"></div>
-  </div>
-  <div class="lower">
-    <div class="letters">
-      <div class="letters-row">
-        <div class="letter">a</div>
-        <div class="letter">b</div>
-        <div class="letter">c</div>
-        <div class="letter">d</div>
-        <div class="letter">e</div>
-        <div class="letter">f</div>
-        <div class="letter">g</div>
-        <div class="letter">h</div>
-      </div>
-    </div>
-  </div>
-  <div class="timers">
-    <div>
-      <div id="black-timer">10:00</div>
-    </div>
-    <div class="moves-section">
-      <h2>Moves</h2>
-      <ul id="moveList"></ul>
-    </div>
-    <div>
-      <div id="white-timer">10:00</div>
-    </div>
-  </div>
-
-</div>
-
+<h2>Daily Leaderboard</h2>
+<table id="dailyLeaderboard">
+  <thead>
+  <tr>
+    <th>Rank</th>
+    <th>Username</th>
+    <th>Score</th>
+  </tr>
+  </thead>
+  <tbody></tbody>
+</table>
 <div class="popup" id="popup">
   <div class="themes">
     <div class="box">
@@ -103,7 +145,7 @@
         <h2>Classic</h2>
       </div>
       <div class="theme theme01">
-        <a onclick="selectTheme('classic')">
+        <a onclick="closePopup()">
           <img src="images/classicTheme.png" alt="Classic Theme" />
         </a>
       </div>
@@ -113,7 +155,7 @@
         <h2>Dark</h2>
       </div>
       <div class="theme theme02">
-        <a onclick="selectTheme('dark')">
+        <a onclick="closePopup()">
           <img src="images/darkTheme.png" alt="Dark Theme" />
         </a>
       </div>
@@ -123,7 +165,7 @@
         <h2>Ocean</h2>
       </div>
       <div class="theme theme03">
-        <a onclick="selectTheme('ocean')">
+        <a onclick="closePopup()">
           <img src="images/oceanTheme.png" alt="Ocean Theme" />
         </a>
       </div>
@@ -133,7 +175,7 @@
         <h2>Wooden</h2>
       </div>
       <div class="theme theme04">
-        <a onclick="selectTheme('wooden')">
+        <a onclick="closePopup()">
           <img src="images/woodenTheme.png" alt="Wooden Theme" />
         </a>
       </div>
@@ -143,7 +185,7 @@
         <h2>Modern</h2>
       </div>
       <div class="theme theme05">
-        <a onclick="selectTheme('modern')">
+        <a onclick="closePopup()">
           <img src="images/modernTheme.png" alt="Modern Theme" />
         </a>
       </div>
@@ -153,7 +195,7 @@
         <h2>Pastel</h2>
       </div>
       <div class="theme theme06">
-        <a onclick="selectTheme('pastel')">
+        <a onclick="closePopup()">
           <img src="images/pastelTheme.png" alt="Pastel Theme" />
         </a>
       </div>
@@ -204,20 +246,28 @@
   </div>
 </div>
 
-<div class="game-popup" id="game-popup">
-  <div class="gameover">
-    <h1>Game Over</h1>
-    <p id="win"></p>
-    <div class="buttons">
-      <div class="playagain">
-        <a href="#" class="btn againbtn" id="close-popup" onclick="closePopup()">Play Again</a>
-      </div>
 
-      <div class="close">
-        <a href="#" class="btn closebtn" id="closepopup" onclick="closePopup()">Close</a>
-      </div>
-    </div>
-  </div>
-</div>
+<script>
+  fetch("https://api.chess.com/pub/leaderboards")
+          .then((response) => response.json())
+          .then((data) => {
+            const dailyLeaderboard = data.daily;
+            const dailyTableBody = document.querySelector(
+                    "#dailyLeaderboard tbody"
+            );
+            dailyLeaderboard.forEach((entry) => {
+              const row = document.createElement("tr");
+              row.innerHTML = `
+            <td>${entry.rank}</td>
+            <td class="username"><img src="${entry.avatar}" alt="${entry.username}"><a href="${entry.url}">${entry.username}</a></td>
+            <td>${entry.score}</td>
+          `;
+              dailyTableBody.appendChild(row);
+            });
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+          });
+</script>
 </body>
 </html>
