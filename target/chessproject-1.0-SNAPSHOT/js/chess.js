@@ -1,5 +1,5 @@
 export default function isValidMove(piece, fromRow, fromCol, toRow, toCol, board, currentPlayer) {
-  
+
     const fromPiece = board[fromRow][fromCol];
     const toPiece = board[toRow][toCol];
 
@@ -7,8 +7,6 @@ export default function isValidMove(piece, fromRow, fromCol, toRow, toCol, board
         return false;
     }
 
-    
-  
     switch (piece) {
         case "pawn":
             // Check if the pawn is moving forward
@@ -116,14 +114,14 @@ export default function isValidMove(piece, fromRow, fromCol, toRow, toCol, board
                     return true;
                 }
             }
-    
+
             break;
         default:
-          
+
             return false;
     }
 
-  
+
     return false;
 }
 
@@ -156,14 +154,14 @@ function hasKingThreat(currentPlayer, board) {
             }
         }
     }
-    return false; 
+    return false;
 }
 
 export function isCheckmate(currentPlayer, board) {
-    
+
     if (!hasKingThreat(currentPlayer, board)) {
-        return false; 
+        return false;
     } else {
-        return true; 
+        return true;
     }
 }

@@ -1,303 +1,306 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>About Us</title>
-    <link rel="stylesheet" href="css/aboutStyle.css" />
-    <link rel="stylesheet" href="css/sidebar.css" />
-    <link rel="stylesheet" href="css/popUp.css" />
-    <link rel="icon" href="images/knight-icon.png">
-    <script src="js/main.js" defer></script>
-    <script src="js/themeswitch.js" defer></script>
-  </head>
-  <body>
-    <div class="sidebar side2">
-      <div class="logo">
-        <a class="logo" href="title.html">
-          <img src="images/knight-icon.png" alt="logo" />
-          <h1>ChessHub</h1>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us</title>
+  <link rel="stylesheet" href="css/aboutStyle.css" />
+  <link rel="stylesheet" href="css/sidebar.css" />
+  <link rel="stylesheet" href="css/popUp.css" />
+  <link rel="icon" href="images/knight-icon.png">
+  <script src="js/main.js" defer></script>
+  <script src="js/themeswitch.js" defer></script>
+</head>
+<body>
+<div class="sidebar side2">
+  <div class="logo">
+    <a class="logo" href="title.html">
+      <img src="images/knight-icon.png" alt="logo" />
+      <h1>ChessHub</h1>
+    </a>
+  </div>
+  <div class="menu">
+    <ul>
+      <li>
+        <a href="title.html">Home</a>
+      </li>
+      <li>
+        <a href="index.html">Online</a>
+      </li>
+      <li>
+        <a href="computer.html">Computer</a>
+      </li>
+      <li>
+        <a href="puzzle.html">Puzzles</a>
+      </li>
+      <li>
+        <a onclick="openPopup()" class="themeslink">Themes</a>
+      </li>
+      <li>
+        <a href="leaderboards.html">Leaderboard</a>
+      </li>
+      <li class="rule">
+        <a onclick="openRulesPopup()" class="rulestheme">Rules</a>
+      </li>
+      <li class="about">
+        <img src="images/aboutIcon.png" alt="aboutIcon" />
+        <a href="about.html">About</a>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="container">
+  <div class="text-section">
+    <div class="title">
+      <h1>Meet Our Team!</h1>
+    </div>
+    <div class="members">
+      <div class="members-details">
+        <div class="mujtaba">
+          <img
+                  class="profile-image"
+                  src="images/mujtaba.png"
+                  alt="Mujtaba"
+                  width="150px"
+                  height="150px"
+          />
+          <h2 class="name">
+            Mujtaba <br />
+            Chaudhry
+          </h2>
+          <div class="icons">
+            <a href="https://github.com/mujtabach2" target="blank">
+              <img
+                      src="images/github.png"
+                      alt="github"
+                      width="25px"
+                      height="25px"
+              />
+            </a>
+            <a
+                    href="https://www.linkedin.com/in/mujtaba-chaudhry/"
+                    target="blank"
+            >
+              <img
+                      src="images/linkedin.png"
+                      alt="linkedin"
+                      width="25px"
+                      height="25px"
+              />
+            </a>
+          </div>
+        </div>
+        <div class="simon">
+          <img
+                  class="profile-image"
+                  src="images/simon.jpeg"
+                  alt="Simon"
+                  width="150px"
+                  height="150px"
+          />
+          <h2 class="name">
+            Simon <br />
+            Berhe
+          </h2>
+          <div class="icons">
+            <a href="https://github.com/Its-Simon" target="blank">
+              <img
+                      src="images/github.png"
+                      alt="github"
+                      width="25px"
+                      height="25px"
+              />
+            </a>
+            <a
+                    href="https://www.linkedin.com/in/simon-berhe/"
+                    target="blank"
+            >
+              <img
+                      src="images/linkedin.png"
+                      alt="linkedin"
+                      width="25px"
+                      height="25px"
+              />
+            </a>
+          </div>
+        </div>
+        <div class="haider">
+          <img
+                  class="profile-image"
+                  src="images/haider.jpeg"
+                  alt="Haider"
+                  width="150px"
+                  height="150px"
+          />
+          <h2 class="name">
+            Haider <br />
+            Saleem
+          </h2>
+          <div class="icons">
+            <a href="https://github.com/Haider425" target="blank">
+              <img
+                      src="images/github.png"
+                      alt="github"
+                      width="25px"
+                      height="25px"
+              />
+            </a>
+            <a href="https://www.linkedin.com/in/haider42/" target="blank">
+              <img
+                      src="images/linkedin.png"
+                      alt="linkedin"
+                      width="25px"
+                      height="25px"
+              />
+            </a>
+          </div>
+        </div>
+        <div class="kersh">
+          <img
+                  class="profile-image"
+                  src="images/kersh.jpeg"
+                  alt="Kersh"
+                  width="150px"
+                  height="150px"
+          />
+          <h2 class="name">
+            Kershan <br />
+            Arulnesarwan
+          </h2>
+          <div class="icons">
+            <a href="https://github.com/Koops0" target="blank">
+              <img
+                      src="images/github.png"
+                      alt="github"
+                      width="25px"
+                      height="25px"
+              />
+            </a>
+            <a href="https://www.linkedin.com/in/kersharul/" target="blank">
+              <img
+                      src="images/linkedin.png"
+                      alt="linkedin"
+                      width="25px"
+                      height="25px"
+              />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    <p>Copyright © 2024 ChessHub. All Rights Reserved.</p>
+  </div>
+</div>
+
+<div class="popup" id="popup">
+  <div class="themes">
+    <div class="box">
+      <div class="text">
+        <h2>Classic</h2>
+      </div>
+      <div class="theme theme01">
+        <a onclick="closePopup()">
+          <img src="images/classicTheme.png" alt="Classic Theme" />
         </a>
       </div>
-      <div class="menu">
-        <ul>
-          <li>
-            <a href="title.html">Home</a>
-          </li>
-          <li>
-            <a href="index.html">Online</a>
-          </li>
-          <li>
-            <a href="register.html">Computer</a>
-          </li>
-          <li>
-            <a onclick="openPopup()" class="themeslink">Themes</a>
-          </li>
-          <li>
-            <a href="leaderboards.html">Leaderboard</a>
-          </li>
-          <li class="rule">
-            <a onclick="openRulesPopup()" class="rulestheme">Rules</a>
-          </li>
-          <li class="about">
-            <img src="images/aboutIcon.png" alt="aboutIcon" />
-            <a href="about.html">About</a>
-          </li>
-        </ul>
+    </div>
+    <div class="box">
+      <div class="text">
+        <h2>Dark</h2>
+      </div>
+      <div class="theme theme02">
+        <a onclick="closePopup()">
+          <img src="images/darkTheme.png" alt="Dark Theme" />
+        </a>
       </div>
     </div>
-    <div class="container">
-      <div class="text-section">
-        <div class="title">
-          <h1>Meet Our Team!</h1>
-        </div>
-        <div class="members">
-          <div class="members-details">
-            <div class="mujtaba">
-              <img
-                class="profile-image"
-                src="images/mujtaba.png"
-                alt="Mujtaba"
-                width="150px"
-                height="150px"
-              />
-              <h2 class="name">
-                Mujtaba <br />
-                Chaudhry
-              </h2>
-              <div class="icons">
-                <a href="https://github.com/mujtabach2" target="blank">
-                  <img
-                    src="images/github.png"
-                    alt="github"
-                    width="25px"
-                    height="25px"
-                  />
-                </a>
-                <a
-                  href="https://www.linkedin.com/in/mujtaba-chaudhry/"
-                  target="blank"
-                >
-                  <img
-                    src="images/linkedin.png"
-                    alt="linkedin"
-                    width="25px"
-                    height="25px"
-                  />
-                </a>
-              </div>
-            </div>
-            <div class="simon">
-              <img
-                class="profile-image"
-                src="images/simon.jpeg"
-                alt="Simon"
-                width="150px"
-                height="150px"
-              />
-              <h2 class="name">
-                Simon <br />
-                Berhe
-              </h2>
-              <div class="icons">
-                <a href="https://github.com/Its-Simon" target="blank">
-                  <img
-                    src="images/github.png"
-                    alt="github"
-                    width="25px"
-                    height="25px"
-                  />
-                </a>
-                <a
-                  href="https://www.linkedin.com/in/simon-berhe/"
-                  target="blank"
-                >
-                  <img
-                    src="images/linkedin.png"
-                    alt="linkedin"
-                    width="25px"
-                    height="25px"
-                  />
-                </a>
-              </div>
-            </div>
-            <div class="haider">
-              <img
-                class="profile-image"
-                src="images/haider.jpeg"
-                alt="Haider"
-                width="150px"
-                height="150px"
-              />
-              <h2 class="name">
-                Haider <br />
-                Saleem
-              </h2>
-              <div class="icons">
-                <a href="https://github.com/Haider425" target="blank">
-                  <img
-                    src="images/github.png"
-                    alt="github"
-                    width="25px"
-                    height="25px"
-                  />
-                </a>
-                <a href="https://www.linkedin.com/in/haider42/" target="blank">
-                  <img
-                    src="images/linkedin.png"
-                    alt="linkedin"
-                    width="25px"
-                    height="25px"
-                  />
-                </a>
-              </div>
-            </div>
-            <div class="kersh">
-              <img
-                class="profile-image"
-                src="images/kersh.jpeg"
-                alt="Kersh"
-                width="150px"
-                height="150px"
-              />
-              <h2 class="name">
-                Kershan <br />
-                Arulnesarwan
-              </h2>
-              <div class="icons">
-                <a href="https://github.com/Koops0" target="blank">
-                  <img
-                    src="images/github.png"
-                    alt="github"
-                    width="25px"
-                    height="25px"
-                  />
-                </a>
-                <a href="https://www.linkedin.com/in/kersharul/" target="blank">
-                  <img
-                    src="images/linkedin.png"
-                    alt="linkedin"
-                    width="25px"
-                    height="25px"
-                  />
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div class="box">
+      <div class="text">
+        <h2>Ocean</h2>
       </div>
-      <div class="footer">
-        <p>Copyright © 2024 ChessHub. All Rights Reserved.</p>
+      <div class="theme theme03">
+        <a onclick="closePopup()">
+          <img src="images/oceanTheme.png" alt="Ocean Theme" />
+        </a>
+      </div>
+    </div>
+    <div class="box">
+      <div class="text">
+        <h2>Wooden</h2>
+      </div>
+      <div class="theme theme04">
+        <a onclick="closePopup()">
+          <img src="images/woodenTheme.png" alt="Wooden Theme" />
+        </a>
+      </div>
+    </div>
+    <div class="box">
+      <div class="text">
+        <h2>Modern</h2>
+      </div>
+      <div class="theme theme05">
+        <a onclick="closePopup()">
+          <img src="images/modernTheme.png" alt="Modern Theme" />
+        </a>
+      </div>
+    </div>
+    <div class="box">
+      <div class="text">
+        <h2>Pastel</h2>
+      </div>
+      <div class="theme theme06">
+        <a onclick="closePopup()">
+          <img src="images/pastelTheme.png" alt="Pastel Theme" />
+        </a>
       </div>
     </div>
 
-    <div class="popup" id="popup">
-      <div class="themes">
-        <div class="box">
-          <div class="text">
-            <h2>Classic</h2>
-          </div>
-          <div class="theme theme01">
-            <a onclick="closePopup()">
-              <img src="images/classicTheme.png" alt="Classic Theme" />
-            </a>
-          </div>
-        </div>
-        <div class="box">
-          <div class="text">
-            <h2>Dark</h2>
-          </div>
-          <div class="theme theme02">
-            <a onclick="closePopup()">
-              <img src="images/darkTheme.png" alt="Dark Theme" />
-            </a>
-          </div>
-        </div>
-        <div class="box">
-          <div class="text">
-            <h2>Ocean</h2>
-          </div>
-          <div class="theme theme03">
-            <a onclick="closePopup()">
-              <img src="images/oceanTheme.png" alt="Ocean Theme" />
-            </a>
-          </div>
-        </div>
-        <div class="box">
-          <div class="text">
-            <h2>Wooden</h2>
-          </div>
-          <div class="theme theme04">
-            <a onclick="closePopup()">
-              <img src="images/woodenTheme.png" alt="Wooden Theme" />
-            </a>
-          </div>
-        </div>
-        <div class="box">
-          <div class="text">
-            <h2>Modern</h2>
-          </div>
-          <div class="theme theme05">
-            <a onclick="closePopup()">
-              <img src="images/modernTheme.png" alt="Modern Theme" />
-            </a>
-          </div>
-        </div>
-        <div class="box">
-          <div class="text">
-            <h2>Pastel</h2>
-          </div>
-          <div class="theme theme06">
-            <a onclick="closePopup()">
-              <img src="images/pastelTheme.png" alt="Pastel Theme" />
-            </a>
-          </div>
-        </div>
-
-        <div class="button">
-          <a href="#" class="close" onclick="closePopup()"></a>
-        </div>
-      </div>
+    <div class="button">
+      <a href="#" class="close" onclick="closePopup()"></a>
     </div>
+  </div>
+</div>
 
-    <div class="rules-popup" id="openRulesPopup">
-      <div class="rules">
-        <h2>Rules</h2>
-        <ul>
-          <li>
-            <strong>Initiating a Game:</strong> Choose to play against other
-            players or challenge the computer.
-          </li>
-          <li>
-            <strong>Online Play:</strong> Generate a unique code that allows
-            both users to join the same game when entered.
-          </li>
-          <li>
-            <strong>Objective:</strong> The primary objective of this game is
-            to capture your opponent's king.
-          </li>
-          <li>
-            <strong>Winning by Timer:</strong> You can win by depleting your
-            opponent's time; when they run out of time, you win.
-          </li>
-          <li>
-            <strong>Piece Capture:</strong> Capturing an opponent's piece is
-            achieved by dragging your piece onto theirs.
-          </li>
-          <li>
-            <strong>Special Moves:</strong> Castling, en passant, and pawn
-            promotion are special moves in chess.
-          </li>
-          <li>
-            <strong>Stalemate:</strong> Stalemate occurs when a player has no
-            legal moves.
-          </li>
-        </ul>
-      </div>
-      <div class="rules-btn">
-        <a href="#" class="close" onclick="closeRulesPopup()"></a>
-      </div>
-    </div>
+<div class="rules-popup" id="openRulesPopup">
+  <div class="rules">
+    <h2>Rules</h2>
+    <ul>
+      <li>
+        <strong>Initiating a Game:</strong> Choose to play against other
+        players or challenge the computer.
+      </li>
+      <li>
+        <strong>Online Play:</strong> Generate a unique code that allows
+        both users to join the same game when entered.
+      </li>
+      <li>
+        <strong>Objective:</strong> The primary objective of this game is
+        to capture your opponent's king.
+      </li>
+      <li>
+        <strong>Winning by Timer:</strong> You can win by depleting your
+        opponent's time; when they run out of time, you win.
+      </li>
+      <li>
+        <strong>Piece Capture:</strong> Capturing an opponent's piece is
+        achieved by dragging your piece onto theirs.
+      </li>
+      <li>
+        <strong>Special Moves:</strong> Castling, en passant, and pawn
+        promotion are special moves in chess.
+      </li>
+      <li>
+        <strong>Stalemate:</strong> Stalemate occurs when a player has no
+        legal moves.
+      </li>
+    </ul>
+  </div>
+  <div class="rules-btn">
+    <a href="#" class="close" onclick="closeRulesPopup()"></a>
+  </div>
+</div>
 
-  </body>
+</body>
 </html>

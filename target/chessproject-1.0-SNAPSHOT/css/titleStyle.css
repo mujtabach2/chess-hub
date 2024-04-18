@@ -99,38 +99,38 @@ body {
   border-radius: 8px;
   border: none;
   box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
-    rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #47743C 0 -5px 0 inset;
+  rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #47743C 0 -5px 0 inset;
   color: #FEFEFF;
-  cursor: pointer;  
+  cursor: pointer;
   display: inline-flex;
   padding: .5rem 5.7rem;
   font-size: 18px;
   transition: transform 0.3s ease-in-out;
- text-align: center;
+  text-align: center;
 }
 
 .play-online-btn button:hover {
   transform: translateY(-2px);
   background-color: #a3d160;
   box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
-    rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #5d9948 0 -5px 0 inset,
-    #5d9948 0 0 4px .5px;
+  rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #5d9948 0 -5px 0 inset,
+  #5d9948 0 0 4px .5px;
 }
 
 .play-online-btn button:active {
   background-color: #83B64D;
   box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
-    rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #47743C 0 -5px 0 inset;
+  rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #47743C 0 -5px 0 inset;
 }
 
 .buttons .text{
-    position: relative;
-    right: 1rem;
+  position: relative;
+  right: 1rem;
 }
 
 .buttons .text2{
-    position: relative;
-    left: .55rem;
+  position: relative;
+  left: .55rem;
 }
 
 .play-online-btn img {
@@ -142,7 +142,7 @@ body {
 }
 
 .buttons a{
-    text-decoration: none;
+  text-decoration: none;
 
 }
 
@@ -165,7 +165,7 @@ body {
   border-radius: 8px;
   border: none;
   box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
-    rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #323330 0 -5px 0 inset;
+  rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #323330 0 -5px 0 inset;
   color: #FEFEFF;
   cursor: pointer;
   display: inline-flex;
@@ -186,14 +186,14 @@ body {
   transform: translateY(-2px);
   background-color: #51504D;
   box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
-    rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #3C3D3A 0 -5px 0 inset,
-    #3C3D3A 0 0 4px .5px;
+  rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #3C3D3A 0 -5px 0 inset,
+  #3C3D3A 0 0 4px .5px;
 }
 
 .play-computer-btn button:active {
   background-color: #413F3C;
   box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
-    rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #323330 0 -5px 0 inset;
+  rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #323330 0 -5px 0 inset;
 }
 
 .play-computer-btn p {
@@ -201,4 +201,3 @@ body {
   font-size: 1.8rem;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
 }
-

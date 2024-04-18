@@ -286,27 +286,6 @@ document.addEventListener("DOMContentLoaded", () => {
         );
         console.log("Opponent piece color:", opponentColor);
         if (opponentColor) {
-          // const opponentPieceName = unicodeToPieceName[opponentPiece.innerHTML.trim().normalize()];
-          // console.log("Captured opponent's", opponentPieceName);
-
-          // const capturedPiece = clickedSquare.querySelector(".piece");
-          // if (capturedPiece && opponentColor) {  // Check if captured piece exists and is opponent's
-
-          //   clickedSquare.removeChild(capturedPiece);
-          // }
-
-          //   clickedSquare.appendChild(selectedPiece);
-          // // Update the chessboard array
-          // updateChessboardArray(
-          //   parseInt(previousSquare.dataset.row),
-          //   parseInt(previousSquare.dataset.col),
-          //   parseInt(clickedSquare.dataset.row),
-          //   parseInt(clickedSquare.dataset.col)
-          // );
-
-          // console.log("Moved piece to row:", clickedSquare.dataset.row, "col:", clickedSquare.dataset.col);
-
-          // switchTurn(true); // Switch turn after successful move
           console.log("Drag to capture opponent piece");
         } else {
           // Target square has your own piece - cannot move there
@@ -510,7 +489,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 isCaptured = false;
               } else {
                 console.log(
-                  "Invalid move. Cannot capture opponent's piesdfsdfsace."
+                  "Invalid move. Cannot capture opponent's piece."
                 );
                 // Change the color of the square to indicate an invalid move
                 targetSquare.style.backgroundColor = "red";
@@ -626,16 +605,6 @@ function displayGameOverMessage(message) {
 
       updateMoveList(selectedPiece.innerHTML.trim(), data.move);
 
-      ws.send(JSON.stringify(data));
-    }
-
-    //Sends the player who's turn it is to the server
-    function sendTurn(chessBoard, player) {
-      const data = {
-          type: "turn",
-          player: player === "white" ? "black" : "white",
-          state: chessBoard
-      };
       ws.send(JSON.stringify(data));
     }
 

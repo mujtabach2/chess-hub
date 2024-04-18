@@ -79,10 +79,9 @@ document.addEventListener("DOMContentLoaded", () => {
   ws.onmessage = function (event) {
     const data = JSON.parse(event.data);
     if (data.type === "move") {
-        console.log(data.player + " played the following move: " + data.move);
         chessBoard = data.state;
-        console.log(chessBoard);
         updateChessboardArray(data.fromRow, data.fromCol, data.toRow, data.toCol);
+        updateMoveList(data.selectedPiece, data.move);
         switchTurn(true); // Switch turn after successful move
     } else if (data.type === "colourAssignment") {
       clientPlayer = data.color;
@@ -216,11 +215,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function selectPiece(event) {
-    if(clientPlayer !== currentPlayer) {
-      console.log("It's not your turn!");
-      return;
-    }
-
     const clickedSquare = event.target.closest(".square");
 
     if (!clickedSquare) return;
@@ -230,6 +224,11 @@ document.addEventListener("DOMContentLoaded", () => {
     highlightedSquares.forEach((square) =>
       square.classList.remove("highlighted")
     );
+
+    if(clientPlayer !== currentPlayer) {
+      console.log("It's not your turn!");
+      return;
+    }
 
     if (selectedPiece) {
       // Second click: Move the piece if valid
@@ -287,27 +286,6 @@ document.addEventListener("DOMContentLoaded", () => {
         );
         console.log("Opponent piece color:", opponentColor);
         if (opponentColor) {
-          // const opponentPieceName = unicodeToPieceName[opponentPiece.innerHTML.trim().normalize()];
-          // console.log("Captured opponent's", opponentPieceName);
-
-          // const capturedPiece = clickedSquare.querySelector(".piece");
-          // if (capturedPiece && opponentColor) {  // Check if captured piece exists and is opponent's
-
-          //   clickedSquare.removeChild(capturedPiece);
-          // }
-
-          //   clickedSquare.appendChild(selectedPiece);
-          // // Update the chessboard array
-          // updateChessboardArray(
-          //   parseInt(previousSquare.dataset.row),
-          //   parseInt(previousSquare.dataset.col),
-          //   parseInt(clickedSquare.dataset.row),
-          //   parseInt(clickedSquare.dataset.col)
-          // );
-
-          // console.log("Moved piece to row:", clickedSquare.dataset.row, "col:", clickedSquare.dataset.col);
-
-          // switchTurn(true); // Switch turn after successful move
           console.log("Drag to capture opponent piece");
         } else {
           // Target square has your own piece - cannot move there
@@ -383,14 +361,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function startDrag(event) {
-    
+    selectedPiece = event.target.closest(".piece");
+    if (!selectedPiece) return;
+
     if(clientPlayer !== currentPlayer) {
       console.log("It's not your turn!");
       return;
     }
-
-    selectedPiece = event.target.closest(".piece");
-    if (!selectedPiece) return;
 
     const pieceColor = selectedPiece.classList.contains("white")
       ? "white"
@@ -512,7 +489,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 isCaptured = false;
               } else {
                 console.log(
-                  "Invalid move. Cannot capture opponent's piesdfsdfsace."
+                  "Invalid move. Cannot capture opponent's piece."
                 );
                 // Change the color of the square to indicate an invalid move
                 targetSquare.style.backgroundColor = "red";
@@ -619,23 +596,15 @@ function displayGameOverMessage(message) {
           player: player,
           move: convertToStandardNotation(selectedPiece, fromCol, toRow, toCol), // Convert the move to standard chess notation
           state : chessBoard,
-          selectedPiece: selectedPiece,
+          selectedPiece: selectedPiece.innerHTML.trim(),
           fromRow: fromRow,
           fromCol: fromCol,
           toRow: toRow,
           toCol: toCol
       };
 
-      ws.send(JSON.stringify(data));
-    }
+      updateMoveList(selectedPiece.innerHTML.trim(), data.move);
 
-    //Sends the player who's turn it is to the server
-    function sendTurn(chessBoard, player) {
-      const data = {
-          type: "turn",
-          player: player === "white" ? "black" : "white",
-          state: chessBoard
-      };
       ws.send(JSON.stringify(data));
     }
 
@@ -689,10 +658,10 @@ function displayGameOverMessage(message) {
       return move;
     }
 
-    function updateMoveList(move) {
+    function updateMoveList(piece, move) {
       const moveList = document.getElementById("moveList");
       const listItem = document.createElement("li");
-      listItem.textContent = move;
+      listItem.textContent = piece + ": " + move;
       moveList.appendChild(listItem);
     }
   });

@@ -74,7 +74,7 @@ body {
   height: 50vh;
   background-color: #242320;
   box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
-    rgba(13, 13, 13, 0.3) 0 7px 13px -3px, #242320 0 -5px 0 inset;
+  rgba(13, 13, 13, 0.3) 0 7px 13px -3px, #242320 0 -5px 0 inset;
   transition: transform 0.3s ease-in-out;
   border-radius: 10px;
 }
