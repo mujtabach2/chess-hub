@@ -25,7 +25,7 @@ All of us have contributed equally.
 
 ## Getting Started
 
-To get started with the emulator, follow these steps:
+To get started, follow these steps:
 
 1. Clone the repository using the command:
    ```bash
