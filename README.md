@@ -11,7 +11,7 @@ Our project is a chess application built using Java Web Applications and HTML/CS
 * [Mujtaba Chaudhry](https://github.com/mujtabach2) - Primary Chess Logic, Chess Moves and Move Validation, Puzzles, Computer Player and ELO Leaderboard
 * [Haider Saleem](https://github.com/Haider425) - Chess Board, Pieces, Themes, Rules, Highlighted Moves, Popups and Sidebar
 
-All of us have contributed equally, although I (Kershan) didn't start until late Sunday (4/14), due to the Computational Science exam.
+All of us have contributed equally.
 
 ## Video Demo
 [Click Here](https://drive.google.com/file/d/1M9cIDx6P93LRgtwjW4GaGHCZAjHwM3Fx/view?usp=sharing)
