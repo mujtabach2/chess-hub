@@ -8,11 +8,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+// This class represents the websocket server endpoint for the chess game
 @ServerEndpoint("/ws/{roomID}")
 public class ChessServer {
     private static Map<String, ChessRoom> activeRooms = new HashMap<>();
     private Map<String, Map<Character, String>> turnList = new HashMap<>();
 
+    // if the websocket connection is opened
     @OnOpen
     public void onOpen(Session session, @PathParam("roomID") String roomID) throws IOException {
         ChessRoom room = activeRooms.getOrDefault(roomID, new ChessRoom(roomID, session.getId()));
@@ -29,11 +31,14 @@ public class ChessServer {
             playerColor = "black";
         }
 
+        // Send the player their colour
         session.getBasicRemote().sendText("{\"type\": \"colourAssignment\", \"color\":\"" + playerColor + "\"}");
 
-        session.getBasicRemote().sendText("{\"type\": \"welcome\", \"message\":\"Welcome to King's Conquest!\"}");
+        // Send the player a welcome message
+        session.getBasicRemote().sendText("{\"type\": \"welcome\", \"message\":\"Welcome to Chesshub!\"}");
     }
 
+    // if the websocket connection receives a message
     @OnMessage
     public void handleMessage(String message, Session session) throws IOException {
         ChessRoom room = activeRooms.get(session.getPathParameters().get("roomID"));
@@ -63,11 +68,13 @@ public class ChessServer {
 
     }
 
+    // if the websocket connection encounters an error, print the stack trace
     @OnError
     public void onError(Session session, Throwable throwable) {
         throwable.printStackTrace();
     }
 
+    // if the websocket connection is closed, remove the user from the room
     @OnClose
     public void onClose(Session session) {
         ChessRoom room = activeRooms.get(session.getPathParameters().get("roomID"));

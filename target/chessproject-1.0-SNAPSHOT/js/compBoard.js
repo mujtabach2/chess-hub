@@ -1,7 +1,6 @@
 import isValidMove from "./chess.js";
 import { isCheckmate } from "./chess.js";
 import { getBestMove } from "./playComp.js";
-let ws;
 
 document.addEventListener("DOMContentLoaded", () => {
     const board = document.querySelector(".chessboard");
@@ -40,19 +39,18 @@ document.addEventListener("DOMContentLoaded", () => {
         "♟": "pawn",
     };
 
-    let code = "1";
     let currentPlayer = "white";
+    let isCaptured = false;
     let selectedPiece = null;
     let isDragging = false;
     let offsetX, offsetY;
     let previousSquare = null;
-    let isCaptured = false;
     let player1Time = 60 * 10;
     let player2Time = 60 * 10;
     let timerInterval1 = setInterval(updateTimer1, 1000);
     let timerInterval2;
 
-    let chessBoard = [
+    const chessBoard = [
         ["Br", "Bn", "Bb", "Bq", "Bk", "Bb", "Bn", "Br"],
         ["Bp", "Bp", "Bp", "Bp", "Bp", "Bp", "Bp", "Bp"],
         ["", "", "", "", "", "", "", ""],
@@ -62,29 +60,6 @@ document.addEventListener("DOMContentLoaded", () => {
         ["Wp", "Wp", "Wp", "Wp", "Wp", "Wp", "Wp", "Wp"],
         ["Wr", "Wn", "Wb", "Wq", "Wk", "Wb", "Wn", "Wr"],
     ];
-
-    const startEffect = new Audio("sound/start-effect.mp3");
-    const moveEffect = new Audio("sound/move-effect.mp3");
-    const captureEffect = new Audio("sound/capture-effect.mp3");
-    const checkMateEffect = new Audio("sound/checkmate-effect.mp3");
-
-    startEffect.play();
-
-    ws = new WebSocket("ws://localhost:8080/chessproject-1.0-SNAPSHOT/ws/"+code);
-
-    ws.onopen = function () {
-        console.log("The WebSocket connection has been opened");
-    };
-
-    ws.onmessage = function (event) {
-        const data = JSON.parse(event.data);
-        if (data.type === "move") {
-            chessBoard = data.state;
-            updateChessboardArray(data.fromRow, data.fromCol, data.toRow, data.toCol);
-            updateMoveList(data.selectedPiece, data.move);
-            switchTurn(true); // Switch turn after successful move
-        }
-    };
 
     function boardToFEN(board) {
         let fen = '';
@@ -99,10 +74,10 @@ document.addEventListener("DOMContentLoaded", () => {
                         emptyCount = 0;
                     }
                     if (board[i][j].startsWith('W')) {
-                        fen += board[i][j].charAt(1).toLowerCase();
+                        fen += board[i][j].charAt(1).toUpperCase();
                     }
                     if (board[i][j].startsWith('B')) {
-                        fen += board[i][j].charAt(1).toUpperCase();
+                        fen += board[i][j].charAt(1).toLowerCase();
                     }
 
                 }
@@ -116,31 +91,31 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // Add active color
-        fen += ' ' + currentPlayer[0].toUpperCase();
+        fen += ' ';
+        if (currentPlayer === 'white') {
+            fen += 'w';
+        }
+        if (currentPlayer === 'black') {
+            fen += ' b';
+        }
         fen += ' - - 0 1'
         return fen;
     }
 
+    const startEffect = new Audio("sound/start-effect.mp3");
+    const moveEffect = new Audio("sound/move-effect.mp3");
+    const captureEffect = new Audio("sound/capture-effect.mp3");
+    const checkMateEffect = new Audio("sound/checkmate-effect.mp3");
+
+    startEffect.play();
+
     // Function to update the chessboard array when a piece is moved
     function updateChessboardArray(fromRow, fromCol, toRow, toCol) {
         const piece = chessBoard[fromRow][fromCol];
-
-        // Update the chessBoard array to move the piece
         chessBoard[fromRow][fromCol] = ""; // Clear the previous position
         chessBoard[toRow][toCol] = piece; // Place the piece in the new position
 
-        // Check if a piece is being captured
-        const toSquare = document.querySelector(`.square[data-row="${toRow}"][data-col="${toCol}"]`);
-        if (toSquare.hasChildNodes()) { //sometimes, 2 pieces can occupy the same square, remove captured piece
-            const capturedPieceElement = toSquare.querySelector(".piece");
-            toSquare.removeChild(capturedPieceElement);
-        }
-
-        // Update the UI
-        const fromSquare = document.querySelector(`.square[data-row="${fromRow}"][data-col="${fromCol}"]`);
-        const pieceElement = fromSquare.querySelector(".piece");
-        fromSquare.removeChild(pieceElement);
-        toSquare.appendChild(pieceElement);
+        console.log(chessBoard);
     }
 
     for (let row = 0; row < 8; row++) {
@@ -203,15 +178,17 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        if (currentPlayer === "white") {
+        if(currentPlayer === "white") {
             clearInterval(timerInterval1); // Pause white timer
+
             computerMove();
+
             console.log("Computer moved", currentPlayer);
-            currentPlayer = "black"; // Set currentPlayer to black after computer move
-        } else {
-            currentPlayer = "white"; // Set currentPlayer to white after player move
+            currentPlayer = "white";
+            return
         }
 
+        currentPlayer = currentPlayer === "white" ? "black" : "white";
         console.log("Current turn: " + currentPlayer);
 
         // Pause or resume timers based on current player
@@ -220,19 +197,15 @@ document.addEventListener("DOMContentLoaded", () => {
             timerInterval1 = setInterval(updateTimer1, 1000); // Resume white timer
         }
 
-        // Call checkmate function if needed
         callCheckMate(currentPlayer, chessBoard);
     }
 
     function computerMove() {
-
-
         currentPlayer = currentPlayer === "white" ? "black" : "white";
         const fen = boardToFEN(chessBoard);
         console.log("FEN:", fen);
         const bestMove = getBestMove(fen);
         console.log("Best move:", bestMove);
-        let didCapture = false;
 
         const from = bestMove.substring(0, 2);
         const to = bestMove.substring(2, 4);
@@ -242,11 +215,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const toCol = to.charCodeAt(0) - 97;
         const toRow = 8 - parseInt(to[1]);
 
-        const piece = chessBoard[fromRow][fromCol];
-
         const fromSquare = document.querySelector(
             `.square[data-row="${fromRow}"][data-col="${fromCol}"]`
         );
+
+        const pieceElement = fromSquare.querySelector(".piece");
+        if (!pieceElement) {
+            console.error("Piece element not found.");
+            return;
+        }
 
         const toSquare = document.querySelector(
             `.square[data-row="${toRow}"][data-col="${toCol}"]`
@@ -268,42 +245,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
             captureEffect.play();
             toSquare.removeChild(opponentPiece);
-            let captured = opponentPiece.innerHTML;
-            didCapture = true;
-            const pieceUni = selectedPiece.innerHTML;
-            const move = `${pieceUni}${from} captures ${captured}${to}`;
-            console.log("Computer moved", move);
-            updateMoveList(move);
-
+            isCaptured = true;
         }
 
-        timerInterval2 = setInterval(updateTimer2, 1000);
-
-        toSquare.appendChild(fromSquare.querySelector(".piece"));
-        setTimeout(function() {
-
-            clearInterval(timerInterval2);
-
-            timerInterval1 = setInterval(updateTimer1, 1000);
-        }, 1000);
-
+        toSquare.appendChild(pieceElement);
 
         updateChessboardArray(fromRow, fromCol, toRow, toCol);
 
-
-        const pieceUni = selectedPiece.innerHTML
-        if (didCapture) {
-            console.log("Computer captured opponent's piece");
-        }
-        else {
-            const move = `${pieceUni}${from} to ${to}`;
-            console.log("Computer moved", move);
-            updateMoveList(move);
-        }
+        const pieceUni = pieceElement.innerHTML;
+        const move = convertToStandardNotation(pieceElement, fromCol, toRow, toCol);
+        console.log("Computer moved", move);
+        updateMoveList(pieceUni, move);
 
         checkArray(chessBoard);
-
-
+        isCaptured = false;
     }
 
     function checkArray(chessBoard) {
@@ -329,6 +284,7 @@ document.addEventListener("DOMContentLoaded", () => {
             displayGameOverMessage("White Wins!");
         }
     }
+
 
     function callCheckMate(currentPlayer, chessBoard) {
         if (isCheckmate(currentPlayer, chessBoard)) {
@@ -430,7 +386,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 } else {
                     // Target square has your own piece - cannot move there
                     console.log("Cannot move to a square occupied by your own piece.");
-                    switchTurn(true);
                     return;
                 }
             } else {
@@ -447,17 +402,34 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (isValid) {
                     moveEffect.play();
                     clickedSquare.appendChild(selectedPiece);
-                    sendMove(currentPlayer, selectedPiece, chessBoard, parseInt(previousSquare.dataset.row),
-                        parseInt(previousSquare.dataset.col), parseInt(clickedSquare.dataset.row),
-                        parseInt(clickedSquare.dataset.col));
-                    switchTurn(true);
+                    updateChessboardArray(
+                        parseInt(previousSquare.dataset.row),
+                        parseInt(previousSquare.dataset.col),
+                        parseInt(clickedSquare.dataset.row),
+                        parseInt(clickedSquare.dataset.col)
+                    );
+                    console.log(
+                        "Moved piece to row: " +
+                        clickedSquare.dataset.row +
+                        " col: " +
+                        clickedSquare.dataset.col
+                    );
+                    const piece = selectedPiece.innerHTML.trim();
+                    const fromCol = parseInt(previousSquare.dataset.col);
+                    const toCol = parseInt(clickedSquare.dataset.col);
+                    const toRow = 8 - parseInt(clickedSquare.dataset.row);
+
+                    const move = convertToStandardNotation(selectedPiece, fromCol, toRow, toCol);
+
+                    // Update and display the move in the sidebar
+                    updateMoveList(piece, move);
+                    switchTurn(isValid);
                 } else {
                     // Change the color of the square to indicate an invalid move
                     clickedSquare.style.backgroundColor = "red";
                     setTimeout(() => {
                         clickedSquare.style.backgroundColor = "";
                     }, 1000);
-                    switchTurn(true);
                 }
             }
 
@@ -465,7 +437,6 @@ document.addEventListener("DOMContentLoaded", () => {
             previousSquare = null;
         } else {
             console.log("Cannot move to the same square.");
-            switchTurn(true);
         }
     }
 
@@ -503,7 +474,6 @@ document.addEventListener("DOMContentLoaded", () => {
     function startDrag(event) {
         selectedPiece = event.target.closest(".piece");
         if (!selectedPiece) return;
-
 
         const pieceColor = selectedPiece.classList.contains("white")
             ? "white"
@@ -566,10 +536,30 @@ document.addEventListener("DOMContentLoaded", () => {
                             if (isValid) {
                                 moveEffect.play();
                                 targetSquare.appendChild(selectedPiece);
-                                sendMove(currentPlayer, selectedPiece, chessBoard,
-                                    parseInt(previousSquare.dataset.row), parseInt(previousSquare.dataset.col),
-                                    parseInt(targetSquare.dataset.row), parseInt(targetSquare.dataset.col));
-                                switchTurn(true);
+                                updateChessboardArray(
+                                    parseInt(previousSquare.dataset.row),
+                                    parseInt(previousSquare.dataset.col),
+                                    parseInt(targetSquare.dataset.row),
+                                    parseInt(targetSquare.dataset.col)
+                                );
+
+                                console.log(
+                                    "Moved piece to row:",
+                                    targetSquare.dataset.row,
+                                    "col:",
+                                    targetSquare.dataset.col
+                                );
+                                const fromCol = parseInt(previousSquare.dataset.col);
+                                const toCol = parseInt(targetSquare.dataset.col);
+                                const toRow = 8 - parseInt(targetSquare.dataset.row);
+
+                                const piece = selectedPiece.innerHTML.trim();
+                                const move = convertToStandardNotation(selectedPiece, fromCol, toRow, toCol);
+
+                                // Update and display the move in the sidebar
+                                updateMoveList(piece, move);
+
+                                switchTurn(isValid);
                             } else {
                                 // Change the color of the square to indicate an invalid move
                                 targetSquare.style.backgroundColor = "red";
@@ -603,29 +593,47 @@ document.addEventListener("DOMContentLoaded", () => {
                             );
 
                             if (isValid) {
-                                // Update the chessBoard array to remove the captured piece
-                                console.log(chessBoard);
-                                const toRow = parseInt(targetSquare.dataset.row);
-                                const toCol = parseInt(targetSquare.dataset.col);
-                                chessBoard[toRow][toCol] = "";
-
                                 // Remove the opponent's piece from the board
-                                captureEffect.play();
-                                const opponentPiece = targetSquare.firstChild;
-                                targetSquare.removeChild(opponentPiece);
                                 isCaptured = true;
+                                captureEffect.play();
+                                targetSquare.removeChild(opponentPiece);
 
                                 // Move the player's piece to the target square
                                 targetSquare.appendChild(selectedPiece);
+                                updateChessboardArray(
+                                    parseInt(previousSquare.dataset.row),
+                                    parseInt(previousSquare.dataset.col),
+                                    parseInt(targetSquare.dataset.row),
+                                    parseInt(targetSquare.dataset.col)
+                                );
 
-                                sendMove(currentPlayer, selectedPiece, chessBoard,
-                                    parseInt(previousSquare.dataset.row), parseInt(previousSquare.dataset.col),
-                                    toRow, toCol);
-                                switchTurn(true);
+                                console.log(
+                                    "Moved piece to row:",
+                                    targetSquare.dataset.row,
+                                    "col:",
+                                    targetSquare.dataset.col
+                                );
+                                console.log(
+                                    "Captured opponent's",
+                                    opponentPieceName,
+                                    "of color",
+                                    opponentPieceColor
+                                );
+
+                                const fromCol = parseInt(previousSquare.dataset.col);
+                                const toCol = parseInt(targetSquare.dataset.col);
+                                const toRow = 8 - parseInt(targetSquare.dataset.row);
+
+                                const piece = selectedPiece.innerHTML.trim();
+                                const move = convertToStandardNotation(selectedPiece, fromCol, toRow, toCol);
+
+                                // Update and display the move in the sidebar
+                                updateMoveList(piece, move);
+                                switchTurn(true); // Switch turn after successful move
                                 isCaptured = false;
                             } else {
                                 console.log(
-                                    "Invalid move. Cannot capture opponent's piece."
+                                    "Invalid move. Cannot capture opponent's piesdfsdfsace."
                                 );
                                 // Change the color of the square to indicate an invalid move
                                 targetSquare.style.backgroundColor = "red";
@@ -711,7 +719,8 @@ document.addEventListener("DOMContentLoaded", () => {
     function displayGameOverMessage(message) {
         // Display the game over message
         winText.textContent = message;
-        openPopup();
+        setTimeout(openPopup, 1000);
+
 
         //stop the timers
         clearInterval(timerInterval1);
@@ -725,25 +734,6 @@ document.addEventListener("DOMContentLoaded", () => {
         board.removeEventListener("mouseup", stopDrag);
         board.removeEventListener("mouseleave", stopDrag);
     }
-    //Sends the player and the move in standard chess notation to the server
-    function sendMove(player, selectedPiece, chessBoard, fromRow, fromCol, toRow, toCol) {
-        const data = {
-            type: "move",
-            player: player,
-            move: convertToStandardNotation(selectedPiece, fromCol, toRow, toCol), // Convert the move to standard chess notation
-            state : chessBoard,
-            selectedPiece: selectedPiece.innerHTML.trim(),
-            fromRow: fromRow,
-            fromCol: fromCol,
-            toRow: toRow,
-            toCol: toCol
-        };
-
-        updateMoveList(selectedPiece.innerHTML.trim(), data.move);
-
-        ws.send(JSON.stringify(data));
-    }
-
     //Converts the column number to a letter
     function convertColumn(col) {
         return String.fromCharCode(97 + col);
@@ -800,4 +790,5 @@ document.addEventListener("DOMContentLoaded", () => {
         listItem.textContent = piece + ": " + move;
         moveList.appendChild(listItem);
     }
+
 });

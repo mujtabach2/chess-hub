@@ -3,6 +3,7 @@ import { isCheckmate } from "./chess.js";
 import { getBestMove } from "./playComp.js";
 
 document.addEventListener("DOMContentLoaded", () => {
+    //Variables
     const board = document.querySelector(".chessboard");
 
     const pieces = {
@@ -45,10 +46,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let isDragging = false;
     let offsetX, offsetY;
     let previousSquare = null;
-    let player1Time = 60 * 10;
-    let player2Time = 60 * 10;
+    let player1Time = 60 * 5;
     let timerInterval1 = setInterval(updateTimer1, 1000);
-    let timerInterval2;
 
     const chessBoard = [
         ["Br", "Bn", "Bb", "Bq", "Bk", "Bb", "Bn", "Br"],
@@ -61,6 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ["Wr", "Wn", "Wb", "Wq", "Wk", "Wb", "Wn", "Wr"],
     ];
 
+    // Function to convert the chessboard array to FEN notation
     function boardToFEN(board) {
         let fen = '';
         for (let i = 0; i < 8; i++) {
@@ -102,6 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return fen;
     }
 
+    // Audio effects
     const startEffect = new Audio("sound/start-effect.mp3");
     const moveEffect = new Audio("sound/move-effect.mp3");
     const captureEffect = new Audio("sound/capture-effect.mp3");
@@ -118,6 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log(chessBoard);
     }
 
+    // Function to create the chessboard
     for (let row = 0; row < 8; row++) {
         for (let col = 0; col < 8; col++) {
             const square = document.createElement("div");
@@ -172,6 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // for click and move the piece
     board.addEventListener("click", selectPiece);
 
+    // Switch turn between players
     function switchTurn(isValidMoveMade) {
         if (!isValidMoveMade) {
             console.log("No valid move made. Turn continues.");
@@ -185,6 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             console.log("Computer moved", currentPlayer);
             currentPlayer = "white";
+            timerInterval1 = setInterval(updateTimer1, 1000); // Resume white timer
             return
         }
 
@@ -200,6 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
         callCheckMate(currentPlayer, chessBoard);
     }
 
+    // Computer move
     function computerMove() {
         currentPlayer = currentPlayer === "white" ? "black" : "white";
         const fen = boardToFEN(chessBoard);
@@ -261,6 +266,7 @@ document.addEventListener("DOMContentLoaded", () => {
         isCaptured = false;
     }
 
+    //Checks if the king is in checkmate
     function checkArray(chessBoard) {
         //if Wq or Bq is in the array, then call checkMate
         let whiteQueen = false;
@@ -285,7 +291,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-
+    // Check if the king is in checkmate
     function callCheckMate(currentPlayer, chessBoard) {
         if (isCheckmate(currentPlayer, chessBoard)) {
             checkMateEffect.play();
@@ -301,7 +307,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-
+    // Function to get all possible moves for a piece
     function getPossibleMoves(piece, row, col, chessBoard, currentPlayer) {
 
         const validMoves = [];
@@ -315,6 +321,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return validMoves;
     }
 
+    //Pick a piece
     function selectPiece(event) {
         const clickedSquare = event.target.closest(".square");
 
@@ -362,6 +369,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // Move the piece to the target square, click event
     function clickMovePiece(clickedSquare) {
         if (clickedSquare !== previousSquare) {
             const pieceColor = selectedPiece.classList.contains("white")
@@ -400,6 +408,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     currentPlayer
                 );
                 if (isValid) {
+                    //NOTE: not sending a move to server, as it's 1v1
                     moveEffect.play();
                     clickedSquare.appendChild(selectedPiece);
                     updateChessboardArray(
@@ -440,6 +449,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    //highlight the valid moves
     function highlightValidMoves(event) {
         // Remove previous highlights
         const highlightedSquares = document.querySelectorAll(".highlighted");
@@ -471,6 +481,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    //drag and drop functions
     function startDrag(event) {
         selectedPiece = event.target.closest(".piece");
         if (!selectedPiece) return;
@@ -491,6 +502,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    //drag the piece
     function dragPiece(event) {
         if (isDragging && selectedPiece) {
             selectedPiece.style.position = "fixed";
@@ -498,6 +510,8 @@ document.addEventListener("DOMContentLoaded", () => {
             selectedPiece.style.top = `${event.clientY - offsetY}px`;
         }
     }
+
+    //stop dragging the piece
     function stopDrag(event) {
         console.log("stopping");
         if (isDragging && selectedPiece) {
@@ -669,17 +683,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    function updateTimer2() {
-        player2Time--;
-        const timer2Display = document.getElementById("black-timer");
-        timer2Display.textContent = formatTime(player2Time);
-        if (player2Time <= 0) {
-            clearInterval(timerInterval2);
-            displayGameOverMessage("White Wins!");
-        }
-    }
-
-
+    // Function to format the time in MM:SS format
     function formatTime(time) {
         const minutes = Math.floor(time / 60);
         const seconds = time % 60;
@@ -698,6 +702,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let closeBtn = document.getElementById('close-popup');
     let closeBtn2 = document.getElementById('closepopup');
 
+    // Open the game over popup
     function openPopup() {
         popup.classList.add('game-over-popup');
     }
@@ -712,10 +717,12 @@ document.addEventListener("DOMContentLoaded", () => {
         closeBtn2.addEventListener('click', closePopup);
     }
 
+    // Close the game over popup
     function closePopup() {
         popup.classList.remove('game-over-popup');
     }
 
+    //display the game over message
     function displayGameOverMessage(message) {
         // Display the game over message
         winText.textContent = message;
@@ -784,6 +791,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return move;
     }
 
+    //add the move to the move list
     function updateMoveList(piece, move) {
         const moveList = document.getElementById("moveList");
         const listItem = document.createElement("li");

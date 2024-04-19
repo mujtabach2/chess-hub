@@ -1,11 +1,6 @@
 package com.chessproject;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import jakarta.websocket.Session;
 
 /**
  * This class represents the data that's stored in a chess room
@@ -30,10 +25,12 @@ public class ChessRoom {
         this.roomcode = roomcode;
     }
 
+    //Get Code
     public String getCode() {
         return roomcode;
     }
 
+    //Get Users
     public Map<String, String> getUsers() {
         return players;
     }
@@ -51,6 +48,7 @@ public class ChessRoom {
         }
     }
 
+    //Getter for username
     public String getUserName(String userID){
         return players.get(userID);
     }
@@ -64,6 +62,7 @@ public class ChessRoom {
         }
     }
 
+    //If in room
     public boolean inRoom(String userID){
         return players.containsKey(userID);
     }

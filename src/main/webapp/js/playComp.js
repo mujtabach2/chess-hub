@@ -1,7 +1,7 @@
 import { Engine } from './wukong.js';
 
 
-
+// Function to get the best move from the engine
 export function getBestMove(fen) {
     const wukong= new Engine();
     wukong.setBoard(fen);

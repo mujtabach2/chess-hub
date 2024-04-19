@@ -3,6 +3,7 @@ import { isCheckmate } from "./chess.js";
 let ws;
 
 document.addEventListener("DOMContentLoaded", () => {
+  // Variables
   const board = document.querySelector(".chessboard");
 
   const pieces = {
@@ -70,6 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   startEffect.play();
 
+  // Connect to the WebSocket server
   ws = new WebSocket("ws://localhost:8080/chessproject-1.0-SNAPSHOT/ws/"+code);
 
   ws.onopen = function () {
@@ -111,6 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
     toSquare.appendChild(pieceElement);
   }
 
+  // Create the chessboard
   for (let row = 0; row < 8; row++) {
     for (let col = 0; col < 8; col++) {
       const square = document.createElement("div");
@@ -165,6 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // for click and move the piece
   board.addEventListener("click", selectPiece);
 
+  //switch turn
   function switchTurn(isValidMoveMade) {
     
     if (!isValidMoveMade) {
@@ -201,6 +205,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
+  // Function to get all possible moves for a piece
   function getPossibleMoves(piece, row, col, chessBoard, currentPlayer) {
 
     const validMoves = [];
@@ -214,6 +219,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return validMoves;
   }
 
+  // Function to select piece
   function selectPiece(event) {
     const clickedSquare = event.target.closest(".square");
 
@@ -266,6 +272,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Function to move the piece when clicked
   function clickMovePiece(clickedSquare) {
     if (clickedSquare !== previousSquare) {
       const pieceColor = selectedPiece.classList.contains("white")
@@ -329,6 +336,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Function to highlight valid moves when dragging a piece
   function highlightValidMoves(event) {
     // Remove previous highlights
     const highlightedSquares = document.querySelectorAll(".highlighted");
@@ -360,6 +368,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Function to start dragging a piece
   function startDrag(event) {
     selectedPiece = event.target.closest(".piece");
     if (!selectedPiece) return;
@@ -385,6 +394,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Function to drag the piece
   function dragPiece(event) {
     if (isDragging && selectedPiece) {
       selectedPiece.style.position = "fixed";
@@ -392,6 +402,8 @@ document.addEventListener("DOMContentLoaded", () => {
       selectedPiece.style.top = `${event.clientY - offsetY}px`;
     }
   }
+
+  // Function to stop dragging the piece
   function stopDrag(event) {
     console.log("stopping");
     if (isDragging && selectedPiece) {
@@ -525,6 +537,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   
+  // Timer for player 2 (black)
   function updateTimer2() {
     player2Time--;
     const timer2Display = document.getElementById("black-timer");
@@ -535,14 +548,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   
-
+ // Function to format the time in MM:SS format
   function formatTime(time) {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
     return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   }
   
-
+  // Theme switcher
   function handleThemeChange(event) {
     const theme = event.target.value;
     const chessboard = document.querySelector(".chessboard");
@@ -554,6 +567,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let closeBtn = document.getElementById('close-popup');
   let closeBtn2 = document.getElementById('closepopup');
 
+  // Function to open the game over popup
 function openPopup() {
   popup.classList.add('game-over-popup');
 }
@@ -568,10 +582,12 @@ if (closeBtn2) {
   closeBtn2.addEventListener('click', closePopup);
 }
 
+// Function to close the game over popup
 function closePopup() {
   popup.classList.remove('game-over-popup');
 }
 
+// Function to display the game over message
 function displayGameOverMessage(message) {
   // Display the game over message
   winText.textContent = message;
@@ -658,6 +674,7 @@ function displayGameOverMessage(message) {
       return move;
     }
 
+    // Function to update the move list
     function updateMoveList(piece, move) {
       const moveList = document.getElementById("moveList");
       const listItem = document.createElement("li");
