@@ -2,8 +2,6 @@
 
 Our project is a chess application built using Java Web Applications and HTML/CSS/JS. It allows players to play chess with another player or a computer, as well as solving chess puzzles. The server utilizes WebSockets for the online component along with HTML, CSS, and JavaScript for client-side interaction across all modes. The primary goal of this project is to implement everything we learnt in this course into a full stack web application.
 
-#### Disclaimer: This is a project that we did as part of a university assignment. DO NOT COPY THIS.
-
 ## Group Members
 
 * [Kershan Arulneswaran](https://github.com/Koops0) - Websockets, Server, Online Multiplayer, Chess Moves, Comments, Readme and Video Demo
