@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   startEffect.play();
 
-  ws = new WebSocket("ws://localhost:8080/chessproject-1.0-SNAPSHOT/ws/"+code);
+  ws = new WebSocket("ws://34.130.166.31:8080/chessproject-1.0-SNAPSHOT/ws/"+code);
 
   ws.onopen = function () {
     console.log("The WebSocket connection has been opened");
