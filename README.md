@@ -2,6 +2,9 @@
 
 Our project is a chess application built using Java Web Applications and HTML/CSS/JS. It allows players to play chess with another player or a computer, as well as solving chess puzzles. The server utilizes WebSockets for the online component along with HTML, CSS, and JavaScript for client-side interaction across all modes. The primary goal of this project is to implement everything we learnt in this course into a full stack web application.
 
+## Website
+[Try Now](https://chess-hub.netlify.app)
+
 ## Group Members
 
 * [Kershan Arulneswaran](https://github.com/Koops0) - Websockets, Server, Online Multiplayer, Chess Moves, Comments, Readme and Video Demo
@@ -13,6 +16,7 @@ All of us have contributed equally.
 
 ## Video Demo
 [Click Here](https://drive.google.com/file/d/1M9cIDx6P93LRgtwjW4GaGHCZAjHwM3Fx/view?usp=sharing)
+
 
 ## Features
 
